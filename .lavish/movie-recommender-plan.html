@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Movies RusticIT — Implementation Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Rubik:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Design source: the user asked for the rusticit.com aesthetic. Tokens taken from its CSS: charcoal #0e152e, purple #4a4ac0, Inter + Rubik, pill nav. */
+  :root{--bg:#f7f7fb;--surface:#fff;--surface2:#eeeef6;--ink:#0e152e;--muted:#59607a;--line:#dcdeea;--primary:#4a4ac0;--on-primary:#fff;--primary-soft:#e6e6fa;--good:#1b7a43;--good-soft:#dff5e7;--warn:#9a5b00;--warn-soft:#fff0d6;--bad:#a8261f;--bad-soft:#fde3e1;--radius:14px}
+  @media (prefers-color-scheme:dark){:root{--bg:#0e152e;--surface:#151d3b;--surface2:#1d2647;--ink:#f3f4fa;--muted:#a3a9c4;--line:#2a345c;--primary:#8f8fe6;--on-primary:#0e152e;--primary-soft:#262a5c;--good:#6fd69a;--good-soft:#163524;--warn:#f1b95a;--warn-soft:#3a2a0c;--bad:#ff9a92;--bad-soft:#42201d}}
+  *,*::before,*::after{box-sizing:border-box}
+  :where(.grid,.flex)>*{min-width:0}
+  :where(p,h1,h2,h3,li,td,th,dd,code,figcaption){overflow-wrap:anywhere}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+  main{max-width:1080px;margin:0 auto;padding:32px 20px 96px}
+  h1,h2,h3{font-family:Rubik,Inter,system-ui,sans-serif}h1{font-size:2.1rem;line-height:1.15;margin:.2em 0 .3em;letter-spacing:-.02em}
+  h2{font-size:1.45rem;margin:2.4em 0 .5em;letter-spacing:-.01em;display:flex;gap:.6em;align-items:baseline}
+  h2 .n{font-size:.8rem;font-weight:700;color:var(--primary);background:var(--primary-soft);border-radius:99px;padding:.1em .7em}
+  h3{font-size:1.05rem;margin:0 0 .3em}
+  p{margin:.4em 0 .8em}
+  code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em}
+  code{background:var(--surface2);padding:.1em .4em;border-radius:6px}
+  pre{background:var(--surface2);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;overflow-x:auto;margin:.6em 0}
+  pre code{background:none;padding:0}
+  .lede{color:var(--muted);font-size:1.1rem;max-width:62ch}
+  .grid{display:grid;gap:14px}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+  .g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+  .card.rec{border-color:var(--primary);box-shadow:0 0 0 1px var(--primary) inset}
+  .badge{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;border-radius:99px;padding:.15em .7em;background:var(--surface2);color:var(--muted)}
+  .badge.good{background:var(--good-soft);color:var(--good)}.badge.warn{background:var(--warn-soft);color:var(--warn)}.badge.bad{background:var(--bad-soft);color:var(--bad)}.badge.pri{background:var(--primary-soft);color:var(--primary)}
+  .stat{font-size:2rem;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+  .stat small{display:block;font-size:.8rem;font-weight:500;color:var(--muted);letter-spacing:0;margin-top:.2em}
+  table{border-collapse:collapse;width:100%;font-size:.93rem}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:var(--surface2)}
+  .tw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+  .tw table td:first-child{font-weight:600}
+  ul.tight{margin:.3em 0;padding-left:1.2em}ul.tight li{margin:.2em 0}
+  .callout{border-left:4px solid var(--warn);background:var(--warn-soft);border-radius:0 var(--radius) var(--radius) 0;padding:12px 16px;margin:1em 0}
+  .callout.info{border-color:var(--primary);background:var(--primary-soft)}
+  .mermaid{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px;overflow-x:auto;text-align:center}
+  /* mockup */
+  .mock{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--bg)}
+  .mock-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:var(--surface);border-bottom:1px solid var(--line);font-weight:600}
+  .mock-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:18px;padding:18px}
+  @media(max-width:720px){.mock-body{grid-template-columns:minmax(0,1fr)}}
+  .field{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface);color:var(--muted);font-size:.92rem}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .chip{background:var(--primary-soft);color:var(--primary);border-radius:8px;padding:5px 10px;font-size:.85rem;font-weight:600}
+  .posters{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px}
+  .poster{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:.8rem}
+  .poster i{display:block;aspect-ratio:2/3;background:linear-gradient(160deg,var(--primary-soft),var(--surface2))}
+  .poster b{display:block;padding:6px 8px 0}.poster span{display:block;padding:0 8px 8px;color:var(--muted);font-size:.74rem}
+  .bar{height:6px;border-radius:9px;background:var(--surface2);margin:4px 8px 8px}.bar u{display:block;height:100%;border-radius:9px;background:var(--primary)}
+  /* tree */
+  .tree{white-space:pre;line-height:1.6}
+  .tree .t{color:var(--good)}.tree .c{color:var(--muted)}
+  /* phases */
+  ol.phases{list-style:none;padding:0;margin:0;display:grid;gap:12px;counter-reset:p}
+  ol.phases>li{counter-increment:p;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 18px 14px 58px;position:relative}
+  ol.phases>li::before{content:counter(p);position:absolute;left:16px;top:14px;width:28px;height:28px;border-radius:50%;background:var(--primary);color:var(--on-primary);display:grid;place-items:center;font-weight:700;font-size:.9rem}
+  /* decisions */
+  form.dec{display:grid;gap:14px}
+  fieldset{border:1px solid var(--line);border-radius:var(--radius);padding:14px 18px;background:var(--surface);margin:0}
+  legend{font-weight:700;padding:0 8px}
+  fieldset label{display:flex;gap:10px;align-items:flex-start;padding:6px 0;cursor:pointer}
+  fieldset label input{margin-top:.35em;accent-color:var(--primary)}
+  fieldset label small{display:block;color:var(--muted)}
+  button.send{background:var(--primary);color:var(--on-primary);border:0;border-radius:99px;padding:12px 28px;font:600 1rem inherit;cursor:pointer;justify-self:start}
+  textarea{width:100%;min-height:70px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:10px;font:inherit}
+</style>
+</head>
+<body>
+<main>
+
+<span class="badge pri">Plan v2 · decisions locked · pre-implementation</span>
+<h1>Movies RusticIT: “people who liked these also liked…”</h1>
+<p class="lede">An Amazon-style suggestion engine over 70 movies and 806 users. Pick a few movies you like, get ranked recommendations with a plain-language reason for each. Nuxt 4 + Vuetify, a server-side recommender, free movie metadata, and end-to-end tests only.</p>
+
+<div class="grid g3" style="margin-top:20px">
+  <div class="card"><div class="stat">70<small>movies (id → "Title (Year)")</small></div></div>
+  <div class="card"><div class="stat">806<small>users · median 15 likes, max 70</small></div></div>
+  <div class="card"><div class="stat">0<small>ratings: the signal is a binary “liked”</small></div></div>
+</div>
+
+<h2><span class="n">01</span>Where we are</h2>
+<div class="grid g2">
+  <div class="card">
+    <h3>Current state <span class="badge">verified in repo</span></h3>
+    <ul class="tight">
+      <li>Nuxt <code>4.6.1</code>, Vue <code>3.5</code>, <code>vuetify-nuxt-module</code>, <code>@nuxtjs/i18n</code> installed and configured.</li>
+      <li><code>app/app.vue</code> is still the <code>NuxtWelcome</code> placeholder.</li>
+      <li>No tests, no server code, no lint/type-check scripts.</li>
+      <li>Data sits at <code>public/movies.json</code> — that makes all 806 user histories <strong>publicly downloadable</strong>. We move it server-side.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Data findings <span class="badge">verified by script</span></h3>
+    <ul class="tight">
+      <li>Shape: <code>{ movies: Record&lt;string,string&gt;, users: {user_id, movies:number[]}[] }</code>. Movie keys are <em>strings</em>, user refs are <em>numbers</em>.</li>
+      <li>Clean: no duplicate user ids, no repeated or unknown movie ids, no empty users.</li>
+      <li>Title format is MovieLens: <code>"Usual Suspects, The (1995)"</code> — articles are moved to the end and need normalising for display and for lookups.</li>
+      <li>Popularity is skewed: Star Wars 583 likes, Doom Generation 7. This drives the main algorithm decision below.</li>
+    </ul>
+  </div>
+</div>
+
+<h2><span class="n">02</span>Free movie data</h2>
+<p>The file gives only titles. For a credible UI we want posters, synopsis, genres and director. We resolve this <strong>once at build time</strong> into a committed <code>catalog.json</code>, so the running app has no third-party dependency and e2e tests are deterministic.</p>
+<div class="tw"><table>
+<thead><tr><th>Option</th><th>Cost / key</th><th>Gives us</th><th>Catch</th></tr></thead>
+<tbody>
+<tr><td>TMDB API <span class="badge good">chosen</span></td><td>Free key, supplied by you in <code>.env</code></td><td>Posters, overview, genres, runtime, rating, cast</td><td>Requires the TMDB logo + notice in the app footer (see 05); free tier is non-commercial. You must create the key.</td></tr>
+<tr><td>Wikipedia REST + Wikidata <span class="badge">not used</span></td><td>Free, <strong>no key</strong></td><td>Poster thumbnail, lead extract; Wikidata gives genres/director</td><td>Title matching is fuzzier (e.g. “Twelve Monkeys” → “12 Monkeys”); I confirmed Toy Story and 12 Monkeys resolve. Posters are fair-use images — fine for a challenge, not for redistribution.</td></tr>
+<tr><td>OMDb <span class="badge">not used</span></td><td>Free key, 1,000 req/day</td><td>Poster, plot, genre, IMDb rating</td><td>Same key friction as TMDB with less data.</td></tr>
+</tbody></table></div>
+<div class="callout info"><strong>Decided:</strong> <code>scripts/build-catalog.ts</code> reads <code>TMDB_API_KEY</code> from <code>.env</code> (already gitignored; we add a committed <code>.env.example</code>). It resolves each of the 70 titles via TMDB title + year search and writes <code>server/assets/catalog.json</code> with title, year, overview, genres, TMDB poster path and a <strong>blurhash</strong>. The key is only needed to regenerate the catalog; the deployed app and the e2e tests never need it. Unmatched titles fail the script with a report, and an override map handles known mismatches (e.g. “Postino, Il”).</div>
+
+<h2><span class="n">03</span>How we recommend</h2>
+<p>Item-based collaborative filtering. For each movie pair, count users who liked both (co-likes). To score a candidate, sum its similarity to every movie the visitor picked. It fits a binary “liked” signal, runs instantly on 70 movies, and every result can explain itself (“because you liked A and B”).</p>
+<p>I prototyped it against the real data with a leave-one-out test (hide one liked movie per user, check whether it appears in the top 5; 684 users with ≥5 likes). The result changes the design:</p>
+<div class="tw"><table>
+<thead><tr><th>Popularity damping α</th><th>Hit@5</th><th>Toy Story + Aladdin + Lion King →</th><th>Reading</th></tr></thead>
+<tbody>
+<tr><td>— (most-popular baseline)</td><td>0.496</td><td>Star Wars, Fargo, …</td><td>Same list for everyone. Not a recommender.</td></tr>
+<tr><td>0.50 (plain cosine)</td><td>0.532</td><td>Empire Strikes Back, Jurassic Park, Raiders, Star Wars</td><td>Barely beats baseline. Disney fans get Star Wars.</td></tr>
+<tr><td>0.65 <span class="badge pri">candidate default</span></td><td>0.482</td><td>Jurassic Park, Apollo 13, Forrest Gump, Empire</td><td>Slightly less accurate, noticeably more tailored.</td></tr>
+<tr><td>0.80</td><td>0.393</td><td>Jurassic Park, Top Gun, Sound of Music, Apollo 13</td><td>Tailored but drifting; niche titles creep in.</td></tr>
+<tr><td>1.00</td><td>0.045</td><td>Free Willy 2, Aristocats, Doom Generation</td><td>Only rarities. Unusable.</td></tr>
+</tbody></table></div>
+<div class="callout"><strong>Honest read:</strong> with 70 mostly-blockbuster titles, accuracy and “feels personal” pull against each other and no setting is a clear win. I recommend exposing α as a documented server constant (default ~0.6, tuned by the same leave-one-out metric) rather than a UI slider. The offline eval prototype becomes a repeatable <code>scripts/evaluate.ts</code> so the choice is defensible. Note the free-willy-style rarities in the data (7–11 likes) make long-tail scores noisy; we ignore similarity from pairs with fewer than N co-likes.</div>
+<ul class="tight">
+  <li><strong>Cold start:</strong> zero picks → return the most-liked movies, labelled “Popular”, never an empty state.</li>
+  <li><strong>Explanations:</strong> each result carries its top 2–3 contributing picks and a normalised 0–1 match score.</li>
+  <li><strong>Exclusions:</strong> picked movies are never recommended; ties break by popularity then id so output is deterministic (needed for stable e2e assertions).</li>
+</ul>
+
+<h2><span class="n">04</span>Architecture</h2>
+<div class="mermaid">
+flowchart TD
+  B[Browser page index.vue] -->|useFetch GET| M[api/movies.get.ts]
+  B -->|POST| R[api/recommendations.post.ts]
+  R -->|validate body| V[utils/schemas.ts zod]
+  R --> E[utils/recommender.ts pure engine]
+  M --> C[utils/catalog.ts]
+  E --> D[(assets/movies.json)]
+  C --> K[(assets/catalog.json)]
+  S[scripts/build-catalog.ts build time only] -.->|TMDB API plus blurhash| K
+  B -.->|poster image| T[image.tmdb.org]
+</div>
+<p>The engine builds its co-like matrix once per server process (module-level lazy singleton) and answers each request in microseconds. The shared <code>Movie</code> / <code>Recommendation</code> types live in <code>shared/types</code> (Nuxt 4 convention) so client and server cannot drift.</p>
+
+<h3 style="margin-top:1.4em">API contract</h3>
+<div class="grid g2">
+<pre><code>GET /api/movies
+→ 200 [{ id, title, year, posterUrl,
+         overview, genres[] }]   // sorted by title</code></pre>
+<pre><code>POST /api/recommendations
+{ "liked": [20, 59, 60], "limit": 10 }
+→ 200 { source: "personalized" | "popular",
+        items: [{ movie, score,
+                  because: [{id,title}] }] }
+→ 400 unknown ids / empty-after-dedupe / limit out of range
+→ 422 body fails schema</code></pre>
+</div>
+<p>POST (not GET) avoids URL length limits, but the <em>page</em> state still lives in the URL as <code>?liked=20,59,60</code> so results are shareable, SSR-rendered, and survive refresh.</p>
+
+<h2><span class="n">05</span>The experience</h2>
+<div class="mock">
+  <div class="mock-bar"><span>🎬 Movies RusticIT</span><span class="badge">EN</span></div>
+  <div class="mock-body">
+    <div>
+      <h3>Movies you like</h3>
+      <div class="field">🔍 Search 70 movies…</div>
+      <div class="chips"><span class="chip">Star Wars (1977) ✕</span><span class="chip">Empire Strikes Back ✕</span><span class="chip">Raiders of the Lost Ark ✕</span></div>
+      <p style="color:var(--muted);font-size:.85rem">Pick 1 or more. With none, we show what’s popular.</p>
+    </div>
+    <div>
+      <h3>Recommended for you</h3>
+      <div class="posters">
+        <div class="poster"><i></i><b>Return of the Jedi</b><span>Because: Star Wars, Empire</span><div class="bar"><u style="width:94%"></u></div></div>
+        <div class="poster"><i></i><b>Terminator 2</b><span>Because: Raiders, Empire</span><div class="bar"><u style="width:81%"></u></div></div>
+        <div class="poster"><i></i><b>The Fugitive</b><span>Because: Raiders</span><div class="bar"><u style="width:77%"></u></div></div>
+        <div class="poster"><i></i><b>Aliens</b><span>Because: Star Wars, Empire</span><div class="bar"><u style="width:70%"></u></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="mock-bar" style="border-top:1px solid var(--line);border-bottom:0;font-weight:400;font-size:.8rem;color:var(--muted)"><span><span class="badge pri">TMDB logo</span> This product uses the TMDB API but is not endorsed or certified by TMDB.</span></div>
+</div>
+<p style="color:var(--muted);font-size:.88rem">Wireframe in Material tokens to match Vuetify; illustrative, not final visuals. Recommendation names above are plausible placeholders, not engine output.</p>
+<ul class="tight">
+  <li><strong>Components:</strong> <code>MovieSearch</code> (v-autocomplete, keyboard accessible), <code>LikedChips</code>, <code>MovieCard</code>, <code>RecommendationGrid</code>, <code>RecommendationEmpty/Error</code> states, <code>AppShell</code> layout, and <code>AppFooter</code> carrying the <a href="https://www.themoviedb.org/about/logos-attribution">TMDB logo attribution</a>: official logo (downloaded from that page into <code>public/</code>) linking to themoviedb.org, plus the required line “This product uses the TMDB API but is not endorsed or certified by TMDB.”</li>
+  <li><strong>State:</strong> a <code>useLikedMovies()</code> composable backed by the route query; <code>useRecommendations()</code> wraps <code>useFetch</code> with a reactive key so it re-fetches (debounced) and is SSR-safe. No Pinia needed.</li>
+  <li><strong>Posters:</strong> remote from the TMDB image CDN, never copied into the repo. A <code>PosterImage</code> component shows the movie’s <strong>blurhash</strong> (decoded to a small canvas) instantly, then fades the real poster in when it loads; it keeps a fixed 2:3 box so there is no layout shift, and falls back to the blurhash with a title overlay if the image errors. Blurhashes are computed once by the catalog script (it downloads each poster a single time to hash it, then discards it).</li>
+  <li><strong>Quality bars:</strong> responsive down to 360px, dark mode via Vuetify theme, <code>data-testid</code> hooks, alt text on posters, strings in the i18n <code>en</code> locale rather than hard-coded.</li>
+</ul>
+
+<h3 style="margin-top:1.4em">Look and feel: rusticit.com</h3>
+<ul class="tight">
+  <li>Palette from its CSS: charcoal <code>#0e152e</code> and off-white surfaces, purple <code>#4a4ac0</code> / <code>#6f6fbe</code> primary, cyan <code>#07c6ff</code> as the sparing accent. Both light and dark themes, following the site’s dark-class convention and system preference.</li>
+  <li>Type: Rubik for headings, Inter for body (both are variable fonts the site already ships; we self-host via <code>@nuxt/fonts</code>).</li>
+  <li>Floating pill header with blurred backdrop, rounded corners, thin low-contrast borders. Implemented as a Vuetify theme (<code>colors</code>, <code>defaults</code>, rounded) so components inherit it rather than being overridden with CSS.</li>
+  <li>Product name “Movies RusticIT”, linking back to rusticit.com. Footer has the TMDB attribution.</li>
+</ul>
+
+<h3 style="margin-top:1.4em">Analytics: Umami</h3>
+<ul class="tight">
+  <li>Same Umami Cloud account as rusticit.com, but <strong>its own website entry</strong> so movies traffic does not mix into the main site’s numbers. You create it in Umami and give me the website id; I will not reuse the rusticit.com id.</li>
+  <li>Loaded from <code>cloud.umami.is/script.js</code> via Nuxt <code>app.head</code> with <code>defer</code>, only when <code>NUXT_PUBLIC_UMAMI_WEBSITE_ID</code> is set (so dev and tests stay clean). Umami is cookieless, so no consent banner is needed.</li>
+  <li>A small <code>useAnalytics()</code> composable wraps <code>window.umami?.track</code> (safe no-op if blocked). Events: <code>movie-picked</code>, <code>movie-removed</code>, <code>recommendations-shown</code> (pick count, source), <code>recommendation-clicked</code>. Payloads carry movie ids only, never anything personal.</li>
+  <li>Add <code>.env.example</code> entry and set the variable in Netlify.</li>
+</ul>
+
+<h2><span class="n">06</span>Layout of the code</h2>
+<pre class="tree"><code>app/
+  pages/index.vue            <span class="c"># thin: composes components</span>
+  components/                <span class="c"># MovieSearch, LikedChips, MovieCard, RecommendationGrid …</span>
+  composables/               <span class="c"># useLikedMovies, useRecommendations</span>
+  layouts/default.vue
+server/
+  api/movies.get.ts
+  api/recommendations.post.ts
+  utils/{recommender,catalog,schemas,titles}.ts
+  assets/{movies.json,catalog.json}   <span class="c"># moved out of public/</span>
+shared/types/index.ts
+scripts/{build-catalog,evaluate}.ts
+tests/e2e/                   <span class="c"># Playwright via @nuxt/test-utils</span>
+</code></pre>
+
+<h2><span class="n">07</span>E2E-only testing</h2>
+<p>Runner: <code>@nuxt/test-utils</code> with <code>setup({ browser: true })</code> (Playwright). It boots the real Nuxt server, so tests hit the real API and the real rendered pages. No mocks of our own code, no unit tests.</p>
+<div class="tw"><table>
+<thead><tr><th>Unit under test</th><th>Covered through</th><th>Key scenarios</th></tr></thead>
+<tbody>
+<tr><td>GET /api/movies</td><td><code>$fetch</code> against the server</td><td>70 items; each has poster/year/title; sorted; no user data leaks</td></tr>
+<tr><td>POST /api/recommendations</td><td><code>$fetch</code></td><td>Star Wars+Empire+Raiders → Return of the Jedi in top 3; picks excluded; deterministic; 400 on unknown id; 422 on bad body; empty → popular</td></tr>
+<tr><td>Recommender engine (module)</td><td>Via the endpoint, with known fixtures from the real data</td><td>Cold start, single pick, 70 picks (nothing left), duplicate ids, limit bounds, explanation ids ⊆ picks</td></tr>
+<tr><td>Catalog / data contract</td><td>Endpoint + a data-contract spec</td><td>All 70 movie ids have catalog entries with a valid blurhash and a TMDB poster path</td></tr>
+<tr><td>MovieSearch, LikedChips</td><td>Browser</td><td>Type-ahead filters; select adds chip; ✕ removes; keyboard-only flow; ignores already-picked</td></tr>
+<tr><td>PosterImage (blurhash)</td><td>Browser, poster requests intercepted with Playwright routes</td><td>Blurhash canvas visible before the image resolves; real poster replaces it on load; failed/aborted image keeps the placeholder and title; no layout shift (box size constant). Tests never hit the real TMDB CDN.</td></tr>
+<tr><td>RecommendationGrid, MovieCard</td><td>Browser</td><td>Cards render with title/poster/reason/score; loading and error states (forced via Playwright route abort)</td></tr>
+<tr><td>Page + URL state</td><td>Browser</td><td>Deep link <code>?liked=…</code> renders results on first paint (SSR); refresh keeps state; invalid ids in URL handled gracefully</td></tr>
+<tr><td>AppFooter (TMDB attribution)</td><td>Browser</td><td>Footer on every page; logo visible with alt text and links to themoviedb.org; notice text present; not clipped at 360px</td></tr>
+<tr><td>Umami analytics</td><td>Browser, Umami host intercepted with Playwright routes</td><td>Script tag present only when the website id is set; picking/removing a movie and showing results fire the expected events with the expected payload; blocked script does not break the app; nothing sent in test runs by default</td></tr>
+<tr><td>Deployment config</td><td>Browser + response headers on the preview build</td><td>Pages carry <code>noindex</code> (display-only site); security headers present; 404 route renders branded page</td></tr>
+<tr><td>Layout, i18n, theme</td><td>Browser</td><td>Mobile viewport (360px) no horizontal scroll; dark mode toggle; strings come from locale</td></tr>
+<tr><td>build-catalog script</td><td>Run as a child process against a recorded TMDB fixture (no real key or network)</td><td>Output schema valid incl. blurhash; unmatched titles reported; non-zero exit on failure; missing <code>TMDB_API_KEY</code> gives a clear error</td></tr>
+</tbody></table></div>
+<div class="callout info"><strong>Gates:</strong> <code>npm run test:e2e</code>, <code>nuxt typecheck</code>, ESLint (<code>@nuxt/eslint</code>) all in CI-ready scripts. A component only counts as done when a browser test exercises it.</div>
+
+<h2><span class="n">08</span>Delivery order</h2>
+<ol class="phases">
+<li><h3>Foundation</h3>Move data to <code>server/assets</code>, add <code>shared/types</code>, ESLint, typecheck, Playwright harness with one smoke test.</li>
+<li><h3>Recommender + API (test-first)</h3>Engine, zod schemas, both endpoints, e2e API suite, <code>evaluate.ts</code> to lock α.</li>
+<li><h3>Catalog</h3>Build script with TMDB lookup + blurhash, committed <code>catalog.json</code>, <code>.env.example</code>, data-contract test.</li>
+<li><h3>UI</h3>Components, composables, i18n strings, URL state, states for loading/empty/error, browser e2e.</li>
+<li><h3>Polish & docs</h3>RusticIT look and feel pass, responsive and dark-mode pass, accessibility pass, README with run/test/regenerate instructions, TMDB attribution.</li>
+<li><h3>Analytics + Deploy to Netlify</h3>Umami script and <code>useAnalytics()</code> events. <code>netlify.toml</code> (build <code>nuxt build</code>, Nitro auto-detects the Netlify preset), site at <code>movies.rusticit.com</code> (DNS CNAME is yours to add), <code>noindex</code> meta and header, security headers. Display only: no accounts, and analytics through Umami Cloud (see below).</li>
+</ol>
+
+<h2><span class="n">09</span>Risks</h2>
+<div class="grid g2">
+  <div class="card"><span class="badge bad">Quality</span><h3>Weak personalization</h3><p>Only +3.6 points of hit@5 over “just show popular”. Mitigation: damping, min co-like threshold, honest explanation text, documented eval. We won’t oversell it.</p></div>
+  <div class="card"><span class="badge warn">Data</span><h3>Title matching</h3><p>MovieLens titles (“Postino, Il”, “ID4”, “Se7en”) can mismatch TMDB. Mitigation: normaliser plus an explicit override map; the script fails loudly on unmatched ids.</p></div>
+  <div class="card"><span class="badge warn">Legal</span><h3>Poster and API terms</h3><p>TMDB requires the logo attribution in the footer (planned, with an e2e check) and non-commercial use. A display-only demo on movies.rusticit.com fits, but any monetisation would need a commercial TMDB agreement.</p></div>
+  <div class="card"><span class="badge warn">Process</span><h3>E2E-only is slower</h3><p>Browser tests cost more than unit tests. Mitigation: heavy logic coverage goes through the API layer ($fetch, fast), browser tests stay focused on UI behaviour.</p></div>
+</div>
+
+<h2><span class="n">10</span>Decisions (locked)</h2>
+<div class="tw"><table>
+<thead><tr><th>Topic</th><th>Decision</th><th>Consequence</th></tr></thead>
+<tbody>
+<tr><td>Movie data</td><td>TMDB; key provided in <code>.env</code></td><td>Script-only dependency; catalog committed; deployed app needs no key.</td></tr>
+<tr><td>Ranking</td><td>Item-based CF with popularity damping</td><td>α tuned with <code>evaluate.ts</code>; ~0.6–0.65 starting range.</td></tr>
+<tr><td>Posters</td><td>Remote (TMDB CDN) + blurhash placeholders</td><td>Hash computed at catalog build; tests intercept image requests; graceful failure state.</td></tr>
+<tr><td>Test runner</td><td>@nuxt/test-utils + Playwright</td><td>Real Nuxt server per run, API via <code>$fetch</code>, UI via browser.</td></tr>
+<tr><td>Brand &amp; look</td><td>“Movies RusticIT”, rusticit.com aesthetic</td><td>Custom Vuetify theme, Rubik + Inter, pill header.</td></tr>
+<tr><td>Analytics</td><td>Umami Cloud, same account, separate website id</td><td>Cookieless, env-driven, custom events, e2e-tested via intercepted requests.</td></tr>
+<tr><td>Hosting</td><td>Netlify at movies.rusticit.com, display only</td><td><code>netlify.toml</code>, noindex, Umami analytics (same account as rusticit.com), no logins.</td></tr>
+</tbody></table></div>
+<div class="callout"><strong>Assumptions:</strong> (1) the site is <code>noindex</code> since it is display-only. (2) You create the Netlify site, the DNS record for <code>movies.rusticit.com</code> and a new Umami website entry; I prepare config and tell you what to add, and deploy nothing unless you ask.</div>
+<p>If this looks right, tell me to start Phase 1.</p>
+
+</main>
+
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.esm.min.mjs";
+  const q = window.matchMedia("(prefers-color-scheme: dark)");
+  const nodes = [...document.querySelectorAll(".mermaid")].map(el => ({ el, src: el.textContent }));
+  let applied;
+  async function render() {
+    const theme = q.matches ? "dark" : "default";
+    if (theme === applied) return;
+    mermaid.initialize({ startOnLoad: false, theme, securityLevel: "strict" });
+    nodes.forEach(n => { n.el.removeAttribute("data-processed"); n.el.textContent = n.src; });
+    await mermaid.run({ nodes: nodes.map(n => n.el) });
+    applied = theme;
+  }
+  render();
+  q.addEventListener("change", render);
+</script>
+</body>
+</html>
