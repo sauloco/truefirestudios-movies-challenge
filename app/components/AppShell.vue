@@ -21,6 +21,7 @@ onMounted(followSystem)
         >{{ $t('app.title') }}</a>
       </v-app-bar-title>
       <template #append>
+        <UserSwitcher />
         <ColorModeToggle />
       </template>
     </v-app-bar>
