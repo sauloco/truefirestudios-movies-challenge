@@ -12,14 +12,12 @@ export async function useLikedMovies() {
   })
 
   // Ids that are not numbers or not in the catalog are dropped rather than failing the page
-  const liked = computed(() => {
-    const ids = requested.value.map(Number).filter(id => byId.value.has(id))
-    return [...new Set(ids)]
-  })
+  const validIds = computed(() => requested.value.map(Number).filter(id => byId.value.has(id)))
+  const liked = computed(() => [...new Set(validIds.value)])
 
   const likedMovies = computed(() => liked.value.map(id => byId.value.get(id)!))
   const available = computed(() => movies.value.filter(movie => !liked.value.includes(movie.id)))
-  const ignoredCount = computed(() => requested.value.length - liked.value.length)
+  const ignoredCount = computed(() => requested.value.length - validIds.value.length)
 
   function setLiked(ids: number[]) {
     const { liked: _previous, ...query } = route.query
