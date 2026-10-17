@@ -2,6 +2,8 @@
 
 "People who liked these also liked…" for 70 movies and 806 users. Pick a few movies you like and get ranked recommendations, each with a plain-language reason ("Because you liked …") and a match score. With no picks it shows what is popular. The picks live in the URL (`?liked=20,59,60`), so a result page can be shared and survives a refresh. Each card opens a read-only detail page at `/movies/<id>` (blurred-poster header, overview, genres, and the match score when you arrive from a result); the poster and title animate between the two pages with a view transition.
 
+Four demo viewers (avatars in the top right) each carry their own likes from the dataset; picking one switches the whole app to that viewer, with the viewer and picks in the URL (`?user=sam&liked=…`). **This is a proof of concept with no security**: anyone can be anyone, and the cookie that remembers the last viewer is only a convenience.
+
 Built with Nuxt 4, Vuetify (themed after rusticit.com, light and dark), `@nuxtjs/i18n`, and a server-side recommender. Tests are browser end-to-end only.
 
 ## Requirements
@@ -49,7 +51,8 @@ To sweep your own values: `npm run evaluate -- 0.55 0.6 0.65`. The honest read i
 
 ## API
 
-- `GET /api/movies` returns the 70 movies with title, year, poster URL, blurhash, overview and genres, sorted by title. User histories are never exposed.
+- `GET /api/movies` returns the 70 movies with title, year, poster URL, blurhash, overview and genres, sorted by title. Per-user histories are not exposed here.
+- `GET /api/profiles` returns the four demo profiles (`id`, `name`, `avatarUrl`, `tint`, `language`, `liked`). Their likes are read from the first four dataset users; the other 802 users stay private.
 - `POST /api/recommendations` with `{ "liked": [20, 59, 60], "limit": 10 }` returns `{ source: "personalized" | "popular", items: [{ movie, score, because }] }`. Unknown ids give 400, a body that fails the schema gives 422.
 
 ## Regenerating the catalog
