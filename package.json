@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "typecheck": "nuxt typecheck",
     "test:e2e": "vitest run",
-    "evaluate": "node scripts/evaluate.ts"
+    "evaluate": "node scripts/evaluate.ts",
+    "build-catalog": "node scripts/build-catalog.ts"
   },
   "dependencies": {
     "@nuxtjs/i18n": "10.6.0",
