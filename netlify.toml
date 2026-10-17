@@ -6,3 +6,4 @@
 
 [build.environment]
   NODE_VERSION = "22"
+  NUXT_PUBLIC_UMAMI_WEBSITE_ID = "1e0d0914-ad91-4052-bb0b-1343af734587"

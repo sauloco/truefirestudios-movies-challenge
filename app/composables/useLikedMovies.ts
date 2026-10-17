@@ -32,6 +32,7 @@ export async function useLikedMovies() {
   }
 
   function remove(id: number) {
+    if (!liked.value.includes(id)) return
     analytics.movieRemoved(id, liked.value.length - 1)
     return setLiked(liked.value.filter(pick => pick !== id))
   }

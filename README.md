@@ -69,7 +69,7 @@ Options: `npm run build-catalog -- --out catalog.json --movies movies.json`.
 
 Page views and four custom events go to [Umami](https://umami.is) Cloud. It is cookieless, so there is no consent banner, and it is off unless a website id is configured: dev and the test suite never load it.
 
-1. Put the website id in `NUXT_PUBLIC_UMAMI_WEBSITE_ID`: in a local `.env` (see `.env.example`) or in Netlify's environment variables. It is read at runtime, so changing it needs a redeploy but not a code change. The id is public (it is visible in the page source), but it is kept out of the repository.
+1. The website id is read from `NUXT_PUBLIC_UMAMI_WEBSITE_ID`. Deploys get it from `netlify.toml`, and a Netlify environment variable overrides it; for local use put it in `.env` (see `.env.example`). It is read at runtime, so changing it needs a redeploy but not a code change. The id is public (it is visible in the page source) and currently is the shared rusticit.com one.
 2. Events: `movie-picked` and `movie-removed` (`movieId`, `pickCount`), `recommendations-shown` (`pickCount`, `source`) and `recommendation-clicked` (`movieId`, `source`). Payloads carry movie ids and counts only. `useAnalytics()` wraps `window.umami?.track`, so an ad blocker only turns tracking into a no-op.
 3. Query strings are excluded from page views (`data-exclude-search`), because the picks in `?liked=` change on every click.
 
@@ -80,8 +80,8 @@ While this site shares the rusticit.com website id, filter by hostname in Umami 
 The repository is ready for a Netlify site; nothing is deployed from here.
 
 1. Create a site from this repository. `netlify.toml` sets the build command (`nuxt build`) and Node 22; Nitro detects Netlify and builds the matching preset, so no publish directory is needed.
-2. Add `NUXT_PUBLIC_UMAMI_WEBSITE_ID` under Site configuration > Environment variables.
-3. Deploy. The site is marked `noindex` (meta tag and `X-Robots-Tag`), and every response carries a Content-Security-Policy (scripts from the site and `cloud.umami.is`, images from the site and `image.tmdb.org`), `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options` and `Permissions-Policy`. These are `routeRules` in `nuxt.config.ts`, which Nitro writes to Netlify's `_headers`. Unknown routes render the branded 404 page (`app/error.vue`).
+2. Deploy. Analytics uses the id from `netlify.toml`; set `NUXT_PUBLIC_UMAMI_WEBSITE_ID` under Site configuration > Environment variables to override it.
+3. Check the result. The site is marked `noindex` (meta tag and `X-Robots-Tag`), and every response carries a Content-Security-Policy (scripts from the site and `cloud.umami.is`, images from the site and `image.tmdb.org`), `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options` and `Permissions-Policy`. These are `routeRules` in `nuxt.config.ts`, which Nitro writes to Netlify's `_headers`. Unknown routes render the branded 404 page (`app/error.vue`).
 
 Pointing `movies.rusticit.com` at the site (a DNS CNAME and the custom domain in Netlify) is a later manual step. Until then the site is served from its `*.netlify.app` address.
 
