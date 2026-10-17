@@ -18,7 +18,10 @@ const { data, status, error, refresh } = await useRecommendations(liked)
         :movies="likedMovies"
         @remove="remove"
       />
-      <p class="text-body-2 text-medium-emphasis mt-2">
+      <p
+        v-if="!liked.length"
+        class="text-body-2 text-medium-emphasis mt-2"
+      >
         {{ $t('liked.hint') }}
       </p>
       <v-alert
