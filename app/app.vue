@@ -1,6 +1,6 @@
 <template>
-  <v-app data-testid="app-shell">
+  <NuxtLayout>
     <NuxtRouteAnnouncer />
-    <v-main />
-  </v-app>
+    <NuxtPage />
+  </NuxtLayout>
 </template>

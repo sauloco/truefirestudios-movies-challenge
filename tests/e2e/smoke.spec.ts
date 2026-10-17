@@ -13,7 +13,7 @@ describe('smoke', async () => {
 
   it('does not serve the raw movies data publicly', async () => {
     const response = await fetch('/movies.json')
-    expect(response.headers.get('content-type') ?? '').not.toContain('application/json')
+    expect(response.status).toBe(404)
     expect(await response.text()).not.toContain('Toy Story')
   })
 })

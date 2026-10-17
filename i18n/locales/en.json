@@ -1,0 +1,10 @@
+{
+  "app": {
+    "title": "Movies RusticIT",
+    "tagline": "People who liked these also liked…"
+  },
+  "footer": {
+    "tmdbLogoAlt": "The Movie Database (TMDB)",
+    "tmdbNotice": "This product uses the TMDB API but is not endorsed or certified by TMDB."
+  }
+}
