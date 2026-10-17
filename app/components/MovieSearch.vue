@@ -30,6 +30,7 @@ const label = (movie: Movie) => `${movie.title} (${movie.year})`
     :label="$t('search.label')"
     :no-data-text="$t('search.noData')"
     variant="outlined"
+    color="primary"
     hide-details
     auto-select-first
     data-testid="movie-search"

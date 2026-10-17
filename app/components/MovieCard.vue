@@ -62,6 +62,7 @@ const to = computed(() => ({ path: `/movies/${props.item.movie.id}`, query: rout
         class="mt-2"
         size="small"
         color="primary"
+        variant="flat"
         data-testid="movie-card-score"
       >
         {{ score }}

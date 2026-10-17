@@ -25,7 +25,10 @@ const edited = computed(() => liked.value.length !== active.value.liked.length
         @remove="remove"
       />
       <div class="d-flex flex-wrap align-center ga-2 mt-2">
-        <p class="text-body-2 text-medium-emphasis">
+        <p
+          v-if="!liked.length"
+          class="text-body-2 text-medium-emphasis"
+        >
           {{ $t('liked.hint') }}
         </p>
         <v-btn

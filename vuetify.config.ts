@@ -34,6 +34,7 @@ export default defineVuetifyConfiguration({
           'surface-variant': '#1d2647',
           'on-surface-variant': '#a3a9c4',
           primary: '#8f8fe6',
+          'on-primary': '#0e152e',
           secondary: '#6f6fbe',
           accent: '#07c6ff',
           info: '#07c6ff',

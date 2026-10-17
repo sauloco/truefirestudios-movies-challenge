@@ -95,6 +95,7 @@ function goBack(event: MouseEvent) {
             v-if="score"
             size="small"
             color="primary"
+            variant="flat"
             data-testid="detail-score"
           >
             {{ score }}
