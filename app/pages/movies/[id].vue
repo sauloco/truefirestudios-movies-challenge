@@ -32,7 +32,7 @@ function goBack(event: MouseEvent) {
     data-testid="movie-detail"
   >
     <NuxtLink
-      to="/"
+      :to="{ path: '/', query: route.query }"
       class="d-inline-flex align-center mb-4 text-body-2"
       data-testid="detail-back"
       @click="goBack"
