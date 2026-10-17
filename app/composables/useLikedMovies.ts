@@ -3,6 +3,7 @@ export async function useLikedMovies() {
   const route = useRoute()
   const router = useRouter()
   const { data: movies } = await useMovies()
+  const analytics = useAnalytics()
 
   const byId = computed(() => new Map(movies.value.map(movie => [movie.id, movie])))
 
@@ -24,8 +25,16 @@ export async function useLikedMovies() {
     return router.replace({ query: ids.length ? { ...query, liked: ids.join(',') } : query })
   }
 
-  const add = (id: number) => liked.value.includes(id) ? undefined : setLiked([...liked.value, id])
-  const remove = (id: number) => setLiked(liked.value.filter(pick => pick !== id))
+  function add(id: number) {
+    if (liked.value.includes(id)) return
+    analytics.moviePicked(id, liked.value.length + 1)
+    return setLiked([...liked.value, id])
+  }
+
+  function remove(id: number) {
+    analytics.movieRemoved(id, liked.value.length - 1)
+    return setLiked(liked.value.filter(pick => pick !== id))
+  }
 
   return { liked, likedMovies, available, ignoredCount, add, remove }
 }
