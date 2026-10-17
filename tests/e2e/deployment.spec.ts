@@ -37,7 +37,7 @@ describe('security headers', () => {
     const messages: string[] = []
     page.on('console', message => messages.push(message.text()))
     page.on('pageerror', error => messages.push(error.message))
-    await page.goto(url('/?liked=1'))
+    await page.goto(url('/?user=sam&liked=1'))
     await page.locator('[data-testid="movie-card"]').first().waitFor()
     await page.locator('[data-testid="movie-card"]').first().click()
     await page.locator('[data-testid="movie-detail"]').waitFor()
@@ -57,7 +57,7 @@ describe('404 page', () => {
 
     await stubPosters(page)
     await page.locator('[data-testid="error-home"]').click()
-    await page.waitForURL(url('/'))
+    await page.waitForURL(u => u.pathname === '/')
     await page.locator('[data-testid="recommendations"]').waitFor()
     await page.close()
   })

@@ -22,7 +22,7 @@ beforeAll(async () => {
   EMPIRE = movies.find(movie => /Empire Strikes Back/.test(movie.title))!
 })
 
-async function open(path = '/') {
+async function open(path = '/?user=sam') {
   const page = await createPage()
   await stubPosters(page)
   const umami = await stubUmami(page)
@@ -83,16 +83,16 @@ describe('custom events', () => {
   })
 
   it('fires movie-removed with the remaining pick count', async () => {
-    const { page, umami } = await open(`/?liked=${STAR_WARS.id},${EMPIRE.id}`)
+    const { page, umami } = await open(`/?user=sam&liked=${STAR_WARS.id},${EMPIRE.id}`)
     await page.locator('[data-testid="movie-card"]').first().waitFor()
     await page.getByRole('button', { name: `Remove ${STAR_WARS.title}` }).click()
-    await page.waitForURL(`**/?liked=${EMPIRE.id}`)
+    await page.waitForURL(`**/?user=sam&liked=${EMPIRE.id}`)
     expect(await umami.events()).toContainEqual({ event: 'movie-removed', data: { movieId: STAR_WARS.id, pickCount: 1 } })
     await page.close()
   })
 
   it('fires recommendations-shown for a deep link rendered on the server', async () => {
-    const { page, umami } = await open(`/?liked=${STAR_WARS.id},${EMPIRE.id}`)
+    const { page, umami } = await open(`/?user=sam&liked=${STAR_WARS.id},${EMPIRE.id}`)
     await page.locator('[data-testid="movie-card"]').first().waitFor()
     expect(await umami.events()).toEqual([
       { event: 'recommendations-shown', data: { pickCount: 2, source: 'personalized' } }
@@ -101,7 +101,7 @@ describe('custom events', () => {
   })
 
   it('fires recommendation-clicked with the movie id and source', async () => {
-    const { page, umami } = await open(`/?liked=${STAR_WARS.id}`)
+    const { page, umami } = await open(`/?user=sam&liked=${STAR_WARS.id}`)
     const card = page.locator('[data-testid="movie-card"]').first()
     await card.waitFor()
     const movieId = Number(await card.getAttribute('data-movie-id'))
