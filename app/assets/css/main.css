@@ -7,8 +7,9 @@ h1, h2, h3, h4, h5, h6, [class*='text-h'], .v-card-title, .v-toolbar-title {
   font-family: Rubik, Inter, system-ui, sans-serif !important;
 }
 
-/* Keyboard focus is always visible, using the sparing cyan accent */
-:focus-visible {
+/* Vuetify text fields render focus on the field wrapper. Keep the fallback
+   ring for other controls without outlining the inner native input too. */
+:focus-visible:not(:where(.v-field input, .v-field textarea, .v-field select)) {
   outline: 2px solid rgb(var(--v-theme-accent));
   outline-offset: 2px;
 }

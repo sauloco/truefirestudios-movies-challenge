@@ -36,6 +36,22 @@ async function search(page: Page, text: string) {
 }
 
 describe('MovieSearch and LikedChips', () => {
+  it('renders keyboard focus on the field without an inner input outline', async () => {
+    const page = await open()
+    const input = page.locator('[data-testid="movie-search"] input')
+    await input.focus()
+    await page.keyboard.type('star wars')
+    await options(page).first().waitFor()
+
+    expect(await input.evaluate(el => getComputedStyle(el).outlineStyle)).toBe('none')
+    const field = page.locator('[data-testid="movie-search"] .v-field')
+    expect(await field.getAttribute('class')).toContain('v-field--focused')
+    const outline = field.locator('.v-field__outline')
+    expect(await outline.getAttribute('class')).toContain('text-primary')
+    expect(await outline.evaluate(el => getComputedStyle(el).getPropertyValue('--v-field-border-width'))).toBe('2px')
+    await page.close()
+  })
+
   it('filters the options as you type', async () => {
     const page = await open()
     await search(page, 'star wars')
