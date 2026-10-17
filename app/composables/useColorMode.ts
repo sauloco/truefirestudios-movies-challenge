@@ -23,7 +23,10 @@ export function useColorMode() {
   }
 
   function init() {
-    apply(choice.value ?? 'light')
+    if (choice.value) apply(choice.value)
+  }
+
+  function followSystem() {
     if (choice.value) return
     const query = window.matchMedia('(prefers-color-scheme: dark)')
     const follow = () => {
@@ -33,5 +36,5 @@ export function useColorMode() {
     query.addEventListener('change', follow)
   }
 
-  return { mode, toggle, init }
+  return { mode, toggle, init, followSystem }
 }

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-const { init } = useColorMode()
-onMounted(init)
+const { init, followSystem } = useColorMode()
+init()
+onMounted(followSystem)
 </script>
 
 <template>
