@@ -1,5 +1,5 @@
-import raw from '../assets/movies.json'
-import { parseTitle } from './titles'
+import raw from '../assets/movies.json' with { type: 'json' }
+import { parseTitle } from './titles.ts'
 
 export interface DatasetMovie {
   id: number
