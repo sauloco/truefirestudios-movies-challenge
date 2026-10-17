@@ -1,0 +1,9 @@
+<template>
+  <v-alert
+    type="info"
+    variant="tonal"
+    :title="$t('recommendations.emptyTitle')"
+    :text="$t('recommendations.emptyText')"
+    data-testid="recommendation-empty"
+  />
+</template>

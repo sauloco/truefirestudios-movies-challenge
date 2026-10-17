@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@nuxtjs/i18n": "10.6.0",
+    "blurhash": "2.0.5",
     "nuxt": "^4.6.1",
     "vue": "^3.5.43",
     "vue-router": "^5.4.0",
@@ -26,7 +27,6 @@
   "devDependencies": {
     "@nuxt/eslint": "1.17.0",
     "@nuxt/test-utils": "4.3.3",
-    "blurhash": "2.0.5",
     "eslint": "10.12.0",
     "jpeg-js": "0.4.4",
     "playwright-core": "1.64.0",
