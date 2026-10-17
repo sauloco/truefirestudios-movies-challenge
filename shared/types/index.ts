@@ -2,7 +2,7 @@ export interface Movie {
   id: number
   title: string
   year: number
-  posterUrl: string
+  posterUrl: string | null
   overview: string
   genres: string[]
 }
