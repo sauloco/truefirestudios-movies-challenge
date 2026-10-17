@@ -5,6 +5,7 @@ const props = defineProps<{
   src: string | null
   blurhash: string | null
   title: string
+  eager?: boolean
 }>()
 
 // The hash only carries the colour layout, so a tiny canvas scaled up by CSS is enough
@@ -15,6 +16,8 @@ const canvas = useTemplateRef<HTMLCanvasElement>('canvas')
 const image = useTemplateRef<HTMLImageElement>('image')
 const loaded = ref(false)
 const failed = ref(!props.src)
+// A cached image must be visible in the first frame, which a view transition snapshots
+const instant = ref(false)
 
 function drawBlurhash() {
   const context = canvas.value?.getContext('2d')
@@ -30,13 +33,17 @@ onMounted(() => {
   // The image may have settled before hydration, when no load/error listener was attached yet
   const settled = image.value
   if (settled?.complete) {
-    if (settled.naturalWidth > 0) loaded.value = true
+    if (settled.naturalWidth > 0) {
+      loaded.value = true
+      instant.value = true
+    }
     else failed.value = true
   }
 })
 
 watch(() => props.src, (src) => {
   loaded.value = false
+  instant.value = false
   failed.value = !src
 })
 watch(() => props.blurhash, drawBlurhash)
@@ -60,10 +67,10 @@ watch(() => props.blurhash, drawBlurhash)
       v-if="src && !failed"
       ref="image"
       class="poster__layer poster__image"
-      :class="{ 'poster__image--loaded': loaded }"
+      :class="{ 'poster__image--loaded': loaded, 'poster__image--instant': instant }"
       :src="src"
       :alt="$t('poster.alt', { title })"
-      loading="lazy"
+      :loading="eager ? 'eager' : 'lazy'"
       data-testid="poster-image"
       @load="loaded = true"
       @error="failed = true"
@@ -102,6 +109,10 @@ watch(() => props.blurhash, drawBlurhash)
 
 .poster__image--loaded {
   opacity: 1;
+}
+
+.poster__image--instant {
+  transition: none;
 }
 
 .poster__title {

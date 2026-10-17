@@ -1,6 +1,6 @@
 # Movies RusticIT
 
-"People who liked these also liked…" for 70 movies and 806 users. Pick a few movies you like and get ranked recommendations, each with a plain-language reason ("Because you liked …") and a match score. With no picks it shows what is popular. The picks live in the URL (`?liked=20,59,60`), so a result page can be shared and survives a refresh.
+"People who liked these also liked…" for 70 movies and 806 users. Pick a few movies you like and get ranked recommendations, each with a plain-language reason ("Because you liked …") and a match score. With no picks it shows what is popular. The picks live in the URL (`?liked=20,59,60`), so a result page can be shared and survives a refresh. Each card opens a read-only detail page at `/movies/<id>` (blurred-poster header, overview, genres, and the match score when you arrive from a result); the poster and title animate between the two pages with a view transition.
 
 Built with Nuxt 4, Vuetify (themed after rusticit.com, light and dark), `@nuxtjs/i18n`, and a server-side recommender. Tests are browser end-to-end only.
 

@@ -26,6 +26,11 @@
     "errorText": "Something went wrong while fetching your picks. Please try again.",
     "retry": "Try again"
   },
+  "detail": {
+    "back": "Back to recommendations",
+    "notFound": "Movie not found",
+    "genres": "Genres"
+  },
   "poster": {
     "alt": "Poster for {title}"
   },
