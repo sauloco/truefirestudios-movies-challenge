@@ -31,7 +31,7 @@ const score = computed(() => {
     />
     <v-card-item>
       <v-card-title
-        class="text-wrap"
+        class="movie-title"
         data-testid="movie-card-title"
       >
         {{ item.movie.title }}
@@ -58,3 +58,13 @@ const score = computed(() => {
     </v-card-text>
   </v-card>
 </template>
+
+<style scoped>
+/* Titles wrap at word boundaries; only an unbreakable overlong word is split */
+.movie-title {
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+</style>

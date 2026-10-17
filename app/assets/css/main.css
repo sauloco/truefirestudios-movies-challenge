@@ -1,0 +1,14 @@
+/* Inter for body copy, Rubik for headings (both self-hosted via @nuxt/fonts) */
+.v-application {
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif !important;
+}
+
+h1, h2, h3, h4, h5, h6, [class*='text-h'], .v-card-title, .v-toolbar-title {
+  font-family: Rubik, Inter, system-ui, sans-serif !important;
+}
+
+/* Keyboard focus is always visible, using the sparing cyan accent */
+:focus-visible {
+  outline: 2px solid rgb(var(--v-theme-accent));
+  outline-offset: 2px;
+}
