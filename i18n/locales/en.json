@@ -3,6 +3,32 @@
     "title": "Movies RusticIT",
     "tagline": "People who liked these also liked…"
   },
+  "search": {
+    "label": "Search 70 movies…",
+    "noData": "No matching movies"
+  },
+  "liked": {
+    "heading": "Movies you like",
+    "hint": "Pick 1 or more. With none, we show what's popular.",
+    "remove": "Remove {title}",
+    "ignored": "Some movies in this link were not recognised and were ignored."
+  },
+  "recommendations": {
+    "headingPersonalized": "Recommended for you",
+    "headingPopular": "Popular right now",
+    "because": "Because you liked {titles}",
+    "popularReason": "Liked by many viewers",
+    "matchScore": "{percent}% match",
+    "popularityScore": "{percent}% as popular as #1",
+    "emptyTitle": "Nothing left to recommend",
+    "emptyText": "You have picked every movie we know. Remove a few to see suggestions again.",
+    "errorTitle": "We couldn't load recommendations",
+    "errorText": "Something went wrong while fetching your picks. Please try again.",
+    "retry": "Try again"
+  },
+  "poster": {
+    "alt": "Poster for {title}"
+  },
   "footer": {
     "tmdbLogoAlt": "The Movie Database (TMDB)",
     "tmdbNotice": "This product uses the TMDB API but is not endorsed or certified by TMDB."

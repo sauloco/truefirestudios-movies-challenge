@@ -1,0 +1,60 @@
+<script setup lang="ts">
+import type { Recommendation } from '#shared/types'
+
+const props = defineProps<{
+  item: Recommendation
+  source: 'personalized' | 'popular'
+}>()
+
+const { t, n } = useI18n()
+
+const reason = computed(() => props.item.because.length
+  ? t('recommendations.because', { titles: props.item.because.map(({ title }) => title).join(', ') })
+  : t('recommendations.popularReason'))
+
+const score = computed(() => {
+  const percent = n(Math.round(props.item.score * 100))
+  return t(props.source === 'personalized' ? 'recommendations.matchScore' : 'recommendations.popularityScore', { percent })
+})
+</script>
+
+<template>
+  <v-card
+    class="h-100"
+    data-testid="movie-card"
+    :data-movie-id="item.movie.id"
+  >
+    <PosterImage
+      :src="item.movie.posterUrl"
+      :blurhash="item.movie.blurhash"
+      :title="item.movie.title"
+    />
+    <v-card-item>
+      <v-card-title
+        class="text-wrap"
+        data-testid="movie-card-title"
+      >
+        {{ item.movie.title }}
+      </v-card-title>
+      <v-card-subtitle data-testid="movie-card-year">
+        {{ item.movie.year }}
+      </v-card-subtitle>
+    </v-card-item>
+    <v-card-text class="pt-0">
+      <p
+        class="text-body-2"
+        data-testid="movie-card-reason"
+      >
+        {{ reason }}
+      </p>
+      <v-chip
+        class="mt-2"
+        size="small"
+        color="primary"
+        data-testid="movie-card-score"
+      >
+        {{ score }}
+      </v-chip>
+    </v-card-text>
+  </v-card>
+</template>

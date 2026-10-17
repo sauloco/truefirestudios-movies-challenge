@@ -1,5 +1,12 @@
+<script setup lang="ts">
+const { data, status, error, refresh } = await useRecommendations(ref([]))
+</script>
+
 <template>
-  <h1 class="text-h5">
-    {{ $t('app.tagline') }}
-  </h1>
+  <RecommendationGrid
+    :recommendations="data"
+    :pending="status === 'pending'"
+    :failed="!!error"
+    @retry="refresh()"
+  />
 </template>
