@@ -9,7 +9,7 @@ export interface DatasetMovie {
 
 export interface Dataset {
   movies: DatasetMovie[]
-  // Liked movie ids per user. Never exposed through the API.
+  // Liked movie ids per user. Only the four demo profiles' likes are exposed; the other 802 users stay private.
   users: number[][]
 }
 
