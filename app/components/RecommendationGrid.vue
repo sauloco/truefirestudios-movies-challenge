@@ -35,7 +35,7 @@ defineEmits<{ retry: [] }>()
         cols="6"
         sm="4"
         md="3"
-        lg="2"
+        lg="3"
       >
         <v-skeleton-loader
           type="image, article"
@@ -61,7 +61,7 @@ defineEmits<{ retry: [] }>()
         cols="6"
         sm="4"
         md="3"
-        lg="2"
+        lg="3"
       >
         <MovieCard
           :item="item"
