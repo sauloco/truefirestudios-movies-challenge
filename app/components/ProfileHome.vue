@@ -5,6 +5,12 @@ const { active, resetLikes } = await useProfiles()
 const { liked, likedMovies, available, ignoredCount, add, remove } = await useLikedMovies()
 const { data, status, error, refresh } = await useRecommendations(liked)
 
+const analytics = useAnalytics()
+// Once per result set shown, including the one rendered on the server for a deep link
+watch(data, (shown) => {
+  if (shown?.items.length) analytics.recommendationsShown(liked.value.length, shown.source)
+}, { immediate: true })
+
 const edited = computed(() => liked.value.length !== active.value.liked.length
   || liked.value.some(id => !active.value.liked.includes(id)))
 </script>

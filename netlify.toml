@@ -1,0 +1,9 @@
+# Nitro detects Netlify at build time and emits the matching preset (functions + publish dir),
+# so no publish path is set here. Security and robots headers live in nuxt.config.ts routeRules,
+# which Nitro writes to Netlify's _headers file.
+[build]
+  command = "nuxt build"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NUXT_PUBLIC_UMAMI_WEBSITE_ID = "1e0d0914-ad91-4052-bb0b-1343af734587"

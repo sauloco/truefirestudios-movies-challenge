@@ -7,6 +7,7 @@ const props = defineProps<{
 }>()
 
 const { t, n } = useI18n()
+const analytics = useAnalytics()
 const route = useRoute()
 // The detail page shows the score only when it was reached from a card
 const arrival = useState<{ id: number, score: string } | null>('movie-arrival', () => null)
@@ -20,6 +21,11 @@ const score = computed(() => {
   return t(props.source === 'personalized' ? 'recommendations.matchScore' : 'recommendations.popularityScore', { percent })
 })
 
+function open() {
+  arrival.value = { id: props.item.movie.id, score: score.value }
+  analytics.recommendationClicked(props.item.movie.id, props.source)
+}
+
 const to = computed(() => ({ path: `/movies/${props.item.movie.id}`, query: route.query }))
 </script>
 
@@ -29,7 +35,7 @@ const to = computed(() => ({ path: `/movies/${props.item.movie.id}`, query: rout
     :to="to"
     data-testid="movie-card"
     :data-movie-id="item.movie.id"
-    @click="arrival = { id: item.movie.id, score }"
+    @click="open"
   >
     <PosterImage
       :src="item.movie.posterUrl"
