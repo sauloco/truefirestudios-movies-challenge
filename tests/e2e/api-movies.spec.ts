@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { $fetch, setup } from '@nuxt/test-utils/e2e'
 import type { Movie } from '../../shared/types'
 
+const POSTER_URL = /^https:\/\/image\.tmdb\.org\/t\/p\/w342\/[\w-]+\.jpg$/
+
 describe('GET /api/movies', async () => {
   await setup()
 
@@ -13,9 +15,9 @@ describe('GET /api/movies', async () => {
         id: expect.any(Number),
         title: expect.any(String),
         year: expect.any(Number),
-        posterUrl: null,
-        overview: '',
-        genres: []
+        posterUrl: expect.stringMatching(POSTER_URL),
+        overview: expect.stringMatching(/\S/),
+        genres: expect.arrayContaining([expect.any(String)])
       })
       expect(movie.year).toBeGreaterThanOrEqual(1950)
     }
@@ -37,6 +39,14 @@ describe('GET /api/movies', async () => {
     expect(byId.get(63)).toMatchObject({ title: 'The Good, The Bad and The Ugly', year: 1966 })
     expect(byId.get(5)).toMatchObject({ title: 'Seven (Se7en)', year: 1995 })
     expect(movies.some(movie => /, (The|A|Il)$/.test(movie.title))).toBe(false)
+  })
+
+  it('joins TMDB metadata onto the dataset titles', async () => {
+    const movies = await $fetch<Movie[]>('/api/movies')
+    const toyStory = movies.find(movie => movie.id === 1)!
+    expect(toyStory.posterUrl).toBe('https://image.tmdb.org/t/p/w342/uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg')
+    expect(toyStory.overview).toContain('Woody')
+    expect(toyStory.genres).toContain('Animation')
   })
 
   it('does not leak user data', async () => {

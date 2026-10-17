@@ -54,7 +54,7 @@ describe('POST /api/recommendations', async () => {
       expect(second).toEqual(first)
     })
 
-    it('returns normalised scores in descending order with the Movie shape', async () => {
+    it('returns normalised scores in descending order with the full Movie shape', async () => {
       const { items } = await recommendations({ liked: picks, limit: 20 })
       expect(items.length).toBeGreaterThan(3)
       expect(items[0]!.score).toBe(1)
@@ -66,9 +66,9 @@ describe('POST /api/recommendations', async () => {
           id: expect.any(Number),
           title: expect.any(String),
           year: expect.any(Number),
-          posterUrl: null,
-          overview: '',
-          genres: []
+          posterUrl: expect.stringMatching(/^https:\/\/image\.tmdb\.org\/t\/p\/w342\/.+/),
+          overview: expect.stringMatching(/\S/),
+          genres: expect.arrayContaining([expect.any(String)])
         })
       }
     })

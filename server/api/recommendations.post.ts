@@ -15,7 +15,7 @@ export default defineEventHandler(async (event): Promise<RecommendationsResponse
     throw createError({ statusCode: 400, message: `limit must be between ${MIN_LIMIT} and ${MAX_LIMIT}` })
   }
 
-  const catalog = new Map(getDataset().movies.map(movie => [movie.id, movie]))
+  const catalog = getMovies()
   const unknown = parsed.data.liked.filter(id => !catalog.has(id))
   if (unknown.length) {
     throw createError({ statusCode: 400, message: `Unknown movie ids: ${[...new Set(unknown)].join(', ')}` })
@@ -27,13 +27,10 @@ export default defineEventHandler(async (event): Promise<RecommendationsResponse
 
   return {
     source,
-    items: items.map(item => {
-      const { id, title, year } = catalog.get(item.id)!
-      return {
-        movie: { id, title, year, posterUrl: null, overview: '', genres: [] },
-        score: item.score,
-        because: item.because.map(reference)
-      }
-    })
+    items: items.map(item => ({
+      movie: catalog.get(item.id)!,
+      score: item.score,
+      because: item.because.map(reference)
+    }))
   }
 })
