@@ -1,0 +1,966 @@
+[
+  {
+    "id": 1,
+    "tmdbId": 862,
+    "title": "Toy Story",
+    "year": 1995,
+    "overview": "Led by Woody, Andy's toys live happily in his room until Andy's birthday brings Buzz Lightyear onto the scene. Afraid of losing his place in Andy's heart, Woody plots against Buzz. But when circumstances separate Buzz and Woody from their owner, the duo eventually learns to put aside their differences.",
+    "genres": [
+      "Family",
+      "Comedy",
+      "Animation",
+      "Adventure"
+    ],
+    "posterPath": "/uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg",
+    "blurhash": "LHEfvk{HF4E,K-oYnjo~-2tlxoRo"
+  },
+  {
+    "id": 2,
+    "tmdbId": 710,
+    "title": "GoldenEye",
+    "year": 1995,
+    "overview": "When a powerful secret defense system is stolen, James Bond is assigned to stop a Russian crime syndicate from using it.",
+    "genres": [
+      "Adventure",
+      "Action",
+      "Thriller"
+    ],
+    "posterPath": "/z0ljRnNxIO7CRBhLEO0DvLgAFPR.jpg",
+    "blurhash": "LYFOfe~BRk9ubdWqRjoJ9aWBsmxF"
+  },
+  {
+    "id": 3,
+    "tmdbId": 63,
+    "title": "Twelve Monkeys",
+    "year": 1995,
+    "overview": "In the year 2035, convict James Cole reluctantly volunteers to be sent back in time to discover the origin of a deadly virus that wiped out nearly all of the earth's population and forced the survivors into underground communities. But when Cole is mistakenly sent to 1990 instead of 1996, he's arrested and locked up in a mental hospital. There he meets psychiatrist Dr. Kathryn Railly and the son of a famous virus expert who may hold the key to the Army of the 12 Monkeys; thought to be responsible for unleashing the killer disease.",
+    "genres": [
+      "Science Fiction",
+      "Thriller",
+      "Mystery"
+    ],
+    "posterPath": "/gt3iyguaCIw8DpQZI1LIN5TohM2.jpg",
+    "blurhash": "L69P{1~W569ZUHt78_4.:*S14.D%"
+  },
+  {
+    "id": 4,
+    "tmdbId": 31174,
+    "title": "Richard III",
+    "year": 1995,
+    "overview": "Having helped his brother King Edward IV take the throne of England, the jealous hunchback Richard, Duke of Gloucester, plots to seize power for himself. Masterfully deceiving and plotting against nearly everyone in the royal court, including his eventual wife, Lady Anne, and his brother George, Duke of Clarence, Richard orchestrates a bloody rise to power before finding all his gains jeopardized by those he betrayed.",
+    "genres": [
+      "Drama",
+      "War"
+    ],
+    "posterPath": "/cBg1AMH1ucPsDlNMfcHlrreQXQX.jpg",
+    "blurhash": "L5BygM_M0NEM]2R40NSf0NRQIB-U"
+  },
+  {
+    "id": 5,
+    "tmdbId": 807,
+    "title": "Seven (Se7en)",
+    "year": 1995,
+    "overview": "Two homicide detectives are on a desperate hunt for a serial killer whose crimes are based on the \"seven deadly sins\" in this dark and haunting film that takes viewers from the tortured remains of one victim to the next. The seasoned Det. Somerset researches each sin in an effort to get inside the killer's mind, while his novice partner, Mills, scoffs at his efforts to unravel the case.",
+    "genres": [
+      "Crime",
+      "Mystery",
+      "Thriller"
+    ],
+    "posterPath": "/191nKfP0ehp3uIvWqgPbFmI4lv9.jpg",
+    "blurhash": "LICh.o=^}?Wor=NbxGR+0h9v9vWX"
+  },
+  {
+    "id": 6,
+    "tmdbId": 629,
+    "title": "The Usual Suspects",
+    "year": 1995,
+    "overview": "Held in an L.A. interrogation room, Verbal Kint attempts to convince the feds that a mythic crime lord, Keyser Soze, not only exists, but was also responsible for drawing him and his four partners into a multi-million dollar heist that ended with an explosion in San Pedro harbor – leaving few survivors. Verbal lures his interrogators with an incredible story of the crime lord's almost supernatural prowess.",
+    "genres": [
+      "Drama",
+      "Crime",
+      "Thriller"
+    ],
+    "posterPath": "/99X2SgyFunJFXGAYnDv3sb9pnUD.jpg",
+    "blurhash": "L$Ja.gbIbHxZ~qfkt7kC.8ofRjRk"
+  },
+  {
+    "id": 7,
+    "tmdbId": 11010,
+    "title": "Il Postino",
+    "year": 1994,
+    "overview": "Simple Italian postman learns to love poetry while delivering mail to a famous poet; he uses this to woo local beauty Beatrice.",
+    "genres": [
+      "Comedy",
+      "Drama",
+      "Romance"
+    ],
+    "posterPath": "/cUaCpjVDefYShKyLmkcDsiPaBHn.jpg",
+    "blurhash": "L7LW^NuOE0L}00g3E2R4~U+F-7%h"
+  },
+  {
+    "id": 8,
+    "tmdbId": 755,
+    "title": "From Dusk Till Dawn",
+    "year": 1996,
+    "overview": "After kidnapping a father and his two kids, the Gecko brothers head south to a seedy Mexican bar to hide out in safety, unaware of its notorious clientele.",
+    "genres": [
+      "Horror",
+      "Action",
+      "Crime"
+    ],
+    "posterPath": "/sV3kIAmvJ9tPz4Lq5fuf9LLMxte.jpg",
+    "blurhash": "L8B{4D}p5814=|t6XRxa4:9}-o}q"
+  },
+  {
+    "id": 9,
+    "tmdbId": 197,
+    "title": "Braveheart",
+    "year": 1995,
+    "overview": "Enraged at the slaughter of Murron, his new bride and childhood love, Scottish warrior William Wallace slays a platoon of the local English lord's soldiers. This leads the village to revolt and, eventually, the entire country to rise up against English rule.",
+    "genres": [
+      "Drama",
+      "History",
+      "War"
+    ],
+    "posterPath": "/or1gBugydmjToAEq7OZY0owwFk.jpg",
+    "blurhash": "LfJP#m}R?FFb={+tS~btb0rqRkt5"
+  },
+  {
+    "id": 10,
+    "tmdbId": 103,
+    "title": "Taxi Driver",
+    "year": 1976,
+    "overview": "Suffering from insomnia, disturbed loner Travis Bickle takes a job as a New York City cabbie, haunting the streets nightly, growing increasingly detached from reality as he dreams of cleaning up the filthy city.",
+    "genres": [
+      "Crime",
+      "Drama"
+    ],
+    "posterPath": "/ekstpH614fwDX8DUln1a2Opz0N8.jpg",
+    "blurhash": "LVELs0tQS2WC07V[WCa}~1WBs,od"
+  },
+  {
+    "id": 11,
+    "tmdbId": 9737,
+    "title": "Bad Boys",
+    "year": 1995,
+    "overview": "Marcus Burnett is a henpecked family man. Mike Lowrey is a footloose and fancy free ladies' man. Both Miami policemen, they have 72 hours to reclaim a consignment of drugs stolen from under their station's nose. To complicate matters, in order to get the assistance of the sole witness to a murder, they have to pretend to be each other.",
+    "genres": [
+      "Action",
+      "Thriller",
+      "Crime",
+      "Comedy"
+    ],
+    "posterPath": "/x1ygBecKHfXX4M2kRhmFKWfWbJc.jpg",
+    "blurhash": "LAOV3b=t}5X9XlNdmQery6R%%NxC"
+  },
+  {
+    "id": 12,
+    "tmdbId": 568,
+    "title": "Apollo 13",
+    "year": 1995,
+    "overview": "The true story of technical troubles that scuttle the Apollo 13 lunar mission in 1970, risking the lives of astronaut Jim Lovell and his crew, with the failed journey turning into a thrilling saga of heroism. Drifting more than 200,000 miles from Earth, the astronauts work furiously with the ground crew to avert tragedy.",
+    "genres": [
+      "Drama",
+      "History"
+    ],
+    "posterPath": "/tVeKscCm2fY1xDXZk8PgnZ87h9S.jpg",
+    "blurhash": "L5Css.?^4.IT?G-=x]Vr004T8{9F"
+  },
+  {
+    "id": 13,
+    "tmdbId": 414,
+    "title": "Batman Forever",
+    "year": 1995,
+    "overview": "Batman faces off against two foes: the schizophrenic, horribly scarred former District Attorney Harvey Dent, aka Two-Face, and the Riddler, a disgruntled ex-Wayne Enterprises inventor seeking revenge against his former employer by unleashing his brain-sucking weapon on Gotham City's residents. As the caped crusader also copes with tortured memories of his parents' murder, he has a new romance, with psychologist Chase Meridian.",
+    "genres": [
+      "Action",
+      "Crime",
+      "Fantasy"
+    ],
+    "posterPath": "/i0fJS8M5UKoETjjJ0zwUiKaR8tr.jpg",
+    "blurhash": "L9Ac-;~p5QT1XCoh%3%M0zE2#lxa"
+  },
+  {
+    "id": 14,
+    "tmdbId": 8068,
+    "title": "Desperado",
+    "year": 1995,
+    "overview": "El Mariachi plunges headfirst into the dark border underworld when he follows a trail of blood to the last of the infamous Mexican drug lords, Bucho, for an action-packed, bullet-riddled showdown. With the help of his friend and a beautiful bookstore owner, El Mariachi tracks Bucho, takes on his army of desperados, and leaves his own trail of blood.",
+    "genres": [
+      "Thriller",
+      "Action",
+      "Crime"
+    ],
+    "posterPath": "/e3gwpBeXpvGZsxUya9zNym5QXrw.jpg",
+    "blurhash": "L46%sS~B5m0~,@OXXR$%DjIos,WC"
+  },
+  {
+    "id": 15,
+    "tmdbId": 13552,
+    "title": "The Doom Generation",
+    "year": 1995,
+    "overview": "Jordan White and Amy Blue, two troubled teens, pick up an adolescent drifter, Xavier Red. Together, the threesome embarks on a sex- and violence-filled journey through a United States of psychos and quickie marts.",
+    "genres": [
+      "Comedy",
+      "Drama",
+      "Crime"
+    ],
+    "posterPath": "/tLfp9fHjydH6wzxukch5PWclga.jpg",
+    "blurhash": "L6Ie|l+JUb^i00bu?]xZ#SRUXlox"
+  },
+  {
+    "id": 16,
+    "tmdbId": 9073,
+    "title": "Free Willy 2: The Adventure Home",
+    "year": 1995,
+    "overview": "Jesse becomes reunited with Willy three years after the whale's jump to freedom as the teenager tries to rescue the killer whale and other orcas from an oil spill.",
+    "genres": [
+      "Family",
+      "Adventure",
+      "Drama",
+      "Comedy"
+    ],
+    "posterPath": "/3wpug3W5rYBdqeAnhc1UeXLE5ZF.jpg",
+    "blurhash": "LNGbk-D$w[e-~2WF%1adD%jvR*bI"
+  },
+  {
+    "id": 17,
+    "tmdbId": 281,
+    "title": "Strange Days",
+    "year": 1995,
+    "overview": "In the last days of 1999, ex-cop turned street hustler Lenny Nero receives a disc which contains the memories of the murder of a prostitute. With the help of bodyguard Mace, he starts to investigate and is pulled deeper and deeper in a whirl of murder, blackmail and intrigue.",
+    "genres": [
+      "Crime",
+      "Science Fiction",
+      "Thriller"
+    ],
+    "posterPath": "/rY5BrDRcYAKE0BYmmT66YG6Uy5Q.jpg",
+    "blurhash": "L4B2x-~A0001v~-T5m5T0gE3^P^i"
+  },
+  {
+    "id": 18,
+    "tmdbId": 2292,
+    "title": "Clerks",
+    "year": 1994,
+    "overview": "Convenience and video store clerks Dante and Randal are sharp-witted, potty-mouthed and bored out of their minds. So in between needling customers, the counter jockeys play hockey on the roof, visit a funeral home and deal with their love lives.",
+    "genres": [
+      "Comedy"
+    ],
+    "posterPath": "/9IiSgiq4h4siTIS9H3o4nZ3h5L9.jpg",
+    "blurhash": "LsPsx2tR-=xukDofoIoL~qRjM_WB"
+  },
+  {
+    "id": 19,
+    "tmdbId": 20156,
+    "title": "Exotica",
+    "year": 1994,
+    "overview": "In the upscale Toronto strip club Exotica, dancer Christina is visited nightly by the obsessive Francis, a depressed tax auditor. Her ex-boyfriend, the club's MC, Eric, still jealously pines for her even as he introduces her onstage, but Eric is having his own relationship problems with the club's female owner. Thomas, a mysterious pet-shop owner, is about to become unexpectedly involved in their lives.",
+    "genres": [
+      "Drama"
+    ],
+    "posterPath": "/pWcJdcIHjL3P6NaEJKeV6ONfAMV.jpg",
+    "blurhash": "LA7dIVIT0~-UyGRNs.bbAeaI^ONe"
+  },
+  {
+    "id": 20,
+    "tmdbId": 11,
+    "title": "Star Wars",
+    "year": 1977,
+    "overview": "Princess Leia is captured and held hostage by the evil Imperial forces in their effort to take over the galactic Empire. Venturesome Luke Skywalker and dashing captain Han Solo team together with the loveable robot duo R2-D2 and C-3PO to rescue the beautiful princess and restore peace and justice in the Empire.",
+    "genres": [
+      "Adventure",
+      "Action",
+      "Science Fiction"
+    ],
+    "posterPath": "/fai0rspsNeJCS69wHNjOdWxcI7P.jpg",
+    "blurhash": "LCE_?tOc01~C00S5_Noesh#%d;9Z"
+  },
+  {
+    "id": 21,
+    "tmdbId": 241,
+    "title": "Natural Born Killers",
+    "year": 1994,
+    "overview": "Two victims of traumatized childhoods become lovers and serial murderers irresponsibly glorified by the mass media.",
+    "genres": [
+      "Crime",
+      "Thriller",
+      "Drama"
+    ],
+    "posterPath": "/fEKZwT91gxvkAoyPgpNXo8W5fu0.jpg",
+    "blurhash": "LvLNupV@%g%M_NRjt7ayITWBRQRP"
+  },
+  {
+    "id": 22,
+    "tmdbId": 101,
+    "title": "The Professional",
+    "year": 1994,
+    "overview": "Léon, the top hit man in New York, has earned a rep as an effective \"cleaner\". But when his next-door neighbors are wiped out by a loose-cannon DEA agent, he becomes the unwilling custodian of 12-year-old Mathilda. Before long, Mathilda's thoughts turn to revenge, and she considers following in Léon's footsteps.",
+    "genres": [
+      "Crime",
+      "Drama",
+      "Action"
+    ],
+    "posterPath": "/bxB2q91nKYp8JNzqE7t7TWBVupB.jpg",
+    "blurhash": "LaFFNND+9G%e~VIWD*x@?ZWEIVbE"
+  },
+  {
+    "id": 23,
+    "tmdbId": 680,
+    "title": "Pulp Fiction",
+    "year": 1994,
+    "overview": "A burger-loving hit man, his philosophical partner, a drug-addled gangster's moll and a washed-up boxer converge in this sprawling, comedic crime caper. Their adventures unfurl in three stories that ingeniously trip back and forth in time.",
+    "genres": [
+      "Thriller",
+      "Crime",
+      "Comedy"
+    ],
+    "posterPath": "/vQWk5YBFWF4bZaofAbv0tShwBvQ.jpg",
+    "blurhash": "LQG%urwHIrS1}Ss:w{Rj}SRleoxa"
+  },
+  {
+    "id": 24,
+    "tmdbId": 278,
+    "title": "The Shawshank Redemption",
+    "year": 1994,
+    "overview": "Imprisoned in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope.",
+    "genres": [
+      "Drama",
+      "Crime"
+    ],
+    "posterPath": "/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg",
+    "blurhash": "LpEL7,E2ofjs~9IVkCjZ?FRjS5ax"
+  },
+  {
+    "id": 25,
+    "tmdbId": 9495,
+    "title": "The Crow",
+    "year": 1994,
+    "overview": "Exactly one year after young rock guitarist Eric Draven and his fiancée are brutally killed by a ruthless gang of criminals, Draven, watched over by a hypnotic crow, returns from the grave to exact revenge.",
+    "genres": [
+      "Fantasy",
+      "Action",
+      "Thriller"
+    ],
+    "posterPath": "/rMMB3v6jYHjsvXRNJYESacoTD7j.jpg",
+    "blurhash": "LFBphDay00of_Na|00j[xaj[R*ay"
+  },
+  {
+    "id": 26,
+    "tmdbId": 13,
+    "title": "Forrest Gump",
+    "year": 1994,
+    "overview": "A man with a low IQ has accomplished great things in his life and been present during significant historic events—in each case, far exceeding what anyone imagined he could do. But despite all he has achieved, his one true love eludes him.",
+    "genres": [
+      "Comedy",
+      "Drama",
+      "Romance"
+    ],
+    "posterPath": "/saHP97rTPS5eLmrLQEcANmKrsFl.jpg",
+    "blurhash": "LDIsILIr5a%1%%RPRPg40Ot6wbNH"
+  },
+  {
+    "id": 27,
+    "tmdbId": 8587,
+    "title": "The Lion King",
+    "year": 1994,
+    "overview": "Young lion prince Simba, eager to one day become king of the Pride Lands, grows up under the watchful eye of his father Mufasa; all the while his villainous uncle Scar conspires to take the throne for himself. Amid betrayal and tragedy, Simba must confront his past and find his rightful place in the Circle of Life.",
+    "genres": [
+      "Animation",
+      "Family",
+      "Drama"
+    ],
+    "posterPath": "/sKCr78MXSLixwmZ8DyJLrpMsd15.jpg",
+    "blurhash": "LEKR~:04-3Sj}FR$D-t*03?WEToH"
+  },
+  {
+    "id": 28,
+    "tmdbId": 854,
+    "title": "The Mask",
+    "year": 1994,
+    "overview": "Timid bank clerk Stanley Ipkiss discovers a magical mask infused with the spirit of the Norse god Loki. Donning it transforms him into an unrestrained, green-faced, cartoon-like wild man. While the mask grants him the confidence to woo a local singer, it also makes him the target of a ruthless mobster.",
+    "genres": [
+      "Comedy",
+      "Fantasy",
+      "Crime",
+      "Romance"
+    ],
+    "posterPath": "/jPC2eYub74zwf2tPGVtzSlBW6Oy.jpg",
+    "blurhash": "L8G7*R]r199b0104%C~8=XKi0P?9"
+  },
+  {
+    "id": 29,
+    "tmdbId": 6075,
+    "title": "Carlito's Way",
+    "year": 1993,
+    "overview": "Free after years in prison, Carlito Brigante intends to give up his criminal ways, but it's not long before the ex-con is sucked back into the New York City underworld.",
+    "genres": [
+      "Crime",
+      "Drama",
+      "Thriller"
+    ],
+    "posterPath": "/g6D7mjQtndu768cusGmoEQY9fTB.jpg",
+    "blurhash": "L45E:FtS4nof?wayI9of9aWA$yj]"
+  },
+  {
+    "id": 30,
+    "tmdbId": 5503,
+    "title": "The Fugitive",
+    "year": 1993,
+    "overview": "Wrongfully convicted of murdering his wife and sentenced to death, Richard Kimble escapes from the law in an attempt to find the real killer and clear his name.",
+    "genres": [
+      "Action",
+      "Thriller",
+      "Drama"
+    ],
+    "posterPath": "/b3rEtLKyOnF89mcK75GXDXdmOEf.jpg",
+    "blurhash": "LJDJ0H4mRkkD~W9F%MR,4.WB-:M{"
+  },
+  {
+    "id": 31,
+    "tmdbId": 11934,
+    "title": "The Hudsucker Proxy",
+    "year": 1994,
+    "overview": "A naive business graduate is installed as president of a manufacturing company as part of a stock scam.",
+    "genres": [
+      "Comedy",
+      "Drama",
+      "Fantasy"
+    ],
+    "posterPath": "/xBQBr6Q1OTivouBK66oFgy86n03.jpg",
+    "blurhash": "LfJswrV@Myt6~WWBWCof1NkCtRaz"
+  },
+  {
+    "id": 32,
+    "tmdbId": 329,
+    "title": "Jurassic Park",
+    "year": 1993,
+    "overview": "A wealthy entrepreneur secretly creates a theme park featuring living dinosaurs drawn from prehistoric DNA. Before opening day, he invites a team of experts and his two eager grandchildren to experience the park and help calm anxious investors. However, the park is anything but amusing as the security systems go off-line and the dinosaurs escape.",
+    "genres": [
+      "Adventure",
+      "Science Fiction"
+    ],
+    "posterPath": "/d9mtMGQDLANKieb9PbD3yK7xxzo.jpg",
+    "blurhash": "LD9s0XW;5ksU}sa|Ezo14:n%xaSM"
+  },
+  {
+    "id": 33,
+    "tmdbId": 78,
+    "title": "Blade Runner",
+    "year": 1982,
+    "overview": "In the smog-choked dystopian Los Angeles of 2019, blade runner Rick Deckard is called out of retirement to terminate a quartet of replicants who have escaped to Earth seeking their creator for a way to extend their short life spans.",
+    "genres": [
+      "Science Fiction",
+      "Drama",
+      "Thriller"
+    ],
+    "posterPath": "/63N9uy8nd9j7Eog2axPQ8lbr3Wj.jpg",
+    "blurhash": "LKE2g|~USvV?~o_1xtRjsl-.xtR%"
+  },
+  {
+    "id": 34,
+    "tmdbId": 319,
+    "title": "True Romance",
+    "year": 1993,
+    "overview": "Clarence marries hooker Alabama, steals cocaine from her pimp, and tries to sell it in Hollywood, while the owners of the coke try to reclaim it.",
+    "genres": [
+      "Action",
+      "Crime",
+      "Romance"
+    ],
+    "posterPath": "/39lXk6ud6KiJgGbbWI2PUKS7y2.jpg",
+    "blurhash": "LEAc#rwKITRi.mJ-Z~#RR6xHn#Ri"
+  },
+  {
+    "id": 35,
+    "tmdbId": 812,
+    "title": "Aladdin",
+    "year": 1992,
+    "overview": "In the boorish city of Agrabah, kind-hearted street urchin Aladdin and Princess Jasmine fall in love, although she can only marry a prince. He and power-hungry Grand Vizier Jafar vie for a magic lamp that can fulfill their wishes.",
+    "genres": [
+      "Animation",
+      "Family",
+      "Adventure",
+      "Fantasy",
+      "Romance"
+    ],
+    "posterPath": "/eLFfl7vS8dkeG1hKp5mwbm37V83.jpg",
+    "blurhash": "L9E{eTGb8x:h06m,IoT0_O$2-.JX"
+  },
+  {
+    "id": 36,
+    "tmdbId": 280,
+    "title": "Terminator 2: Judgment Day",
+    "year": 1991,
+    "overview": "Ten years after the events of the original, a reprogrammed T-800 is sent back in time to protect young John Connor from the shape-shifting T-1000. Together with his mother Sarah, he fights to stop Skynet from triggering a nuclear apocalypse.",
+    "genres": [
+      "Action",
+      "Thriller",
+      "Science Fiction"
+    ],
+    "posterPath": "/jFTVD4XoWQTcg7wdyJKa8PEds5q.jpg",
+    "blurhash": "L98;Z4s8IpW;01RiVrxv}[aeM{kC"
+  },
+  {
+    "id": 37,
+    "tmdbId": 581,
+    "title": "Dances with Wolves",
+    "year": 1990,
+    "overview": "Wounded Civil War soldier John Dunbar tries to commit suicide—and becomes a hero instead. As a reward, he's assigned to his dream post, a remote junction on the Western frontier, and soon makes unlikely friends with the local Sioux tribe.",
+    "genres": [
+      "Adventure",
+      "Drama",
+      "Western"
+    ],
+    "posterPath": "/hw0ZEHAaTqTxSXGVwUFX7uvanSA.jpg",
+    "blurhash": "LTG[~IIV%1xuGK%2IWR+00ozaeM{"
+  },
+  {
+    "id": 38,
+    "tmdbId": 274,
+    "title": "The Silence of the Lambs",
+    "year": 1991,
+    "overview": "Clarice Starling is a top student at the FBI's training academy.  Jack Crawford wants Clarice to interview Dr. Hannibal Lecter, a brilliant psychiatrist who is also a violent psychopath, serving life behind bars for various acts of murder and cannibalism.  Crawford believes that Lecter may have insight into a case and that Starling, as an attractive young woman, may be just the bait to draw him out.",
+    "genres": [
+      "Crime",
+      "Thriller",
+      "Drama"
+    ],
+    "posterPath": "/uS9m8OBk1A8eM9I042bx8XXpqAq.jpg",
+    "blurhash": "LhIE*5_3R*og~qt6WAofM{M{WBax"
+  },
+  {
+    "id": 39,
+    "tmdbId": 275,
+    "title": "Fargo",
+    "year": 1996,
+    "overview": "Jerry Lundegaard is a small-town Minnesota car salesman deeply in debt and willing to do almost anything to get out. Police chief Marge Gunderson discovers a string of violent crimes as Jerry's schemes spiral out of control.",
+    "genres": [
+      "Crime",
+      "Drama",
+      "Thriller"
+    ],
+    "posterPath": "/rt7cpEr1uP6RTZykBFhBTcRaKvG.jpg",
+    "blurhash": "LAO{,Y_3~qj=#sV@EgWY?bS2IUsD"
+  },
+  {
+    "id": 40,
+    "tmdbId": 10112,
+    "title": "The Aristocats",
+    "year": 1970,
+    "overview": "When Madame Adelaide Bonfamille leaves her fortune to Duchess and her children—Bonfamille’s beloved family of cats—the butler plots to steal the money and kidnaps the legatees, leaving them out on a country road. All seems lost until the wily Thomas O’Malley Cat and his jazz-playing alley cats come to the aristocats’ rescue.",
+    "genres": [
+      "Animation",
+      "Comedy",
+      "Family",
+      "Adventure"
+    ],
+    "posterPath": "/aOWs5XMJEABN6SKCTJBCoeD1kCA.jpg",
+    "blurhash": "LPQ9v8ox_Lx^x]t7adVr_Lo}DiV@"
+  },
+  {
+    "id": 41,
+    "tmdbId": 503475,
+    "title": "Wallace & Gromit: The Best of Aardman Animation",
+    "year": 1996,
+    "overview": "Anthology of Aardman Animation short films released in theaters in 1996, centered on the new release of the third Wallace & Gromit short, \"A Close Shave.\"  Includes: \"A Close Shave,\" \"Creature Comforts\" and \"Heat Electric Commercials\" by Nick Park; \"Rex the Runt: How Dinosaurs Became Extinct\", \"Rex the Runt: Dreams\" and \"Ident\" by Richard Goleszowski; \"Wat's Pig\" and \"My Baby Just Cares For Me\" by Peter Lord; \"Early Bird\" by Peter Lord and David Sproxton; \"Pib and Pog\" directed by Peter Peake",
+    "genres": [
+      "Family",
+      "Animation",
+      "Comedy"
+    ],
+    "posterPath": "/tWkYclnnChwoMMBFECsEjd5hb77.jpg",
+    "blurhash": "LCJa[|?d4{IV01%MbKbJFiD$x9nm"
+  },
+  {
+    "id": 42,
+    "tmdbId": 9802,
+    "title": "The Rock",
+    "year": 1996,
+    "overview": "When vengeful General Francis X. Hummel seizes control of Alcatraz Island and threatens to launch missiles loaded with deadly chemical weapons into San Francisco, only a young FBI chemical weapons expert and notorious Federal prisoner have the skills to penetrate the impregnable island fortress and take him down.",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Thriller"
+    ],
+    "posterPath": "/eBcoxveWzzXQrCrwWMGAROcqgpP.jpg",
+    "blurhash": "LRGZ{Sxt9]R+~UsoNHkC5:NHnPbb"
+  },
+  {
+    "id": 43,
+    "tmdbId": 664,
+    "title": "Twister",
+    "year": 1996,
+    "overview": "An unprecedented series of violent tornadoes is sweeping across Oklahoma. Tornado chasers, headed by Dr. Jo Harding, attempt to release a groundbreaking device that will allow them to track them and create a more advanced warning system. They are joined by Jo's soon to be ex-husband Bill, a former tornado chaser himself, and his girlfriend Melissa.",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Drama"
+    ],
+    "posterPath": "/d4ie3f6QTvNw40V770Uzo87SDZn.jpg",
+    "blurhash": "LKE2UW~T?ES5ogRks,s.039bE3xD"
+  },
+  {
+    "id": 44,
+    "tmdbId": 9879,
+    "title": "Striptease",
+    "year": 1996,
+    "overview": "Bounced from her job, Erin Grant needs money if she's to have any chance of winning back custody of her child. But, eventually, she must confront the naked truth: to take on the system, she'll have to take it all off. Erin strips to conquer, but she faces unintended circumstances when a hound dog of a Congressman zeroes in on her and sharpens the shady tools at his fingertips, including blackmail and murder.",
+    "genres": [
+      "Comedy",
+      "Crime",
+      "Drama"
+    ],
+    "posterPath": "/4zMy6R7acotCmGoDk4sjzRtDwKn.jpg",
+    "blurhash": "LIJt0T?b69o#00ITMxRjcbtR=_oL"
+  },
+  {
+    "id": 45,
+    "tmdbId": 602,
+    "title": "Independence Day (ID4)",
+    "year": 1996,
+    "overview": "Strange phenomena surface around the globe. The skies ignite. Terror races through the world's major cities. As these extraordinary events unfold, it becomes increasingly clear that a force of incredible magnitude has arrived. Its mission: total annihilation over the Fourth of July weekend. The last hope to stop the destruction is an unlikely group of people united by fate and unimaginable circumstances.",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Science Fiction"
+    ],
+    "posterPath": "/p0BPQGSPoSa8Ml0DAf2mB2kCU0R.jpg",
+    "blurhash": "L4D*-7#=0Kjc00WAk=Wo1ntk?GW."
+  },
+  {
+    "id": 46,
+    "tmdbId": 238,
+    "title": "The Godfather",
+    "year": 1972,
+    "overview": "Spanning the years 1945 to 1955, a chronicle of the fictional Italian-American Corleone crime family. When organized crime family patriarch, Vito Corleone barely survives an attempt on his life, his youngest son, Michael steps in to take care of the would-be killers, launching a campaign of bloody revenge.",
+    "genres": [
+      "Drama",
+      "Crime"
+    ],
+    "posterPath": "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
+    "blurhash": "L29Z.h?b0000L}slBWKP0JVs.9t-"
+  },
+  {
+    "id": 47,
+    "tmdbId": 15121,
+    "title": "The Sound of Music",
+    "year": 1965,
+    "overview": "In the years before World War II, a tomboyish postulant at an Austrian abbey is hired as a governess in the home of a widowed naval captain with seven children and brings a new love of life and music into the home.",
+    "genres": [
+      "Drama",
+      "Family",
+      "Music",
+      "Romance"
+    ],
+    "posterPath": "/c6CrUZypAsBCaRWX0M3RVRDbhNS.jpg",
+    "blurhash": "L@IF;.R-xsof.AaybJWYIqoeRjR*"
+  },
+  {
+    "id": 48,
+    "tmdbId": 562,
+    "title": "Die Hard",
+    "year": 1988,
+    "overview": "High above the city of L.A. a team of terrorists has seized a building, taken hostages, and declared war. One man has manages to escape... An off-duty cop hiding somewhere inside. He's alone, tired... and the only chance anyone has got.",
+    "genres": [
+      "Action",
+      "Thriller"
+    ],
+    "posterPath": "/7Bjd8kfmDSOzpmhySpEhkUyK2oH.jpg",
+    "blurhash": "L7AJZs00AG$*.RNH9aocHX_N9tr?"
+  },
+  {
+    "id": 49,
+    "tmdbId": 623,
+    "title": "A Fish Called Wanda",
+    "year": 1988,
+    "overview": "While a diamond advocate attempts to steal a collection of diamonds, troubles arise when he realises he’s not the only one after the collection.",
+    "genres": [
+      "Comedy",
+      "Crime"
+    ],
+    "posterPath": "/hkSGFNVfEEUXFCxRZDITFHVhUlu.jpg",
+    "blurhash": "LmNTtHae_3xu~qtRV@WB?bRjM{js"
+  },
+  {
+    "id": 50,
+    "tmdbId": 583,
+    "title": "Monty Python's Life of Brian",
+    "year": 1979,
+    "overview": "Brian Cohen is an average young Jewish man, but through a series of ridiculous events, he gains a reputation as the Messiah. When he's not dodging his followers or being scolded by his shrill mother, the hapless Brian has to contend with the pompous Pontius Pilate and acronym-obsessed members of a separatist movement. Rife with Monty Python's signature absurdity, the tale finds Brian's life paralleling Biblical lore, albeit with many more laughs.",
+    "genres": [
+      "Comedy"
+    ],
+    "posterPath": "/lSSA64WF0M0BXnjwr2quMh6shCl.jpg",
+    "blurhash": "LCIpt-5F06^c01#lE9oH0FTu}kn6"
+  },
+  {
+    "id": 51,
+    "tmdbId": 88,
+    "title": "Dirty Dancing",
+    "year": 1987,
+    "overview": "Expecting the usual tedium that accompanies a summer in the Catskills with her family, 17-year-old Frances 'Baby' Houseman is surprised to find herself stepping into the shoes of a professional hoofer—and unexpectedly falling in love.",
+    "genres": [
+      "Drama",
+      "Music",
+      "Romance"
+    ],
+    "posterPath": "/9Jw6jys7q9gjzVX5zm1z0gC8gY9.jpg",
+    "blurhash": "LKRMPX_N_MDixvIAxt%M_MWAMyxv"
+  },
+  {
+    "id": 52,
+    "tmdbId": 500,
+    "title": "Reservoir Dogs",
+    "year": 1992,
+    "overview": "A botched robbery indicates a police informant, and the pressure mounts in the aftermath at a warehouse. Crime begets violence as the survivors -- veteran Mr. White, newcomer Mr. Orange, psychopathic parolee Mr. Blonde, bickering weasel Mr. Pink and Nice Guy Eddie -- unravel.",
+    "genres": [
+      "Crime",
+      "Thriller"
+    ],
+    "posterPath": "/xi8Iu6qyTfyZVDVy60raIOYJJmk.jpg",
+    "blurhash": "LiIy:u}raeWC%LNHoes.--R*NHWW"
+  },
+  {
+    "id": 53,
+    "tmdbId": 792,
+    "title": "Platoon",
+    "year": 1986,
+    "overview": "As a young and naive recruit in Vietnam, Chris Taylor faces a moral crisis when confronted with the horrors of war and the duality of man.",
+    "genres": [
+      "Drama",
+      "War",
+      "Action"
+    ],
+    "posterPath": "/m3mmFkPQKvPZq5exmh0bDuXlD9T.jpg",
+    "blurhash": "LDAAp:WAD%t7~qWBMyofV{WCxaoy"
+  },
+  {
+    "id": 54,
+    "tmdbId": 402,
+    "title": "Basic Instinct",
+    "year": 1992,
+    "overview": "Catherine, a novelist with an insatiable sexual appetite, becomes a prime suspect when her boyfriend is brutally murdered -- a crime she had described in her latest story.",
+    "genres": [
+      "Thriller",
+      "Mystery"
+    ],
+    "posterPath": "/76Ts0yoHk8kVQj9MMnoMixhRWoh.jpg",
+    "blurhash": "LLKBdzMJ~p9u000L%1R5+Y8_W=Sh"
+  },
+  {
+    "id": 55,
+    "tmdbId": 744,
+    "title": "Top Gun",
+    "year": 1986,
+    "overview": "For Lieutenant Pete 'Maverick' Mitchell and his friend and co-pilot Nick 'Goose' Bradshaw, being accepted into an elite training school for fighter pilots is a dream come true. But a tragedy, as well as personal demons, will threaten Pete's dreams of becoming an ace pilot.",
+    "genres": [
+      "Action",
+      "Drama",
+      "Romance"
+    ],
+    "posterPath": "/xUuHj3CgmZQ9P2cMaqQs4J0d4Zc.jpg",
+    "blurhash": "LJF=2JIp%0S#~B9u%fS#XRIVt7of"
+  },
+  {
+    "id": 56,
+    "tmdbId": 2756,
+    "title": "The Abyss",
+    "year": 1989,
+    "overview": "A civilian oil rig crew is recruited to conduct a search and rescue effort when a nuclear submarine mysteriously sinks. One diver soon finds himself on a spectacular odyssey 25,000 feet below the ocean's surface where he confronts a mysterious force that has the power to change the world or destroy it.",
+    "genres": [
+      "Adventure",
+      "Thriller",
+      "Science Fiction"
+    ],
+    "posterPath": "/2dCit3XAtv9KWCJvRKdPkJ0FAkH.jpg",
+    "blurhash": "L799A*yE00t-00W=-:Z#00R5_MjX"
+  },
+  {
+    "id": 57,
+    "tmdbId": 762,
+    "title": "Monty Python and the Holy Grail",
+    "year": 1974,
+    "overview": "King Arthur, accompanied by his squire, recruits his Knights of the Round Table, including Sir Bedevere the Wise, Sir Lancelot the Brave, Sir Robin the Not-Quite-So-Brave-As-Sir-Lancelot and Sir Galahad the Pure. On the way, Arthur battles the Black Knight who, despite having had all his limbs chopped off, insists he can still fight. They reach Camelot, but Arthur decides not  to enter, as \"it is a silly place\".",
+    "genres": [
+      "Adventure",
+      "Comedy",
+      "Fantasy"
+    ],
+    "posterPath": "/7nTkHjETdGMYK1phHwDbPsrzbYl.jpg",
+    "blurhash": "LqOV_Ss-T0s:~obIsoayOZWBbHbH"
+  },
+  {
+    "id": 58,
+    "tmdbId": 892,
+    "title": "Delicatessen",
+    "year": 1991,
+    "overview": "In a post-apocalyptic world, the residents of an apartment above the butcher shop receive an occasional delicacy of meat, something that is in low supply. A young man new in town falls in love with the butcher's daughter, which causes conflicts in her family, who need the young man for other business-related purposes.",
+    "genres": [
+      "Comedy",
+      "Science Fiction",
+      "Fantasy"
+    ],
+    "posterPath": "/gNtOgQHxE5B8e08zuNRAdDpmK5Z.jpg",
+    "blurhash": "L6Ac-mW=00RP~TWBD,t701s:~UR*"
+  },
+  {
+    "id": 59,
+    "tmdbId": 1891,
+    "title": "The Empire Strikes Back",
+    "year": 1980,
+    "overview": "The epic saga continues as Luke Skywalker, in hopes of defeating the evil Galactic Empire, learns the ways of the Jedi from aging master Yoda. But Darth Vader is more determined than ever to capture Luke. Meanwhile, rebel leader Princess Leia, cocky Han Solo, Chewbacca, and droids C-3PO and R2-D2 are thrown into various stages of capture, betrayal and despair.",
+    "genres": [
+      "Adventure",
+      "Action",
+      "Science Fiction"
+    ],
+    "posterPath": "/nNAeTmF4CtdSgMDplXTDPOpYzsX.jpg",
+    "blurhash": "L6D9;#9E01Vt00NL_3?G01_4DiR+"
+  },
+  {
+    "id": 60,
+    "tmdbId": 85,
+    "title": "Raiders of the Lost Ark",
+    "year": 1981,
+    "overview": "When Dr. Indiana Jones – the tweed-suited professor who just happens to be a celebrated archaeologist – is hired by the government to locate the legendary Ark of the Covenant, he finds himself up against the entire Nazi regime.",
+    "genres": [
+      "Adventure",
+      "Action"
+    ],
+    "posterPath": "/ceG9VzoRAVGwivFU403Wc3AHRys.jpg",
+    "blurhash": "L8Gjygt60KoI0P$$NeNI0Loc~Bb^"
+  },
+  {
+    "id": 61,
+    "tmdbId": 68,
+    "title": "Brazil",
+    "year": 1985,
+    "overview": "Low-level bureaucrat Sam Lowry escapes the monotony of his day-to-day life through a recurring daydream of himself as a virtuous hero saving a beautiful damsel. Investigating a case that led to the wrongful arrest and eventual death of an innocent man instead of wanted terrorist Harry Tuttle, he meets the woman from his daydream, and in trying to help her gets caught in a web of mistaken identities, mindless bureaucracy and lies.",
+    "genres": [
+      "Comedy",
+      "Science Fiction"
+    ],
+    "posterPath": "/2w09J0KUnVtJvqPYu8N63XjAyCR.jpg",
+    "blurhash": "LPF=:g~q4n4n00D%%MxuM{WUt7t7"
+  },
+  {
+    "id": 62,
+    "tmdbId": 679,
+    "title": "Aliens",
+    "year": 1986,
+    "overview": "Ripley, the sole survivor of the Nostromo's deadly encounter with the monstrous Alien, returns to Earth after drifting through space in hypersleep for 57 years. Although her story is initially met with skepticism, she agrees to accompany a team of Colonial Marines back to LV-426.",
+    "genres": [
+      "Action",
+      "Thriller",
+      "Science Fiction"
+    ],
+    "posterPath": "/r1x5JGpyqZU8PYhbs4UcrO1Xb6x.jpg",
+    "blurhash": "LD6[{.Z~TgMy%%f5k@MxI9p0ROtS"
+  },
+  {
+    "id": 63,
+    "tmdbId": 429,
+    "title": "The Good, The Bad and The Ugly",
+    "year": 1966,
+    "overview": "While the Civil War rages on between the Union and the Confederacy, three men – a quiet loner, a ruthless hitman, and a Mexican bandit – comb the American Southwest in search of a strongbox containing $200,000 in stolen gold.",
+    "genres": [
+      "Western"
+    ],
+    "posterPath": "/bX2xnavhMYjWDoZp1VM6VnU1xwe.jpg",
+    "blurhash": "LYIOIXr=E2.8_NRjx]X8XSkW?bn$"
+  },
+  {
+    "id": 64,
+    "tmdbId": 185,
+    "title": "A Clockwork Orange",
+    "year": 1971,
+    "overview": "In a near-future Britain, young Alexander DeLarge and his pals get their kicks beating and raping anyone they please. When not destroying the lives of others, Alex swoons to the music of Beethoven. The state, eager to crack down on juvenile crime, gives an incarcerated Alex the option to undergo an invasive procedure that'll rob him of all personal agency. In a time when conscience is a commodity, can Alex change his tune?",
+    "genres": [
+      "Science Fiction",
+      "Crime"
+    ],
+    "posterPath": "/4sHeTAp65WrSSuc05nRBKddhBxO.jpg",
+    "blurhash": "LnP%9Ps:_Nofx^kCnjae?baeIUkC"
+  },
+  {
+    "id": 65,
+    "tmdbId": 28,
+    "title": "Apocalypse Now",
+    "year": 1979,
+    "overview": "At the height of the Vietnam war, Captain Benjamin Willard is sent on a dangerous mission that, officially, \"does not exist, nor will it ever exist.\" His goal is to locate - and eliminate - a mysterious Green Beret Colonel named Walter Kurtz, who has been leading his personal army on illegal guerrilla missions into enemy territory.",
+    "genres": [
+      "Drama",
+      "War"
+    ],
+    "posterPath": "/gQB8Y5RCMkv2zwzFHbUJX3kAhvA.jpg",
+    "blurhash": "LnG6eWJ8I;xZ}sR+Rks.S#sTsASN"
+  },
+  {
+    "id": 66,
+    "tmdbId": 1892,
+    "title": "Return of the Jedi",
+    "year": 1983,
+    "overview": "Luke Skywalker leads a mission to rescue his friend Han Solo from the clutches of Jabba the Hutt, the Emperor prepares to crush the Rebellion with a more powerful Death Star, and the Rebel fleet mounts a massive attack on the space station. Luke Skywalker confronts Darth Vader in a final climactic duel before the evil Emperor.",
+    "genres": [
+      "Adventure",
+      "Action",
+      "Science Fiction"
+    ],
+    "posterPath": "/jQYlydvHm3kUix1f8prMucrplhm.jpg",
+    "blurhash": "L59s@|$d0O=DBHtm$%X600TN}-KR"
+  },
+  {
+    "id": 67,
+    "tmdbId": 769,
+    "title": "GoodFellas",
+    "year": 1990,
+    "overview": "The true story of Henry Hill, a half-Irish, half-Sicilian Brooklyn kid who is adopted by neighbourhood gangsters at an early age and climbs the ranks of a Mafia family under the guidance of Jimmy Conway.",
+    "genres": [
+      "Drama",
+      "Crime"
+    ],
+    "posterPath": "/9OkCLM73MIU2CrKZbqiT8Ln1wY2.jpg",
+    "blurhash": "L59Z[$kX9uo#_}RPV?V?8_og-=fk"
+  },
+  {
+    "id": 68,
+    "tmdbId": 348,
+    "title": "Alien",
+    "year": 1979,
+    "overview": "During its return to the earth, commercial spaceship Nostromo intercepts a distress signal from a distant planet. When a three-member team of the crew discovers a chamber containing thousands of eggs on the planet, a creature inside one of the eggs attacks an explorer. The entire crew is unaware of the impending nightmare set to descend upon them when the alien parasite planted inside its unfortunate host is birthed.",
+    "genres": [
+      "Horror",
+      "Science Fiction"
+    ],
+    "posterPath": "/vfrQk5IPloGg1v9Rzbh2Eg3VGyM.jpg",
+    "blurhash": "L44xxZt702IARlt7bYM|8}M{_K%M"
+  },
+  {
+    "id": 69,
+    "tmdbId": 766,
+    "title": "Army of Darkness",
+    "year": 1993,
+    "overview": "Ash, a handsome, shotgun-toting, chainsaw-armed department store clerk, is time warped backwards into England's Dark Ages, where he romances a beauty and faces legions of the undead.",
+    "genres": [
+      "Fantasy",
+      "Horror",
+      "Comedy"
+    ],
+    "posterPath": "/xsgTuAtR2zSH8Umg3jWZcZjlDpe.jpg",
+    "blurhash": "L2A0zSPW00=|16D%MIMw00rB_Nt7"
+  },
+  {
+    "id": 70,
+    "tmdbId": 539,
+    "title": "Psycho",
+    "year": 1960,
+    "overview": "When larcenous real estate clerk Marion Crane goes on the lam with a wad of cash and hopes of starting a new life, she ends up at the notorious Bates Motel, where manager Norman Bates cares for his housebound mother.",
+    "genres": [
+      "Horror",
+      "Thriller",
+      "Mystery"
+    ],
+    "posterPath": "/yz4QVqPx3h1hD1DfqqQkCq3rmxW.jpg",
+    "blurhash": "L6F=UBx7j2pKR16QM*RQ00~DI[-6"
+  }
+]
