@@ -51,5 +51,12 @@
       "ja": "Japanese"
     },
     "likedCount": "{count} liked movie | {count} liked movies"
+  },
+  "error": {
+    "title": "Something went wrong",
+    "text": "An unexpected error occurred. Head back to the recommendations and try again.",
+    "notFoundTitle": "Page not found",
+    "notFoundText": "We couldn't find that page. The movie or link may have moved.",
+    "home": "Back to recommendations"
   }
 }
