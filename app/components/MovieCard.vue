@@ -7,6 +7,9 @@ const props = defineProps<{
 }>()
 
 const { t, n } = useI18n()
+const route = useRoute()
+// The detail page shows the score only when it was reached from a card
+const arrival = useState<{ id: number, score: string } | null>('movie-arrival', () => null)
 
 const reason = computed(() => props.item.because.length
   ? t('recommendations.because', { titles: props.item.because.map(({ title }) => title).join(', ') })
@@ -16,25 +19,33 @@ const score = computed(() => {
   const percent = n(Math.round(props.item.score * 100))
   return t(props.source === 'personalized' ? 'recommendations.matchScore' : 'recommendations.popularityScore', { percent })
 })
+
+const to = computed(() => ({ path: `/movies/${props.item.movie.id}`, query: route.query }))
 </script>
 
 <template>
   <v-card
     class="h-100"
+    :to="to"
     data-testid="movie-card"
     :data-movie-id="item.movie.id"
+    @click="arrival = { id: item.movie.id, score }"
   >
     <PosterImage
       :src="item.movie.posterUrl"
       :blurhash="item.movie.blurhash"
       :title="item.movie.title"
+      :style="{ viewTransitionName: `movie-poster-${item.movie.id}`, viewTransitionClass: 'poster' }"
     />
     <v-card-item>
       <v-card-title
         class="movie-title"
         data-testid="movie-card-title"
       >
-        {{ item.movie.title }}
+        <span
+          class="vt-fit"
+          :style="{ viewTransitionName: `movie-title-${item.movie.id}`, viewTransitionClass: 'title' }"
+        >{{ item.movie.title }}</span>
       </v-card-title>
       <v-card-subtitle data-testid="movie-card-year">
         {{ item.movie.year }}

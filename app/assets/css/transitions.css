@@ -20,3 +20,10 @@
   from { border-radius: 12px; }
   to { border-radius: 16px; }
 }
+
+/* A transition name snapshots the whole box, so keep text boxes as wide as their text */
+.vt-fit {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+}
