@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Movie detail view and card transition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Rubik:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Design source: the project's own look (rusticit.com tokens used by the app and the earlier plan): charcoal #0e152e, purple #4a4ac0, Rubik + Inter. */
+  :root{--bg:#f7f7fb;--surface:#fff;--surface2:#eeeef6;--ink:#0e152e;--muted:#59607a;--line:#dcdeea;--primary:#4a4ac0;--on-primary:#fff;--primary-soft:#e6e6fa;--good:#1b7a43;--good-soft:#dff5e7;--warn:#9a5b00;--warn-soft:#fff0d6;--radius:14px;--vt-ms:380ms;--vt-ease:cubic-bezier(.2,.8,.2,1)}
+  @media (prefers-color-scheme:dark){:root{--bg:#0e152e;--surface:#151d3b;--surface2:#1d2647;--ink:#f3f4fa;--muted:#a3a9c4;--line:#2a345c;--primary:#8f8fe6;--on-primary:#0e152e;--primary-soft:#262a5c;--good:#6fd69a;--good-soft:#163524;--warn:#f1b95a;--warn-soft:#3a2a0c}}
+  *,*::before,*::after{box-sizing:border-box}
+  :where(.grid,.flex)>*{min-width:0}
+  :where(p,h1,h2,h3,li,td,th,dd,code,figcaption,label){overflow-wrap:anywhere}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+  main{max-width:1080px;margin:0 auto;padding:32px 20px 96px}
+  h1,h2,h3{font-family:Rubik,Inter,system-ui,sans-serif}
+  h1{font-size:2.1rem;line-height:1.15;margin:.2em 0 .3em;letter-spacing:-.02em}
+  h2{font-size:1.45rem;margin:2.4em 0 .5em;letter-spacing:-.01em;display:flex;gap:.6em;align-items:baseline}
+  h2 .n{font-size:.8rem;font-weight:700;color:var(--primary);background:var(--primary-soft);border-radius:99px;padding:.1em .7em}
+  h3{font-size:1.05rem;margin:0 0 .3em}
+  p{margin:.4em 0 .8em}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;background:var(--surface2);padding:.1em .4em;border-radius:6px}
+  .lede{color:var(--muted);font-size:1.1rem;max-width:62ch}
+  .grid{display:grid;gap:14px}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+  .badge{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;border-radius:99px;padding:.15em .7em;background:var(--surface2);color:var(--muted)}
+  .badge.pri{background:var(--primary-soft);color:var(--primary)}.badge.good{background:var(--good-soft);color:var(--good)}.badge.warn{background:var(--warn-soft);color:var(--warn)}
+  table{border-collapse:collapse;width:100%;font-size:.93rem}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:var(--surface2)}
+  .tw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+  .tw td:first-child{font-weight:600}
+  .callout{border-left:4px solid var(--primary);background:var(--primary-soft);border-radius:0 var(--radius) var(--radius) 0;padding:12px 16px;margin:1em 0}
+  .callout.warn{border-color:var(--warn);background:var(--warn-soft)}
+
+  /* ---------- prototype: mirrors the app (Vuetify card, v-app-bar, chips) ---------- */
+  .stage-wrap{border:1px solid var(--line);border-radius:18px;background:var(--bg);overflow:hidden}
+  .toolbar{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;padding:10px 16px;background:var(--surface2);border-bottom:1px solid var(--line);font-size:.85rem;color:var(--muted)}
+  .toolbar b{color:var(--ink)}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:99px;overflow:hidden;background:var(--surface)}
+  .seg button{border:0;background:none;color:var(--ink);font:500 .82rem inherit;padding:5px 14px;cursor:pointer}
+  .seg button[aria-pressed=true]{background:var(--primary);color:var(--on-primary)}
+  .app{container-type:inline-size;container-name:app;margin:0 auto;transition:max-width .3s;background:var(--bg)}
+  .app.phone{max-width:390px;border-inline:1px solid var(--line)}
+  .appbar{display:flex;align-items:center;gap:12px;padding:0 16px;height:56px;background:var(--surface);border-bottom:1px solid var(--line);font:600 1.1rem Rubik,sans-serif}
+  .view{padding:20px 16px 28px;min-height:560px}
+  .view[hidden]{display:none}
+  .view h3.sec{font-size:1.15rem;margin:0 0 12px}
+  .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  @container app (max-width:520px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .mcard{all:unset;box-sizing:border-box;display:block;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:box-shadow .15s,transform .15s}
+  .mcard:hover{box-shadow:0 6px 18px rgb(14 21 46/.14);transform:translateY(-2px)}
+  .mcard:focus-visible,.back:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+  .poster{position:relative;aspect-ratio:2/3;overflow:hidden;background:var(--surface2);border-radius:0}
+  .poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .mcard .meta{padding:10px 12px 12px}
+  .mcard .t{font:600 .95rem/1.25 Rubik,sans-serif;margin:0}
+  .mcard .y{color:var(--muted);font-size:.8rem}
+  .mcard .reason{font-size:.78rem;margin:6px 0 8px;color:var(--ink)}
+  .chip{display:inline-block;background:var(--primary-soft);color:var(--primary);border-radius:8px;padding:3px 9px;font-size:.76rem;font-weight:600}
+  .chip.outline{background:none;border:1px solid var(--line);color:var(--muted);font-weight:500}
+
+  .back{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:var(--primary);font-weight:600;padding:6px 10px 6px 4px;border-radius:99px;margin-bottom:12px}
+  .back:hover{background:var(--primary-soft)}
+  .detail{position:relative;display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:28px;align-items:start}
+  @container app (max-width:620px){.detail{grid-template-columns:minmax(0,1fr)}.detail .poster-big{max-width:240px}}
+  .poster-big{border-radius:16px;box-shadow:0 14px 36px rgb(14 21 46/.28)}
+  .detail h1{font-size:2rem;margin:0;line-height:1.1}
+  .detail .sub{color:var(--muted);margin:.3em 0 .9em}
+  .detail .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 1em}
+  .detail .overview{max-width:60ch;margin:0 0 1.2em}
+  .detail .score{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  /* variant B: blurred poster behind the header */
+  .detail[data-layout=backdrop]{display:block;padding-top:0}
+  .detail[data-layout=backdrop] .hero{position:relative;margin:-20px -16px 0;padding:36px 16px 24px;overflow:hidden;display:flex;gap:24px;align-items:flex-end;flex-wrap:wrap;isolation:isolate}
+  .detail[data-layout=backdrop] .hero::before{content:"";position:absolute;inset:-30px;background:var(--bd) center/cover;filter:blur(28px) saturate(1.3);opacity:.55;z-index:-1}
+  .detail[data-layout=backdrop] .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,var(--bg));z-index:-1}
+  .detail[data-layout=backdrop] .poster-big{width:200px;flex:none}
+  .detail[data-layout=backdrop] .headline{flex:1 1 240px}
+  .detail[data-layout=backdrop] .body{padding-top:6px}
+  .detail[data-layout=split] .hero{display:contents}
+  .detail[data-layout=split] .headline,.detail[data-layout=split] .body{grid-column:2}
+  .detail[data-layout=split] .poster-big{grid-column:1;grid-row:1/span 3}
+  @container app (max-width:620px){.detail[data-layout=split] .headline,.detail[data-layout=split] .body,.detail[data-layout=split] .poster-big{grid-column:1;grid-row:auto}}
+  .hint{font-size:.8rem;color:var(--muted)}
+
+  /* ---------- view transition styling (this is the CSS that would ship) ---------- */
+  ::view-transition-group(*){animation-duration:var(--vt-ms);animation-timing-function:var(--vt-ease)}
+  ::view-transition-old(root),::view-transition-new(root){animation-duration:calc(var(--vt-ms) * .6)}
+  ::view-transition-group(.poster),::view-transition-group(.title){animation-duration:var(--vt-ms);animation-timing-function:var(--vt-ease)}
+  ::view-transition-old(.poster),::view-transition-new(.poster){height:100%;object-fit:cover;border-radius:14px;overflow:clip}
+  ::view-transition-image-pair(.poster){isolation:auto}
+  ::view-transition-old(.poster){mix-blend-mode:normal}
+  ::view-transition-new(.poster){mix-blend-mode:normal;animation-name:vt-fade-in}
+  @keyframes vt-fade-in{from{opacity:0}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}
+
+  /* ---------- decisions ---------- */
+  form.dec{display:grid;gap:14px}
+  fieldset{border:1px solid var(--line);border-radius:var(--radius);padding:12px 18px 14px;background:var(--surface);margin:0}
+  legend{font-weight:700;padding:0 8px}
+  fieldset label{display:flex;gap:10px;align-items:flex-start;padding:5px 0;cursor:pointer}
+  fieldset input{margin-top:.35em;accent-color:var(--primary)}
+  fieldset label small{display:block;color:var(--muted)}
+  button.send{background:var(--primary);color:var(--on-primary);border:0;border-radius:99px;padding:12px 28px;font:600 1rem Inter,sans-serif;cursor:pointer;justify-self:start}
+  textarea{width:100%;min-height:70px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:10px;font:inherit}
+  .nosupport{display:none}
+  .no-vt .nosupport{display:block}
+</style>
+</head>
+<body>
+<main>
+
+<span class="badge pri">Design review · movie detail page · nothing built yet</span>
+<h1>Movie page, with the card morphing into it</h1>
+<p class="lede">Click a card below. The poster (and optionally the title) travels from the grid into the detail page, using the same browser feature the app would use. Tune the layout and timing in the panel under the prototype, then send your choices back.</p>
+
+<div class="callout warn nosupport" role="note"><b>This browser has no View Transitions API.</b> The prototype still works but swaps instantly. In the app that is the intended fallback: plain navigation. Use Chrome or Edge to judge the motion.</div>
+
+<h2><span class="n">1</span>Prototype</h2>
+<div class="stage-wrap">
+  <div class="toolbar">
+    <span><b>Viewport</b></span>
+    <span class="seg" role="group" aria-label="Viewport">
+      <button type="button" id="vp-desktop" aria-pressed="true">Desktop</button>
+      <button type="button" id="vp-phone" aria-pressed="false">Phone</button>
+    </span>
+    <span class="hint">Real TMDB posters, real catalog text. Esc or Back returns.</span>
+  </div>
+  <div class="app" id="app">
+    <div class="appbar">Movies RusticIT</div>
+
+    <section class="view" id="list-view" aria-label="Recommendations">
+      <h3 class="sec">Recommended for you</h3>
+      <div class="cards" id="cards"></div>
+    </section>
+
+    <section class="view" id="detail-view" aria-label="Movie" hidden></section>
+  </div>
+</div>
+
+<h2><span class="n">2</span>Tune and decide</h2>
+<p>Changes apply to the prototype immediately. Nothing is sent until you press the button at the bottom.</p>
+<form class="dec" id="decisions" data-lavish-question="movie-detail-design" onsubmit="submitDecisions(event)">
+  <div class="grid g2">
+    <fieldset>
+      <legend>Detail layout</legend>
+      <label><input type="radio" name="layout" value="split" checked><span><b>A. Split</b><small>Poster left, text right; stacks on phones. Closest to the cards, calmest morph.</small></span></label>
+      <label><input type="radio" name="layout" value="backdrop"><span><b>B. Backdrop header</b><small>Blurred poster behind the title. More cinematic, one extra decorative layer.</small></span></label>
+    </fieldset>
+    <fieldset>
+      <legend>What travels between pages</legend>
+      <label><input type="radio" name="shared" value="poster" checked><span><b>Poster only</b><small>Title and text fade in.</small></span></label>
+      <label><input type="radio" name="shared" value="poster+title"><span><b>Poster and title</b><small>Title slides to its new place. Livelier; can feel busy on phones.</small></span></label>
+    </fieldset>
+    <fieldset>
+      <legend>Motion feel</legend>
+      <label><input type="radio" name="feel" value="snappy" checked><span><b>Snappy</b><small>380 ms, fast start, soft landing.</small></span></label>
+      <label><input type="radio" name="feel" value="calm"><span><b>Calm</b><small>560 ms, ease in and out.</small></span></label>
+      <label><input type="radio" name="feel" value="quick"><span><b>Quick</b><small>240 ms, barely noticed, still connected.</small></span></label>
+    </fieldset>
+    <fieldset>
+      <legend>Detail page extras</legend>
+      <label><input type="checkbox" name="extras" value="like-toggle"><span><b>Like / unlike button</b><small>Changes <code>?liked=</code> from the detail page. Default is read-only.</small></span></label>
+      <label><input type="checkbox" name="extras" value="score"><span><b>Show the match score chip</b><small>Same chip as on the card; hidden if the visit was direct.</small></span></label>
+      <label><input type="checkbox" name="extras" value="hide-back-direct"><span><b>Hide Back on direct visits</b><small>Otherwise Back links to <code>/</code> when there is no app history.</small></span></label>
+    </fieldset>
+  </div>
+  <label for="notes"><b>Anything else about look or feel?</b></label>
+  <textarea id="notes" name="notes" placeholder="e.g. bigger overview text, add runtime, different corner radius…"></textarea>
+  <button class="send" type="submit">Queue these choices</button>
+</form>
+
+<h2><span class="n">3</span>How it works in the app</h2>
+<div class="grid g2">
+  <div class="card">
+    <h3>Mechanics</h3>
+    <ul>
+      <li>Route <code>app/pages/movies/[id].vue</code>; data comes from the cached <code>useMovies()</code>, no new endpoint.</li>
+      <li><code>experimental.viewTransition: true</code> in <code>nuxt.config.ts</code>; Nuxt wraps each navigation in <code>document.startViewTransition</code>, including browser back and forward.</li>
+      <li>Card and detail poster share <code>view-transition-name: movie-poster-{id}</code> and <code>view-transition-class: poster</code>.</li>
+      <li>The card becomes a real link and keeps <code>?liked=</code> in the URL.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Fallbacks and guards</h3>
+    <ul>
+      <li>No API support (older Firefox/Safari) or <code>prefers-reduced-motion</code>: plain navigation, no animation.</li>
+      <li>The poster must be visible in the new page's first frame, so the image fade-in is skipped when the image is already cached.</li>
+      <li>Unknown or non-numeric id: 404 page.</li>
+      <li>Going back needs the card in the DOM; the cached recommendations render it immediately.</li>
+    </ul>
+  </div>
+</div>
+
+<h2><span class="n">4</span>Motion spec</h2>
+<div class="tw"><table>
+  <thead><tr><th>Layer</th><th>What happens</th><th>Duration</th></tr></thead>
+  <tbody>
+    <tr><td>Poster</td><td>Grows and moves from card position to the detail slot; corner radius 12 to 16 px</td><td>Set by "Motion feel"</td></tr>
+    <tr><td>Title (optional)</td><td>Slides from under the poster to the headline</td><td>Same</td></tr>
+    <tr><td>Everything else</td><td>Page crossfade</td><td>60% of the above</td></tr>
+    <tr><td>Reduced motion</td><td>No animation</td><td>0</td></tr>
+  </tbody>
+</table></div>
+
+<h2><span class="n">5</span>Tests</h2>
+<p>All end to end, in <code>tests/e2e/movie-detail.spec.ts</code>: card opens the right page; <code>startViewTransition</code> is invoked and both ends carry the same transition name; Back restores <code>?liked=</code> and the grid; direct URL renders on the server; bad id gives 404; reduced motion skips the transition. The animation itself cannot be asserted in Playwright, so you review it by eye, like here.</p>
+
+</main>
+
+<script>
+const MOVIES = [
+  {id:33,title:"Blade Runner",year:1982,genres:["Science Fiction","Drama","Thriller"],poster:"https://image.tmdb.org/t/p/w342/63N9uy8nd9j7Eog2axPQ8lbr3Wj.jpg",overview:"In the smog-choked dystopian Los Angeles of 2019, blade runner Rick Deckard is called out of retirement to terminate a quartet of replicants who have escaped to Earth seeking their creator for a way to extend their short life spans.",because:"Aliens, Alien",score:92},
+  {id:62,title:"Aliens",year:1986,genres:["Action","Thriller","Science Fiction"],poster:"https://image.tmdb.org/t/p/w342/r1x5JGpyqZU8PYhbs4UcrO1Xb6x.jpg",overview:"Ripley, the sole survivor of the Nostromo's deadly encounter with the monstrous Alien, returns to Earth after drifting through space in hypersleep for 57 years. Although her story is initially met with skepticism, she agrees to accompany a team of Colonial Marines back to LV-426.",because:"Alien, Terminator 2",score:88},
+  {id:23,title:"Pulp Fiction",year:1994,genres:["Thriller","Crime","Comedy"],poster:"https://image.tmdb.org/t/p/w342/vQWk5YBFWF4bZaofAbv0tShwBvQ.jpg",overview:"A burger-loving hit man, his philosophical partner, a drug-addled gangster's moll and a washed-up boxer converge in this sprawling, comedic crime caper. Their adventures unfurl in three stories that ingeniously trip back and forth in time.",because:"Reservoir Dogs",score:81},
+  {id:36,title:"Terminator 2: Judgment Day",year:1991,genres:["Action","Thriller","Science Fiction"],poster:"https://image.tmdb.org/t/p/w342/jFTVD4XoWQTcg7wdyJKa8PEds5q.jpg",overview:"Ten years after the events of the original, a reprogrammed T-800 is sent back in time to protect young John Connor from the shape-shifting T-1000. Together with his mother Sarah, he fights to stop Skynet from triggering a nuclear apocalypse.",because:"Aliens",score:79},
+  {id:27,title:"The Lion King",year:1994,genres:["Animation","Family","Drama"],poster:"https://image.tmdb.org/t/p/w342/sKCr78MXSLixwmZ8DyJLrpMsd15.jpg",overview:"Young lion prince Simba, eager to one day become king of the Pride Lands, grows up under the watchful eye of his father Mufasa; all the while his villainous uncle Scar conspires to take the throne for himself. Amid betrayal and tragedy, Simba must confront his past and find his rightful place in the Circle of Life.",because:"Aladdin",score:74},
+  {id:48,title:"Die Hard",year:1988,genres:["Action","Thriller"],poster:"https://image.tmdb.org/t/p/w342/7Bjd8kfmDSOzpmhySpEhkUyK2oH.jpg",overview:"High above the city of L.A. a team of terrorists has seized a building, taken hostages, and declared war. One man has manages to escape... An off-duty cop hiding somewhere inside. He's alone, tired... and the only chance anyone has got.",because:"The Rock",score:70}
+];
+const FEEL = {snappy:["380ms","cubic-bezier(.2,.8,.2,1)"],calm:["560ms","cubic-bezier(.65,0,.35,1)"],quick:["240ms","cubic-bezier(.3,.7,.3,1)"]};
+const $ = s => document.querySelector(s);
+const supportsVT = 'startViewTransition' in document;
+if (!supportsVT) document.documentElement.classList.add('no-vt');
+const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+const opts = () => {
+  const f = new FormData($('#decisions'));
+  return {layout:f.get('layout'), shared:f.get('shared'), feel:f.get('feel'), extras:f.getAll('extras')};
+};
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let openId = null;
+
+function setName(el, name, cls) { el.style.viewTransitionName = name; el.style.viewTransitionClass = cls; }
+
+function buildGrid() {
+  $('#cards').innerHTML = MOVIES.map(m => `
+    <button class="mcard" type="button" data-id="${m.id}" aria-label="Open ${esc(m.title)}">
+      <div class="poster"><img src="${m.poster}" alt="Poster for ${esc(m.title)}"></div>
+      <div class="meta">
+        <p class="t">${esc(m.title)}</p><div class="y">${m.year}</div>
+        <p class="reason">Because you liked ${esc(m.because)}</p>
+        <span class="chip">${m.score}% match</span>
+      </div>
+    </button>`).join('');
+  document.querySelectorAll('.mcard').forEach(card => {
+    const m = MOVIES.find(x => x.id == card.dataset.id);
+    setName(card.querySelector('.poster'), 'movie-poster-' + m.id, 'poster');
+    card.addEventListener('click', () => show(m.id));
+  });
+  applyTitleNames();
+}
+
+function applyTitleNames() {
+  const on = opts().shared === 'poster+title';
+  document.querySelectorAll('.mcard').forEach(card => {
+    const t = card.querySelector('.t');
+    if (on) setName(t, 'movie-title-' + card.dataset.id, 'title');
+    else { t.style.viewTransitionName = ''; t.style.viewTransitionClass = ''; }
+  });
+}
+
+function buildDetail(m) {
+  const o = opts();
+  const score = o.extras.includes('score') ? `<span class="chip">${m.score}% match</span><span class="chip outline">Because you liked ${esc(m.because)}</span>` : '';
+  const like = o.extras.includes('like-toggle') ? `<button type="button" class="chip" style="border:0;cursor:pointer;font:inherit;font-weight:600" onclick="this.textContent=this.textContent.startsWith('♡')?'♥ Liked':'♡ Like'">♡ Like</button>` : '';
+  const el = $('#detail-view');
+  el.innerHTML = `
+    <button class="back" type="button" id="back">← Back to recommendations</button>
+    <article class="detail" data-layout="${o.layout}" style="--bd:url('${m.poster}')">
+      <div class="hero">
+        <div class="poster poster-big"><img src="${m.poster}" alt="Poster for ${esc(m.title)}"></div>
+        <div class="headline">
+          <h1>${esc(m.title)}</h1>
+          <p class="sub">${m.year}</p>
+        </div>
+      </div>
+      <div class="body">
+        <div class="chips">${m.genres.map(g => `<span class="chip">${esc(g)}</span>`).join('')}</div>
+        <p class="overview">${esc(m.overview)}</p>
+        <div class="score">${score}${like}</div>
+      </div>
+    </article>`;
+  setName(el.querySelector('.poster-big'), 'movie-poster-' + m.id, 'poster');
+  if (o.shared === 'poster+title') setName(el.querySelector('h1'), 'movie-title-' + m.id, 'title');
+  $('#back').addEventListener('click', () => show(null));
+  return el;
+}
+
+function swap(id) {
+  openId = id;
+  if (id === null) { $('#detail-view').hidden = true; $('#list-view').hidden = false; }
+  else { buildDetail(MOVIES.find(m => m.id === id)); $('#list-view').hidden = true; $('#detail-view').hidden = false; $('#back').focus({preventScroll:true}); }
+}
+
+function show(id, instant) {
+  const [ms, ease] = FEEL[opts().feel];
+  document.documentElement.style.setProperty('--vt-ms', ms);
+  document.documentElement.style.setProperty('--vt-ease', ease);
+  applyTitleNames();
+  if (!supportsVT || reduced() || instant) swap(id);
+  else document.startViewTransition(() => swap(id));
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && openId !== null) show(null); });
+$('#decisions').addEventListener('change', () => { if (openId !== null) swap(openId); else applyTitleNames(); });
+
+function setViewport(phone) {
+  $('#app').classList.toggle('phone', phone);
+  $('#vp-phone').setAttribute('aria-pressed', phone);
+  $('#vp-desktop').setAttribute('aria-pressed', !phone);
+}
+$('#vp-phone').onclick = () => setViewport(true);
+$('#vp-desktop').onclick = () => setViewport(false);
+
+function submitDecisions(event) {
+  event.preventDefault();
+  const o = opts();
+  const notes = $('#notes').value.trim();
+  const text = `Layout ${o.layout}; shared: ${o.shared}; feel: ${o.feel}; extras: ${o.extras.join(', ') || 'none'}` + (notes ? `; notes: ${notes}` : '');
+  window.lavish?.queuePrompt('Use these design choices for the movie detail page and transition, then update the plan: ' + text, {
+    tag: 'choice', text, element: event.currentTarget, data: {...o, notes}
+  });
+}
+
+buildGrid();
+</script>
+</body>
+</html>
