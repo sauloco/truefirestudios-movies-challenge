@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   modules: ['@nuxt/eslint', '@nuxt/fonts', 'vuetify-nuxt-module', '@nuxtjs/i18n'],
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/main.css', '~/assets/css/transitions.css'],
   fonts: {
     // Self-hosted: fetched once at build time and served from our own origin
     provider: 'fontsource',
@@ -11,6 +11,10 @@ export default defineNuxtConfig({
       { name: 'Rubik', provider: 'fontsource', weights: [500, 600, 700], styles: ['normal'], subsets: ['latin'] },
       { name: 'Inter', provider: 'fontsource', weights: [400, 500, 600], styles: ['normal'], subsets: ['latin'] }
     ]
+  },
+  experimental: {
+    // Falls back to plain navigation without the API or under prefers-reduced-motion
+    viewTransition: true
   },
   vuetify: {
     moduleOptions: {
