@@ -1,5 +1,4 @@
 <script setup lang="ts">
-defineProps<{ retrying?: boolean }>()
 defineEmits<{ retry: [] }>()
 </script>
 
@@ -13,7 +12,6 @@ defineEmits<{ retry: [] }>()
   >
     <template #append>
       <v-btn
-        :loading="retrying"
         data-testid="recommendation-retry"
         @click="$emit('retry')"
       >

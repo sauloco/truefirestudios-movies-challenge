@@ -25,14 +25,8 @@ defineEmits<{ retry: [] }>()
       {{ $t(recommendations.source === 'popular' ? 'recommendations.headingPopular' : 'recommendations.headingPersonalized') }}
     </h2>
 
-    <RecommendationError
-      v-if="failed"
-      :retrying="pending"
-      @retry="$emit('retry')"
-    />
-
     <v-row
-      v-else-if="pending && !recommendations"
+      v-if="pending && !recommendations"
       data-testid="recommendation-loading"
     >
       <v-col
@@ -49,6 +43,11 @@ defineEmits<{ retry: [] }>()
         />
       </v-col>
     </v-row>
+
+    <RecommendationError
+      v-else-if="failed"
+      @retry="$emit('retry')"
+    />
 
     <RecommendationEmpty v-else-if="recommendations && !recommendations.items.length" />
 
