@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>User profiles and switcher plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Rubik:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Design source: the project's own look (rusticit.com tokens used by the app and earlier plans): charcoal #0e152e, purple #4a4ac0, Rubik + Inter. */
+  :root{--bg:#f7f7fb;--surface:#fff;--surface2:#eeeef6;--ink:#0e152e;--muted:#59607a;--line:#dcdeea;--primary:#4a4ac0;--on-primary:#fff;--primary-soft:#e6e6fa;--good:#1b7a43;--good-soft:#dff5e7;--warn:#9a5b00;--warn-soft:#fff0d6;--radius:14px;
+    --t1:#ffd9c7;--t2:#cfe8ff;--t3:#d9f2d0;--t4:#f3d3f5}
+  @media (prefers-color-scheme:dark){:root{--bg:#0e152e;--surface:#151d3b;--surface2:#1d2647;--ink:#f3f4fa;--muted:#a3a9c4;--line:#2a345c;--primary:#8f8fe6;--on-primary:#0e152e;--primary-soft:#262a5c;--good:#6fd69a;--good-soft:#163524;--warn:#f1b95a;--warn-soft:#3a2a0c}}
+  *,*::before,*::after{box-sizing:border-box}
+  :where(.grid,.flex)>*{min-width:0}
+  :where(p,h1,h2,h3,li,td,th,dd,code,figcaption,label){overflow-wrap:anywhere}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+  main{max-width:1080px;margin:0 auto;padding:32px 20px 96px}
+  h1,h2,h3{font-family:Rubik,Inter,system-ui,sans-serif}
+  h1{font-size:2.1rem;line-height:1.15;margin:.2em 0 .3em;letter-spacing:-.02em}
+  h2{font-size:1.45rem;margin:2.4em 0 .5em;letter-spacing:-.01em;display:flex;gap:.6em;align-items:baseline}
+  h2 .n{font-size:.8rem;font-weight:700;color:var(--primary);background:var(--primary-soft);border-radius:99px;padding:.1em .7em}
+  h3{font-size:1.05rem;margin:0 0 .3em}
+  p{margin:.4em 0 .8em}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;background:var(--surface2);padding:.1em .4em;border-radius:6px}
+  .lede{color:var(--muted);font-size:1.1rem;max-width:64ch}
+  .grid{display:grid;gap:14px}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+  .g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+  .badge{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;border-radius:99px;padding:.15em .7em;background:var(--surface2);color:var(--muted)}
+  .badge.pri{background:var(--primary-soft);color:var(--primary)}.badge.good{background:var(--good-soft);color:var(--good)}.badge.warn{background:var(--warn-soft);color:var(--warn)}
+  table{border-collapse:collapse;width:100%;font-size:.93rem}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:var(--surface2)}
+  .tw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+  .callout{border-left:4px solid var(--primary);background:var(--primary-soft);border-radius:0 var(--radius) var(--radius) 0;padding:12px 16px;margin:1em 0}
+  .callout.warn{border-color:var(--warn);background:var(--warn-soft)}
+
+  /* avatars: transparent line art, so each profile gets a tint behind it to read in both themes */
+  .av{position:relative;display:inline-block;width:var(--s,44px);height:var(--s,44px);border-radius:50%;overflow:hidden;background:var(--tint);border:2px solid var(--surface);flex:none}
+  .av img{position:absolute;width:150%;height:150%;left:-18%;top:-22%;max-width:none}
+  .av[data-id=sam]{--tint:var(--t1)}.av[data-id=yuki]{--tint:var(--t2)}.av[data-id=lucia]{--tint:var(--t3)}.av[data-id=dale]{--tint:var(--t4)}
+  .pcard{display:flex;gap:12px;align-items:center}
+  .pcard b{font-family:Rubik,sans-serif}
+  .pcard small{display:block;color:var(--muted)}
+
+  /* ---------- prototype ---------- */
+  .stage-wrap{border:1px solid var(--line);border-radius:18px;background:var(--bg);overflow:hidden}
+  .toolbar{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;padding:10px 16px;background:var(--surface2);border-bottom:1px solid var(--line);font-size:.85rem;color:var(--muted)}
+  .app{container-type:inline-size;container-name:app}
+  .appbar{display:flex;align-items:center;gap:12px;padding:0 16px;height:60px;background:var(--surface);border-bottom:1px solid var(--line);font:600 1.1rem Rubik,sans-serif}
+  .appbar .sp{flex:1}
+  .iconbtn{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--muted);display:grid;place-items:center;font-size:1rem}
+  /* the switcher */
+  .stack{display:flex;align-items:center;padding:4px;border-radius:99px}
+  .stack .who{margin-right:10px;text-align:right;line-height:1.15}
+  .stack .who b{display:block;font:600 .9rem Rubik,sans-serif}
+  .stack .who span{font:500 .72rem Inter,sans-serif;color:var(--muted)}
+  .stack button.av{padding:0;cursor:pointer;margin-left:calc(var(--s) * -.32);transition:margin .2s,transform .2s,box-shadow .2s;--s:40px}
+  .stack button.av:first-of-type{margin-left:0}
+  .stack:hover button.av,.stack:focus-within button.av{margin-left:4px}
+  .stack:hover button.av:first-of-type,.stack:focus-within button.av:first-of-type{margin-left:0}
+  .stack button.av[aria-checked=true]{z-index:2;transform:translateY(-2px);box-shadow:0 0 0 2px var(--primary)}
+  .stack button.av:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+  @container app (max-width:560px){.stack .who{display:none}}
+  @media (prefers-reduced-motion:reduce){.stack button.av{transition:none}}
+  .view{padding:20px 16px 24px}
+  .view h3{font-size:1.1rem;margin:0 0 10px}
+  .field{border:1px solid var(--line);border-radius:6px;background:var(--surface);padding:12px 14px;color:var(--muted);font-size:.9rem;margin-bottom:10px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;min-height:34px}
+  .chip{display:inline-block;background:var(--primary-soft);color:var(--primary);border-radius:8px;padding:3px 10px;font-size:.8rem;font-weight:600}
+  .chip.more{background:var(--surface2);color:var(--muted)}
+  .recs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:16px}
+  @container app (max-width:520px){.recs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .ph{aspect-ratio:2/3;border-radius:10px;background:linear-gradient(135deg,var(--surface2),var(--line));animation:pulse 1.1s ease-in-out infinite alternate}
+  .ph.done{animation:none;background:var(--surface2);display:grid;place-items:center;color:var(--muted);font-size:.72rem;text-align:center;padding:6px}
+  @keyframes pulse{to{opacity:.55}}
+  .urlbar{font:.78rem ui-monospace,Menlo,monospace;color:var(--muted);background:var(--surface2);border-radius:8px;padding:6px 10px;margin:0 16px 4px;overflow-wrap:anywhere}
+  .log{font:.78rem ui-monospace,Menlo,monospace;list-style:none;padding:10px 16px;margin:0;border-top:1px solid var(--line);background:var(--surface2);color:var(--muted);min-height:96px}
+  .log li{margin:0}
+  .log li::before{content:"✓ ";color:var(--good)}
+
+  /* diagram */
+  figure{margin:0}
+  figure svg{width:100%;height:auto;display:block}
+  figcaption{color:var(--muted);font-size:.88rem;margin-top:6px}
+  .nd{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+  .nd.pri{fill:var(--primary-soft);stroke:var(--primary)}
+  .nd.good{fill:var(--good-soft);stroke:var(--good)}
+  svg text{fill:var(--ink);font:500 13px Inter,sans-serif}
+  svg text.s{fill:var(--muted);font-size:11px}
+  svg .ed{stroke:var(--muted);stroke-width:1.6;fill:none}
+
+  /* decisions */
+  form.dec{display:grid;gap:14px}
+  fieldset{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);padding:14px 18px 8px;margin:0;min-width:0}
+  legend{font:600 1rem Rubik,sans-serif;padding:0 8px}
+  .opt{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;padding:8px 0;border-top:1px dashed var(--line);cursor:pointer}
+  .opt:first-of-type{border-top:0}
+  .opt input{margin-top:5px;accent-color:var(--primary)}
+  .opt span{color:var(--muted);font-size:.9rem}
+  .opt b{font-weight:600}
+  button.go{font:600 .95rem Inter,sans-serif;background:var(--primary);color:var(--on-primary);border:0;border-radius:99px;padding:10px 22px;cursor:pointer}
+  textarea{width:100%;font:inherit;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--surface);color:var(--ink);min-height:70px}
+  #queued{color:var(--good);font-weight:600;margin-left:10px}
+</style>
+</head>
+<body>
+<main>
+
+<header>
+  <span class="badge pri">Plan · not started</span>
+  <h1>User profiles and a stacked-avatar switcher</h1>
+  <p class="lede">Four demo viewers, each with a name, an avatar, a language preference and their real liked movies from <code>movies.json</code>. A stack of avatars in the top right switches the whole app to another viewer. i18n itself is out of scope here, so this plan only stores the language choice.</p>
+</header>
+
+<div class="callout warn">
+  <b>One correction to the brief:</b> <code>server/assets/movies.json</code> holds <b>806</b> users (<code>user_id</code> 1–806, array index = id − 1), not 4. There are four avatars, so the plan makes profiles from the first four users and leaves the other 802 untouched. Which four is decision D4 below. Every liked id for users 1–4 exists in the 70-movie catalog.
+</div>
+
+<h2><span class="n">1</span>The four profiles</h2>
+<p>Names are made up. Languages cover English, Spanish and Japanese, and English appears twice because there are four people and three languages. Likes are not copied anywhere: each profile points at a dataset <code>user_id</code> and its likes are read from <code>movies.json</code> at runtime, so there is one source of truth.</p>
+<div class="tw"><table>
+  <thead><tr><th>Profile</th><th>Slug</th><th>Dataset user</th><th>Language</th><th>Liked</th><th>Avatar (renamed from)</th></tr></thead>
+  <tbody>
+    <tr><td><div class="pcard"><span class="av" data-id="sam" style="--s:44px"><img src="users/sam.png" alt=""></span><div><b>Sam Okafor</b><small>light viewer, 8 likes</small></div></div></td><td><code>sam</code></td><td><code>user_id 1</code></td><td>English <code>en</code></td><td>8</td><td><code>sam.png</code> ← <code>notion-avatar-1792211029601.png</code></td></tr>
+    <tr><td><div class="pcard"><span class="av" data-id="yuki" style="--s:44px"><img src="users/yuki.png" alt=""></span><div><b>Yuki Tanaka</b><small>35 likes</small></div></div></td><td><code>yuki</code></td><td><code>user_id 2</code></td><td>日本語 <code>ja</code></td><td>35</td><td><code>yuki.png</code> ← <code>…1792211024282.png</code></td></tr>
+    <tr><td><div class="pcard"><span class="av" data-id="lucia" style="--s:44px"><img src="users/lucia.png" alt=""></span><div><b>Lucía Navarro</b><small>45 likes</small></div></div></td><td><code>lucia</code></td><td><code>user_id 3</code></td><td>Español <code>es</code></td><td>45</td><td><code>lucia.png</code> ← <code>…1792211013641.png</code></td></tr>
+    <tr><td><div class="pcard"><span class="av" data-id="dale" style="--s:44px"><img src="users/dale.png" alt=""></span><div><b>Dale Whitfield</b><small>heaviest viewer, 53 likes</small></div></div></td><td><code>dale</code></td><td><code>user_id 4</code></td><td>English <code>en</code></td><td>53</td><td><code>dale.png</code> ← <code>…1792211034447.png</code></td></tr>
+  </tbody>
+</table></div>
+<p>The avatars are 576×576 RGBA line art with a transparent background and the face sitting off-centre. On the dark theme black lines on a dark surface would vanish, so each profile also gets a pastel tint behind the image and the image is cropped with <code>object-fit: cover</code> plus a slight scale. The mockup below shows the result.</p>
+
+<h2><span class="n">2</span>The switcher, clickable</h2>
+<p>This mirrors the app bar (Vuetify <code>v-app-bar</code>, tokens above). Click or arrow-key between avatars. The log underneath lists what the real implementation resets on each switch.</p>
+<div class="stage-wrap">
+  <div class="toolbar"><b style="color:var(--ink)">Prototype</b><span>avatars overlap, spread on hover/focus, active one is raised and ringed</span></div>
+  <div class="app" id="app">
+    <div class="appbar">
+      <span>Movies RusticIT</span><span class="sp"></span>
+      <span class="iconbtn" aria-hidden="true" title="Theme toggle from PR #2">◐</span>
+      <div class="stack" role="radiogroup" aria-label="Viewer" id="stack"></div>
+    </div>
+    <div class="urlbar" id="url"></div>
+    <div class="view">
+      <h3>Movies you liked</h3>
+      <div class="field" id="field">Search movies…</div>
+      <div class="chips" id="chips"></div>
+      <div class="recs" id="recs"></div>
+    </div>
+    <ul class="log" id="log" aria-live="polite"></ul>
+  </div>
+</div>
+
+<h2><span class="n">3</span>What "clean context" means</h2>
+<p>Today the page is a pure function of the URL: <code>useLikedMovies</code> reads <code>?liked=</code>, and <code>useRecommendations</code> keys its fetch on the settled picks (<code>recommendations:20,59</code>). The plan keeps that property by putting the active viewer in the URL too, so a switch is one navigation and nothing can be left over from the previous viewer.</p>
+<figure>
+<svg viewBox="0 0 960 250" role="img" aria-labelledby="d-t">
+  <title id="d-t">Switching viewer: one navigation replaces the whole query, then every derived piece of state follows</title>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--muted)"/></marker></defs>
+  <g id="n-click"><rect class="nd pri" x="10" y="20" width="170" height="64" rx="12"/><text x="95" y="48" text-anchor="middle">Click avatar</text><text class="s" x="95" y="66" text-anchor="middle">UserSwitcher</text></g>
+  <g id="n-nav"><rect class="nd pri" x="240" y="20" width="250" height="64" rx="12"/><text x="365" y="46" text-anchor="middle">router.push(query)</text><text class="s" x="365" y="64" text-anchor="middle">{ user: "lucia", liked: "1,3,5,…" }</text></g>
+  <g id="n-cookie"><rect class="nd" x="550" y="20" width="190" height="64" rx="12"/><text x="645" y="46" text-anchor="middle">Cookie profile</text><text class="s" x="645" y="64" text-anchor="middle">remember for bare "/"</text></g>
+  <g id="n-key"><rect class="nd good" x="240" y="150" width="250" height="64" rx="12"/><text x="365" y="176" text-anchor="middle">New fetch key</text><text class="s" x="365" y="194" text-anchor="middle">recommendations:1,3,5,…</text></g>
+  <g id="n-remount"><rect class="nd good" x="550" y="150" width="190" height="64" rx="12"/><text x="645" y="176" text-anchor="middle">Remount by key</text><text class="s" x="645" y="194" text-anchor="middle">search text, menus, errors</text></g>
+  <g id="n-ui"><rect class="nd good" x="780" y="150" width="170" height="64" rx="12"/><text x="865" y="176" text-anchor="middle">Chips + cards</text><text class="s" x="865" y="194" text-anchor="middle">scroll back to top</text></g>
+  <path class="ed" d="M180 52H238" marker-end="url(#ar)"/><path class="ed" d="M490 52H548" marker-end="url(#ar)"/>
+  <path class="ed" d="M365 84V148" marker-end="url(#ar)"/><path class="ed" d="M490 182H548" marker-end="url(#ar)"/><path class="ed" d="M740 182H778" marker-end="url(#ar)"/>
+</svg>
+<figcaption>The push (not replace) means the browser Back button returns to the previous viewer with that viewer's picks.</figcaption>
+</figure>
+
+<div class="grid g2" style="margin-top:14px">
+  <div class="card"><h3>Reset on every switch</h3>
+    <ul><li>Picked movies: the URL <code>liked</code> is replaced by the new viewer's likes, so edits made as the previous viewer do not leak.</li>
+    <li>Search box text and open dropdown (<code>MovieSearch</code> remounts via <code>:key="profile.id"</code>).</li>
+    <li>The "ignored ids" warning, error and retry state of the recommendations.</li>
+    <li>In-flight recommendation request (the debounced <code>settled</code> picks are re-seeded, not carried over).</li>
+    <li>Scroll position.</li></ul></div>
+  <div class="card"><h3>Rules for the URL</h3>
+    <ul><li><code>?user=</code> missing → middleware picks the cookie's viewer, else the first profile, and redirects with <code>user</code> and their likes filled in.</li>
+    <li><code>?user=sam</code> without <code>liked</code> means "no picks" (popular fallback), <b>not</b> "reseed". Seeding only happens when <code>user</code> is missing, so removing the last chip never loops.</li>
+    <li>Unknown <code>user</code> → treated as missing (same graceful drop as invalid <code>liked</code> ids today).</li>
+    <li>A "Reset to my likes" button re-applies the profile's likes after edits.</li></ul></div>
+</div>
+
+<h2><span class="n">4</span>Implementation</h2>
+<div class="tw"><table>
+  <thead><tr><th>Where</th><th>Change</th></tr></thead>
+  <tbody>
+    <tr><td><code>shared/types/index.ts</code></td><td>Add <code>Language = 'en' | 'es' | 'ja'</code> and <code>Profile { id, name, avatarUrl, tint, language, liked: number[] }</code>.</td></tr>
+    <tr><td><code>server/utils/profiles.ts</code> <span class="badge pri">new</span></td><td>The four profile definitions (slug, name, avatar, language, dataset user id). Likes come from <code>getDataset().users[userId - 1]</code>, validated at module load (throws if a mapped id is not in the catalog).</td></tr>
+    <tr><td><code>server/api/profiles.get.ts</code> <span class="badge pri">new</span></td><td><code>GET /api/profiles</code> returns the four profiles with likes (about 140 ids, under 1 KB). One endpoint because the switcher needs all four at once.</td></tr>
+    <tr><td><code>server/utils/dataset.ts</code></td><td>Only the comment changes: "never exposed" becomes "only the four demo profiles' likes are exposed; the other 802 users stay private".</td></tr>
+    <tr><td><code>public/users/</code></td><td><code>git mv</code> the four staged <code>notion-avatar-*.png</code> to slug names (<code>sam.png</code>…). They are already staged, so this is free.</td></tr>
+    <tr><td><code>app/composables/useProfiles.ts</code> <span class="badge pri">new</span></td><td>Fetches <code>/api/profiles</code> once (key <code>profiles</code>), exposes <code>profiles</code>, <code>active</code> (from <code>route.query.user</code>), <code>switchTo(id)</code>, <code>resetLikes()</code>, and <code>locale</code> = the profile's language resolved against the supported list with <code>'en'</code> fallback.</td></tr>
+    <tr><td><code>app/middleware/profile.global.ts</code> <span class="badge pri">new</span></td><td>Implements the URL rules above; reads/writes <code>useCookie('profile')</code> so SSR and client agree and there is no flash of the wrong viewer.</td></tr>
+    <tr><td><code>app/components/UserSwitcher.vue</code> <span class="badge pri">new</span></td><td>Radiogroup of overlapping <code>v-avatar</code>s, roving tabindex with arrow keys, tooltip per avatar (name, language, like count), <code>aria-checked</code>, <code>data-testid="user-switcher"</code>. Respects <code>prefers-reduced-motion</code>; on narrow screens the name label hides and the overlap tightens.</td></tr>
+    <tr><td><code>app/components/AppShell.vue</code></td><td>Mount <code>UserSwitcher</code> in the right slot of <code>v-app-bar</code>, next to the theme toggle from PR #2.</td></tr>
+    <tr><td><code>app/composables/useLikedMovies.ts</code></td><td>Unchanged contract. <code>setLiked</code> already spreads the existing query, so <code>user</code> survives pick edits.</td></tr>
+    <tr><td><code>app/pages/index.vue</code></td><td>Wrap the page content in <code>:key="active.id"</code> so local component state is dropped on switch; add the reset button; scroll to top after navigation.</td></tr>
+    <tr><td><code>i18n/locales/en.json</code></td><td>A few strings (switcher label, reset button, language names). No other locales yet; <code>ja</code> and <code>es</code> are stored on profiles but resolve to English until the i18n plan registers those files.</td></tr>
+  </tbody>
+</table></div>
+
+<h2><span class="n">5</span>Tests (e2e only, per the locked plan)</h2>
+<div class="tw"><table>
+  <thead><tr><th>Spec</th><th>Asserts</th></tr></thead>
+  <tbody>
+    <tr><td><code>api-profiles.spec.ts</code></td><td>Returns exactly 4 profiles; languages ⊆ en/es/ja; each profile's likes equal that user's likes in <code>movies.json</code> and all exist in the catalog; no other users' data appears in the payload; avatar URLs return 200.</td></tr>
+    <tr><td><code>user-switcher.spec.ts</code></td><td>Bare <code>/</code> lands on a viewer with their chips (count matches); clicking another avatar swaps chips and recommendations; Back returns to the previous viewer; arrow keys move the radio; cookie restores the last viewer on a bare visit; unknown <code>?user=</code> falls back; removing the last chip does not reseed.</td></tr>
+    <tr><td><code>user-context-reset.spec.ts</code></td><td>Type into search, remove a chip, open the dropdown as Sam, switch to Dale: search is empty, the closed dropdown stays closed, Sam's removal did not carry over, no stale cards from Sam's key are shown, no console errors.</td></tr>
+    <tr><td>existing specs</td><td><code>liked-movies</code>, <code>smoke</code>, <code>layout</code> currently open bare <code>/</code> and expect no picks. They will open <code>/?user=sam&amp;liked=</code>-style URLs or a helper that clears picks. Mechanical update, called out so it is not a surprise.</td></tr>
+  </tbody>
+</table></div>
+
+<h2><span class="n">6</span>Risks and interactions</h2>
+<ul>
+  <li><b>Shared links now carry two params.</b> That is intended: the recipient sees the same viewer and picks. Cost: longer URLs (Dale's 53 ids is about 150 characters).</li>
+  <li><b>Movie detail page plan</b> (<code>/movies/[id]</code>, card → page transition): every link and the back link must preserve <code>user</code> (and <code>liked</code>), or navigating back would reseed. Noted in that plan's build, not changed here.</li>
+  <li><b>PR #2 (theme toggle)</b> touches the same app bar. Whichever lands second resolves a small conflict in <code>AppShell.vue</code>.</li>
+  <li><b>No security, by design.</b> Anyone can be anyone; the cookie is only a convenience. The README should say this is a proof of concept.</li>
+  <li><b>Privacy invariant relaxed on purpose.</b> The API used to expose no per-user likes. It now exposes four fabricated profiles' likes; the 802 other users remain internal, and the contract test guards that.</li>
+  <li><b>Recommender not touched.</b> It still takes <code>liked: number[]</code>. Dataset users 1–4 are also training data for the model, so these viewers' own likes are in the co-occurrence counts. That slightly flatters their recommendations; the leave-one-out eval is unaffected.</li>
+</ul>
+
+<h2><span class="n">7</span>Decided</h2>
+<div class="grid g2">
+  <div class="card"><span class="badge good">D1</span><h3>URL <code>?user=</code> plus cookie memory</h3><p>State stays a pure function of the URL; the cookie only picks who a bare "/" shows.</p></div>
+  <div class="card"><span class="badge good">D2</span><h3>Edits are session-only</h3><p>Profiles are read-only; "Reset to my likes" restores them.</p></div>
+  <div class="card"><span class="badge good">D3</span><h3>First visit starts as Sam</h3><p>No guest mode; the app always has a viewer.</p></div>
+  <div class="card"><span class="badge good">D4</span><h3>Dataset users 1 to 4</h3><p>Spread of 8 to 53 likes. Names and language mapping as in section 1.</p></div>
+</div>
+<p>No open questions remain. Awaiting an explicit go-ahead before any code is written.</p>
+
+</main>
+
+<script type="application/json" id="data">[{"id": "sam", "name": "Sam Okafor", "lang": "en", "uid": 1, "liked": ["Seven (Se7en)", "Braveheart", "Apollo 13", "Batman Forever", "Forrest Gump", "True Romance", "Dances with Wolves", "Platoon"]}, {"id": "yuki", "name": "Yuki Tanaka", "lang": "ja", "uid": 2, "liked": ["Toy Story", "Twelve Monkeys", "Richard III", "Usual Suspects, The", "Postino, Il", "From Dusk Till Dawn", "Taxi Driver", "Apollo 13", "Star Wars", "Professional, The", "Pulp Fiction", "Lion King, The", "Mask, The", "Hudsucker Proxy, The", "Blade Runner", "Aladdin", "Dances with Wolves", "Silence of the Lambs, The", "Fargo", "Wallace & Gromit: The Best of Aardman Animation", "Twister", "Godfather, The", "Sound of Music, The", "Die Hard", "Fish Called Wanda, A", "Monty Python's Life of Brian", "Monty Python and the Holy Grail", "Delicatessen", "Raiders of the Lost Ark", "Brazil", "Aliens", "Clockwork Orange, A", "Return of the Jedi", "GoodFellas", "Psycho"]}, {"id": "lucia", "name": "Lucía Navarro", "lang": "es", "uid": 3, "liked": ["Toy Story", "Twelve Monkeys", "Seven (Se7en)", "Usual Suspects, The", "From Dusk Till Dawn", "Braveheart", "Bad Boys", "Apollo 13", "Desperado", "Exotica", "Star Wars", "Natural Born Killers", "Professional, The", "Pulp Fiction", "Shawshank Redemption, The", "Forrest Gump", "Lion King, The", "Mask, The", "Fugitive, The", "Jurassic Park", "Blade Runner", "True Romance", "Aladdin", "Terminator 2: Judgment Day", "Dances with Wolves", "Silence of the Lambs, The", "Fargo", "Rock, The", "Twister", "Independence Day (ID4)", "Sound of Music, The", "Die Hard", "Fish Called Wanda, A", "Monty Python's Life of Brian", "Dirty Dancing", "Reservoir Dogs", "Basic Instinct", "Abyss, The", "Monty Python and the Holy Grail", "Empire Strikes Back, The", "Raiders of the Lost Ark", "Brazil", "Clockwork Orange, A", "Return of the Jedi", "Army of Darkness"]}, {"id": "dale", "name": "Dale Whitfield", "lang": "en", "uid": 4, "liked": ["Toy Story", "Twelve Monkeys", "Seven (Se7en)", "Usual Suspects, The", "From Dusk Till Dawn", "Braveheart", "Taxi Driver", "Apollo 13", "Clerks", "Star Wars", "Professional, The", "Pulp Fiction", "Shawshank Redemption, The", "Crow, The", "Forrest Gump", "Lion King, The", "Mask, The", "Fugitive, The", "Hudsucker Proxy, The", "Jurassic Park", "Blade Runner", "True Romance", "Aladdin", "Terminator 2: Judgment Day", "Dances with Wolves", "Silence of the Lambs, The", "Fargo", "Rock, The", "Twister", "Independence Day (ID4)", "Godfather, The", "Sound of Music, The", "Die Hard", "Fish Called Wanda, A", "Monty Python's Life of Brian", "Reservoir Dogs", "Platoon", "Top Gun", "Abyss, The", "Monty Python and the Holy Grail", "Delicatessen", "Empire Strikes Back, The", "Raiders of the Lost Ark", "Brazil", "Aliens", "Good, The Bad and The Ugly, The", "Clockwork Orange, A", "Apocalypse Now", "Return of the Jedi", "GoodFellas", "Alien", "Army of Darkness", "Psycho"]}]</script>
+<script>
+  const P = JSON.parse(document.getElementById('data').textContent);
+  const LANG = { en: 'English', es: 'Español', ja: '日本語' };
+  const stack = document.getElementById('stack');
+  let cur = 0, timer;
+
+  P.forEach((p, i) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'av'; b.dataset.id = p.id;
+    b.setAttribute('role', 'radio'); b.setAttribute('aria-label', p.name + ', ' + LANG[p.lang] + ', ' + p.liked.length + ' liked');
+    b.title = p.name + ' · ' + LANG[p.lang];
+    b.innerHTML = '<img src="users/' + p.id + '.png" alt="">';
+    b.addEventListener('click', () => pick(i, true));
+    b.addEventListener('keydown', e => {
+      const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+      if (!d) return;
+      e.preventDefault();
+      pick((i + d + P.length) % P.length, true);
+      stack.querySelector('[aria-checked=true]').focus();
+    });
+    stack.append(b);
+  });
+  const who = document.createElement('div');
+  who.className = 'who'; who.style.order = -1;
+  stack.prepend(who);
+
+  function pick(i, animate) {
+    cur = i;
+    const p = P[i];
+    clearTimeout(timer);
+    stack.querySelectorAll('button.av').forEach((b, j) => { b.setAttribute('aria-checked', j === i); b.tabIndex = j === i ? 0 : -1; });
+    who.innerHTML = '<b>' + p.name + '</b><span>' + LANG[p.lang] + ' · ' + p.liked.length + ' liked</span>';
+    const shown = p.liked.slice(0, 10);
+    document.getElementById('chips').innerHTML = shown.map(t => '<span class="chip">' + t + '</span>').join('') +
+      (p.liked.length > 10 ? '<span class="chip more">+' + (p.liked.length - 10) + ' more</span>' : '');
+    document.getElementById('url').textContent = '/?user=' + p.id + '&liked=' + (p.uid === 1 ? '5,9,12,13,26,34,37,53' : '…' + p.liked.length + ' ids');
+    const recs = document.getElementById('recs');
+    recs.innerHTML = '<div class="ph"></div>'.repeat(4);
+    const log = document.getElementById('log');
+    if (animate) {
+      log.innerHTML = ['router.push({ user: "' + p.id + '", liked: [' + p.liked.length + ' ids] })',
+        'cookie profile = "' + p.id + '"', 'MovieSearch + page remounted, search text cleared',
+        'recommendations key changed, previous request cancelled', 'scrolled to top'].map(t => '<li>' + t + '</li>').join('');
+      timer = setTimeout(() => { recs.innerHTML = '<div class="ph done">recommendations for ' + p.name.split(' ')[0] + '</div>'.repeat(1) + '<div class="ph done">…</div>'.repeat(3); }, 700);
+    } else {
+      log.innerHTML = '<li>initial load as ' + p.name + ' (cookie / first profile)</li>';
+      recs.innerHTML = '<div class="ph done">recommendations for ' + p.name.split(' ')[0] + '</div>' + '<div class="ph done">…</div>'.repeat(3);
+    }
+  }
+  pick(0, false);
+</script>
+</body>
+</html>
