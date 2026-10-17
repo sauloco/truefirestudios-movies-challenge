@@ -7,7 +7,7 @@ import { failPoster, holdPosters, stubPosters } from './helpers/posters'
 async function openHome(prepare: (page: Page) => Promise<unknown>) {
   const page = await createPage()
   await prepare(page)
-  await page.goto(url('/'))
+  await page.goto(url('/?user=sam'))
   const poster = page.locator('[data-testid="poster"]').first()
   await poster.waitFor()
   return { page, poster }
@@ -27,7 +27,7 @@ describe('PosterImage', () => {
   it('shows the blurhash first, then fades the real poster in', async () => {
     const page = await createPage()
     const held = await holdPosters(page)
-    await page.goto(url('/'))
+    await page.goto(url('/?user=sam'))
     const poster = page.locator('[data-testid="poster"]').first()
     await poster.waitFor()
 
@@ -65,7 +65,7 @@ describe('PosterImage', () => {
   it('keeps a fixed 2:3 box through loading, loaded and failed states', async () => {
     const page = await createPage()
     const held = await holdPosters(page)
-    await page.goto(url('/'))
+    await page.goto(url('/?user=sam'))
     const poster = page.locator('[data-testid="poster"]').first()
     await poster.waitFor()
 

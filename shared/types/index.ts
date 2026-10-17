@@ -28,3 +28,15 @@ export interface RecommendationsRequest {
   liked: number[]
   limit?: number
 }
+
+export type Language = 'en' | 'es' | 'ja'
+
+export interface Profile {
+  id: string
+  name: string
+  avatarUrl: string
+  // Pastel backdrop so the transparent line-art avatar stays visible on the dark theme
+  tint: string
+  language: Language
+  liked: number[]
+}

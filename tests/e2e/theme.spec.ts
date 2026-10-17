@@ -61,7 +61,7 @@ describe('theme', async () => {
     const page = await createPage()
     await page.emulateMedia({ colorScheme })
     await page.setViewportSize({ width: 360, height: 640 })
-    await page.goto(url('/?liked=1,2,3'))
+    await page.goto(url('/?user=sam&liked=1,2,3'))
     await page.waitForSelector('[data-testid="movie-card"]')
     await page.waitForSelector(`${shell}.v-theme--${colorScheme}`)
 
@@ -74,7 +74,7 @@ describe('theme', async () => {
 
   it('renders every visible string from the en locale', async () => {
     const en = (await import('../../i18n/locales/en.json')).default
-    const page = await createPage('/?liked=1')
+    const page = await createPage('/?user=sam&liked=1')
     await page.waitForSelector('[data-testid="movie-card"]')
 
     expect(await page.locator('[data-testid="app-title"]').innerText()).toBe(en.app.title)

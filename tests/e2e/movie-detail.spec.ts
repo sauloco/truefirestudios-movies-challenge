@@ -34,7 +34,7 @@ const SPY = () => {
   }) as typeof document.startViewTransition
 }
 
-async function open(path = '/', options: { reducedMotion?: boolean } = {}) {
+async function open(path = '/?user=sam', options: { reducedMotion?: boolean } = {}) {
   const page = await createPage()
   if (options.reducedMotion) await page.emulateMedia({ reducedMotion: 'reduce' })
   await stubPosters(page)
@@ -64,7 +64,7 @@ describe('movie detail page', () => {
     const target = await firstPopularCard(page)
     await card(page, target).click()
 
-    await page.waitForURL(`**/movies/${target.id}`)
+    await page.waitForURL(`**/movies/${target.id}?user=sam`)
     await page.locator('[data-testid="movie-detail"]').waitFor()
     expect(await page.locator('[data-testid="detail-title"]').innerText()).toBe(target.title)
     expect(await page.locator('[data-testid="detail-year"]').innerText()).toBe(String(target.year))
@@ -87,15 +87,15 @@ describe('movie detail page', () => {
   })
 
   it('keeps ?liked= on the card links and restores the grid and query on Back', async () => {
-    const page = await open(`/?liked=${STAR_WARS.id}`)
+    const page = await open(`/?user=sam&liked=${STAR_WARS.id}`)
     const target = await firstPopularCard(page)
-    expect(await card(page, target).getAttribute('href')).toBe(`/movies/${target.id}?liked=${STAR_WARS.id}`)
+    expect(await card(page, target).getAttribute('href')).toBe(`/movies/${target.id}?user=sam&liked=${STAR_WARS.id}`)
 
     await card(page, target).click()
     await page.locator('[data-testid="movie-detail"]').waitFor()
     await page.locator('[data-testid="detail-back"]').click()
 
-    await page.waitForURL(`**/?liked=${STAR_WARS.id}`)
+    await page.waitForURL(`**/?user=sam&liked=${STAR_WARS.id}`)
     await page.locator('[data-testid="recommendation-grid"]').waitFor()
     expect(await card(page, target).isVisible()).toBe(true)
     expect(await page.locator('[data-testid="liked-chip"]').count()).toBe(1)
@@ -103,7 +103,7 @@ describe('movie detail page', () => {
   })
 
   it('shows the match score after arriving from a card and no like button', async () => {
-    const page = await open(`/?liked=${STAR_WARS.id}`)
+    const page = await open(`/?user=sam&liked=${STAR_WARS.id}`)
     const target = await firstPopularCard(page)
     const cardScore = await card(page, target).locator('[data-testid="movie-card-score"]').innerText()
     await card(page, target).click()
@@ -114,19 +114,19 @@ describe('movie detail page', () => {
     await page.close()
   })
 
-  it('renders on the server for a direct visit, without a score, and Back goes home', async () => {
+  it('renders on the server for a direct visit, without a score, and Back goes home as the same viewer', async () => {
     const html = await $fetch<string>(`/movies/${EMPIRE.id}`)
     expect(html).toContain('data-testid="movie-detail"')
     expect(html).toContain(EMPIRE.overview.slice(0, 40))
     expect(html).toContain(`view-transition-name:movie-poster-${EMPIRE.id}`)
 
-    const page = await open(`/movies/${EMPIRE.id}`)
+    const page = await open(`/movies/${EMPIRE.id}?user=sam`)
     expect(await page.locator('[data-testid="detail-score"]').count()).toBe(0)
     const back = page.locator('[data-testid="detail-back"]')
     expect(await back.isVisible()).toBe(true)
-    expect(await back.getAttribute('href')).toBe('/')
+    expect(await back.getAttribute('href')).toBe('/?user=sam')
     await back.click()
-    await page.waitForURL(url('/'))
+    await page.waitForURL(url('/?user=sam'))
     await page.locator('[data-testid="recommendation-grid"]').waitFor()
     await page.close()
   })
@@ -137,11 +137,11 @@ describe('movie detail page', () => {
   })
 
   it('skips the transition under reduced motion', async () => {
-    const page = await open('/', { reducedMotion: true })
+    const page = await open('/?user=sam', { reducedMotion: true })
     const target = await firstPopularCard(page)
     await card(page, target).click()
 
-    await page.waitForURL(`**/movies/${target.id}`)
+    await page.waitForURL(`**/movies/${target.id}?user=sam`)
     await page.locator('[data-testid="movie-detail"]').waitFor()
     expect(await transitions(page)).toEqual([])
     await page.close()

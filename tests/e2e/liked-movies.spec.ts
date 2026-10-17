@@ -16,7 +16,8 @@ beforeAll(async () => {
   EMPIRE = movies.find(movie => /Empire Strikes Back/.test(movie.title))!
 })
 
-async function open(path = '/') {
+// `?user=sam` without `liked` means a viewer with no picks
+async function open(path = '/?user=sam') {
   const page = await createPage()
   await stubPosters(page)
   await page.goto(url(path))
@@ -77,31 +78,31 @@ describe('MovieSearch and LikedChips', () => {
     await chips(page).first().waitFor()
     expect(await chips(page).allInnerTexts()).toEqual([`${STAR_WARS.title} (${STAR_WARS.year})`])
     expect(await page.locator('[data-testid="movie-search"] input').inputValue()).toBe('')
-    await page.waitForURL(`**/?liked=${STAR_WARS.id}`)
+    await page.waitForURL(`**/?user=sam&liked=${STAR_WARS.id}`)
     await page.close()
   })
 
   it('removes a chip with its close button', async () => {
-    const page = await open(`/?liked=${STAR_WARS.id},${EMPIRE.id}`)
+    const page = await open(`/?user=sam&liked=${STAR_WARS.id},${EMPIRE.id}`)
     expect(await chips(page).count()).toBe(2)
 
     await page.getByRole('button', { name: `Remove ${STAR_WARS.title}` }).click()
     await page.waitForFunction(() => document.querySelectorAll('[data-testid="liked-chip"]').length === 1)
     expect(await chips(page).allInnerTexts()).toEqual([`${EMPIRE.title} (${EMPIRE.year})`])
-    await page.waitForURL(`**/?liked=${EMPIRE.id}`)
+    await page.waitForURL(`**/?user=sam&liked=${EMPIRE.id}`)
     await page.close()
   })
 
   it('drops the query once the last chip is removed', async () => {
-    const page = await open(`/?liked=${STAR_WARS.id}`)
+    const page = await open(`/?user=sam&liked=${STAR_WARS.id}`)
     await page.getByRole('button', { name: `Remove ${STAR_WARS.title}` }).click()
     await page.waitForFunction(() => document.querySelectorAll('[data-testid="liked-chip"]').length === 0)
-    await page.waitForURL(url => !url.search)
+    await page.waitForURL(url => url.search === '?user=sam')
     await page.close()
   })
 
   it('does not offer movies that are already picked', async () => {
-    const page = await open(`/?liked=${STAR_WARS.id}`)
+    const page = await open(`/?user=sam&liked=${STAR_WARS.id}`)
     await search(page, 'star wars')
     await page.waitForTimeout(300)
     expect(await page.locator(`[data-testid="movie-option-${STAR_WARS.id}"]`).count()).toBe(0)
@@ -129,7 +130,7 @@ describe('MovieSearch and LikedChips', () => {
 
 describe('page and URL state', () => {
   it('renders deep-linked results in the server HTML, before hydration', async () => {
-    const html = await $fetch<string>(`/?liked=${STAR_WARS.id},${EMPIRE.id}`)
+    const html = await $fetch<string>(`/?user=sam&liked=${STAR_WARS.id},${EMPIRE.id}`)
     expect(html).toContain('Recommended for you')
     expect(html).toContain('data-testid="movie-card"')
     expect(html).toContain('Because you liked')
@@ -137,7 +138,7 @@ describe('page and URL state', () => {
   })
 
   it('shows personalized cards with reasons and match scores for a deep link', async () => {
-    const page = await open(`/?liked=${STAR_WARS.id},${EMPIRE.id}`)
+    const page = await open(`/?user=sam&liked=${STAR_WARS.id},${EMPIRE.id}`)
     await page.locator('[data-testid="movie-card"]').first().waitFor()
     expect(await page.locator('[data-testid="recommendations-heading"]').innerText()).toBe('Recommended for you')
     expect(await chips(page).count()).toBe(2)
@@ -149,7 +150,7 @@ describe('page and URL state', () => {
   })
 
   it('keeps the picks and results after a refresh', async () => {
-    const page = await open(`/?liked=${STAR_WARS.id}`)
+    const page = await open(`/?user=sam&liked=${STAR_WARS.id}`)
     await page.reload()
     await page.locator('[data-testid="movie-card"]').first().waitFor()
     expect(await chips(page).allInnerTexts()).toEqual([`${STAR_WARS.title} (${STAR_WARS.year})`])
@@ -167,7 +168,7 @@ describe('page and URL state', () => {
   })
 
   it('ignores invalid and unknown ids in the URL and says so', async () => {
-    const page = await open(`/?liked=${STAR_WARS.id},abc,9999,-3,${STAR_WARS.id},`)
+    const page = await open(`/?user=sam&liked=${STAR_WARS.id},abc,9999,-3,${STAR_WARS.id},`)
     await page.locator('[data-testid="movie-card"]').first().waitFor()
     expect(await chips(page).allInnerTexts()).toEqual([`${STAR_WARS.title} (${STAR_WARS.year})`])
     expect(await page.locator('[data-testid="ignored-ids-notice"]').innerText()).toContain('were not recognised')
@@ -175,7 +176,7 @@ describe('page and URL state', () => {
   })
 
   it('falls back to popular results when no id in the URL is valid', async () => {
-    const page = await open('/?liked=abc,9999')
+    const page = await open('/?user=sam&liked=abc,9999')
     await page.locator('[data-testid="movie-card"]').first().waitFor()
     expect(await page.locator('[data-testid="recommendations-heading"]').innerText()).toBe('Popular right now')
     expect(await chips(page).count()).toBe(0)
@@ -184,7 +185,7 @@ describe('page and URL state', () => {
 
   it('shows the empty state when every movie is picked', async () => {
     const all = movies.map(movie => movie.id).join(',')
-    const page = await open(`/?liked=${all}`)
+    const page = await open(`/?user=sam&liked=${all}`)
     await page.locator('[data-testid="recommendation-empty"]').waitFor()
     expect(await page.locator('[data-testid="movie-card"]').count()).toBe(0)
     await page.close()
@@ -216,7 +217,7 @@ describe('page and URL state', () => {
     const page = await createPage()
     await stubPosters(page)
     await page.setViewportSize({ width: 360, height: 640 })
-    await page.goto(url(`/?liked=${STAR_WARS.id},${EMPIRE.id}`))
+    await page.goto(url(`/?user=sam&liked=${STAR_WARS.id},${EMPIRE.id}`))
     await page.locator('[data-testid="movie-card"]').first().waitFor()
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360)
     await page.close()

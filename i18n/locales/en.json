@@ -41,5 +41,15 @@
   "theme": {
     "switchToDark": "Switch to dark theme",
     "switchToLight": "Switch to light theme"
+  },
+  "profiles": {
+    "switcher": "Switch viewer",
+    "reset": "Reset to my likes",
+    "languages": {
+      "en": "English",
+      "es": "Spanish",
+      "ja": "Japanese"
+    },
+    "likedCount": "{count} liked movie | {count} liked movies"
   }
 }
