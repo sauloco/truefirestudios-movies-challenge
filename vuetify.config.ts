@@ -2,6 +2,8 @@ import { defineVuetifyConfiguration } from 'vuetify-nuxt-module/custom-configura
 
 // rusticit.com palette: charcoal #0e152e, purple #4a4ac0 / #6f6fbe, cyan #07c6ff as a sparing accent
 export default defineVuetifyConfiguration({
+  // Bundled SVG paths instead of the icon font, which the module would otherwise load from a CDN
+  icons: { defaultSet: 'mdi-svg' },
   theme: {
     defaultTheme: 'light',
     themes: {
