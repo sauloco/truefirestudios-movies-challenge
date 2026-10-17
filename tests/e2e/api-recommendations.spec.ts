@@ -67,6 +67,7 @@ describe('POST /api/recommendations', async () => {
           title: expect.any(String),
           year: expect.any(Number),
           posterUrl: expect.stringMatching(/^https:\/\/image\.tmdb\.org\/t\/p\/w342\/.+/),
+          blurhash: expect.stringMatching(/\S/),
           overview: expect.stringMatching(/\S/),
           genres: expect.arrayContaining([expect.any(String)])
         })

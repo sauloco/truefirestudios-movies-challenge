@@ -16,6 +16,7 @@ describe('GET /api/movies', async () => {
         title: expect.any(String),
         year: expect.any(Number),
         posterUrl: expect.stringMatching(POSTER_URL),
+        blurhash: expect.stringMatching(/\S/),
         overview: expect.stringMatching(/\S/),
         genres: expect.arrayContaining([expect.any(String)])
       })
@@ -54,7 +55,7 @@ describe('GET /api/movies', async () => {
     expect(body).not.toContain('user_id')
     expect(body).not.toContain('users')
     for (const movie of JSON.parse(body) as Movie[]) {
-      expect(Object.keys(movie).sort()).toEqual(['genres', 'id', 'overview', 'posterUrl', 'title', 'year'])
+      expect(Object.keys(movie).sort()).toEqual(['blurhash', 'genres', 'id', 'overview', 'posterUrl', 'title', 'year'])
     }
   })
 })

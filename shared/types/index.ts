@@ -3,6 +3,7 @@ export interface Movie {
   title: string
   year: number
   posterUrl: string | null
+  blurhash: string
   overview: string
   genres: string[]
 }

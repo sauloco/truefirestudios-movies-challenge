@@ -14,7 +14,7 @@ export function getMovies(): Map<number, Movie> {
     movies = new Map(getDataset().movies.map(({ id, title, year }) => {
       const entry = entries.get(id)
       if (!entry) throw new Error(`Movie ${id} (${title}) is missing from catalog.json; run \`npm run build-catalog\``)
-      return [id, { id, title, year, posterUrl: `${POSTER_BASE_URL}${entry.posterPath}`, overview: entry.overview, genres: entry.genres }]
+      return [id, { id, title, year, posterUrl: `${POSTER_BASE_URL}${entry.posterPath}`, blurhash: entry.blurhash, overview: entry.overview, genres: entry.genres }]
     }))
   }
   return movies
