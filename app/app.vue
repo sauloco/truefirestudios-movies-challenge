@@ -8,6 +8,7 @@ useHead({
 </script>
 
 <template>
+  <ProfileLoading />
   <NuxtLayout>
     <NuxtRouteAnnouncer />
     <NuxtPage />

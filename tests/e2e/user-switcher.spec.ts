@@ -1,18 +1,18 @@
 import { beforeAll, describe, expect, it } from 'vitest'
-import { $fetch, createPage, setup, url } from '@nuxt/test-utils/e2e'
+import { $fetch, createPage, setup } from '@nuxt/test-utils/e2e'
+import { gotoAs, waitForViewer } from './helpers/viewer'
 import type { Page } from 'playwright-core'
-import type { Movie, Profile } from '../../shared/types'
+import type { Profile } from '../../shared/types'
 import { stubPosters } from './helpers/posters'
 import { faceWall } from './helpers/room'
 
 await setup({ browser: true })
 
 let profiles: Profile[]
-let movies: Movie[]
 const profile = (id: string) => profiles.find(candidate => candidate.id === id)!
 
 beforeAll(async () => {
-  [profiles, movies] = await Promise.all([$fetch<Profile[]>('/api/profiles'), $fetch<Movie[]>('/api/movies')])
+  profiles = await $fetch<Profile[]>('/api/profiles')
 })
 
 async function open(path = '/') {
@@ -23,7 +23,7 @@ async function open(path = '/') {
 }
 
 async function visit(page: Page, path: string) {
-  await page.goto(url(path))
+  await gotoAs(page, path)
   await page.locator('[data-testid="user-switcher"]').waitFor()
   await page.waitForFunction(() => (window as unknown as { useNuxtApp?: () => { isHydrating: boolean } }).useNuxtApp?.().isHydrating === false)
 }
@@ -39,9 +39,9 @@ async function waitForChips(page: Page, count: number) {
 const likedParam = (id: string) => profile(id).liked.join(',')
 
 describe('user switcher', () => {
-  it('lands a bare visit on the first viewer with their picks in the URL', async () => {
+  it('lands a bare visit on the first viewer with their own likes and a clean URL', async () => {
     const page = await open('/')
-    await page.waitForURL(`**/?user=sam&liked=${likedParam('sam')}`)
+    expect(new URL(page.url()).search).toBe('')
     expect(await chips(page).count()).toBe(profile('sam').liked.length)
     expect(await radio(page, 'sam').getAttribute('aria-checked')).toBe('true')
     await page.close()
@@ -63,7 +63,7 @@ describe('user switcher', () => {
     const before = await titles(page)
 
     await radio(page, 'dale').click()
-    await page.waitForURL(`**/?user=dale&liked=${likedParam('dale')}`)
+    await waitForViewer(page, 'dale', profile('dale').liked)
     await waitForChips(page, profile('dale').liked.length)
     expect(await radio(page, 'dale').getAttribute('aria-checked')).toBe('true')
     expect(await radio(page, 'sam').getAttribute('aria-checked')).toBe('false')
@@ -79,7 +79,7 @@ describe('user switcher', () => {
     await waitForChips(page, profile('lucia').liked.length)
 
     await page.goBack()
-    await page.waitForURL('**/?user=sam')
+    await waitForViewer(page, 'sam', [])
     await waitForChips(page, 0)
     expect(await radio(page, 'sam').getAttribute('aria-checked')).toBe('true')
     await page.close()
@@ -90,7 +90,7 @@ describe('user switcher', () => {
     await radio(page, 'sam').focus()
 
     await page.keyboard.press('ArrowRight')
-    await page.waitForURL(url => url.searchParams.get('user') === 'yuki')
+    await waitForViewer(page, 'yuki')
     expect(await radio(page, 'yuki').getAttribute('aria-checked')).toBe('true')
     expect(await radio(page, 'yuki').getAttribute('tabindex')).toBe('0')
     expect(await radio(page, 'sam').getAttribute('tabindex')).toBe('-1')
@@ -98,29 +98,30 @@ describe('user switcher', () => {
 
     await page.keyboard.press('ArrowLeft')
     await page.keyboard.press('ArrowLeft')
-    await page.waitForURL(url => url.searchParams.get('user') === 'dale')
+    await waitForViewer(page, 'dale')
     await page.waitForFunction(() => document.activeElement?.getAttribute('data-testid') === 'user-dale')
     await page.close()
   })
 
-  it('restores the last viewer from the cookie on a bare visit', async () => {
+  it('restores the last viewer from localStorage on a bare visit', async () => {
     const page = await open('/?user=lucia')
     await visit(page, '/')
-    await page.waitForURL(`**/?user=lucia&liked=${likedParam('lucia')}`)
+    await waitForViewer(page, 'lucia')
     expect(await radio(page, 'lucia').getAttribute('aria-checked')).toBe('true')
     await page.close()
   })
 
-  it('falls back to the remembered viewer for an unknown ?user=', async () => {
+  it('falls back to the first viewer for an unknown ?user=', async () => {
     const page = await open('/?user=nobody')
-    await page.waitForURL(`**/?user=sam&liked=${likedParam('sam')}`)
+    await waitForViewer(page, 'sam')
     expect(await radio(page, 'sam').getAttribute('aria-checked')).toBe('true')
     await page.close()
   })
 
-  it('keeps picks that are already in the URL when it only lacks a viewer', async () => {
+  it('imports an old ?liked= link into storage and cleans the URL', async () => {
     const page = await open('/?liked=1,2')
-    await page.waitForURL('**/?user=sam&liked=1,2')
+    await waitForViewer(page, 'sam', [1, 2])
+    await page.waitForURL(url => url.search === '')
     expect(await chips(page).count()).toBe(2)
     await page.close()
   })
@@ -130,26 +131,10 @@ describe('user switcher', () => {
     await faceWall(page, 'likes')
     await page.getByRole('button', { name: /^Remove / }).click()
     await waitForChips(page, 0)
-    await page.waitForURL(url => url.search === '?user=sam')
+    await waitForViewer(page, 'sam', [])
     await page.waitForTimeout(400)
     expect(await chips(page).count()).toBe(0)
-    expect(await page.locator('[data-testid="recommendations-heading"]').innerText()).toBe('Popular right now')
-    await page.close()
-  })
-
-  it('offers a reset to the viewer\'s own likes once the picks were edited', async () => {
-    const page = await open(`/?user=sam&liked=${likedParam('sam')}`)
-    expect(await page.locator('[data-testid="reset-likes"]').count()).toBe(0)
-    const extra = movies.find(movie => !profile('sam').liked.includes(movie.id))!
-    await page.locator('[data-testid="movie-search"] input').fill(extra.title)
-    await page.locator(`[data-testid="movie-option-${extra.id}"]`).click()
-    await waitForChips(page, profile('sam').liked.length + 1)
-    await page.locator('[data-testid="reset-likes"]').waitFor()
-
-    await page.locator('[data-testid="reset-likes"]').click()
-    await page.waitForURL(`**/?user=sam&liked=${likedParam('sam')}`)
-    await waitForChips(page, profile('sam').liked.length)
-    expect(await page.locator('[data-testid="reset-likes"]').count()).toBe(0)
+    expect(await page.locator('[data-testid="recommendations-heading"]').innerText()).toBe('Recommendations Wall')
     await page.close()
   })
 
@@ -158,10 +143,10 @@ describe('user switcher', () => {
     await page.locator('[data-testid="movie-card"]').first().click()
     await page.locator('[data-testid="movie-detail"]').waitFor()
     const back = page.locator('[data-testid="detail-back"]')
-    expect(await back.getAttribute('href')).toBe(`/?user=yuki&liked=${likedParam('yuki')}`)
+    expect(await back.getAttribute('href')).toBe('/')
 
     await back.click()
-    await page.waitForURL(`**/?user=yuki&liked=${likedParam('yuki')}`)
+    await waitForViewer(page, 'yuki', profile('yuki').liked)
     await waitForChips(page, profile('yuki').liked.length)
     await page.close()
   })
@@ -170,7 +155,7 @@ describe('user switcher', () => {
     const page = await createPage()
     await stubPosters(page)
     await page.setViewportSize({ width: 360, height: 640 })
-    await page.goto(url('/?user=dale'))
+    await gotoAs(page, '/?user=dale')
     await page.locator('[data-testid="user-switcher"]').waitFor()
     expect(await page.locator('[data-testid="active-profile-name"]').isVisible()).toBe(false)
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360)
@@ -184,7 +169,7 @@ describe('user switcher', () => {
   it('does not animate the avatars under reduced motion', async () => {
     const page = await createPage()
     await page.emulateMedia({ reducedMotion: 'reduce' })
-    await page.goto(url('/?user=sam'))
+    await gotoAs(page, '/?user=sam')
     await page.locator('[data-testid="user-switcher"]').waitFor()
     expect(await radio(page, 'sam').evaluate(item => getComputedStyle(item).transitionDuration)).toBe('0s')
     await page.close()

@@ -14,11 +14,11 @@ function read(key: string): number[] {
 // Synchronous so any card can use it. The lists are read after mount, which keeps the server HTML and the
 // first client render identical (an empty watchlist) instead of mismatching
 export function useWatchlist() {
-  const route = useRoute()
   const { data: profiles } = useProfileList()
+  const { state } = useViewer()
   const lists = useState<Record<string, number[]>>('watchlists', () => ({}))
 
-  const profileId = computed(() => findProfile(profiles.value, route.query.user)?.id ?? profiles.value[0]?.id ?? 'guest')
+  const profileId = computed(() => findProfile(profiles.value, state.value.user)?.id ?? profiles.value[0]?.id ?? 'guest')
   const ids = computed(() => lists.value[profileId.value] ?? [])
 
   function load(id: string) {

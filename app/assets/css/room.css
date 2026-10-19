@@ -240,19 +240,6 @@
   opacity: 0.8;
 }
 
-/* Notices about the picks float over the top of the room */
-.room-notices {
-  position: absolute;
-  top: 96px;
-  left: 16px;
-  z-index: 6;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  max-width: calc(100% - 32px);
-}
-
 /* The home page runs under the floating header */
 .room-page {
   padding-top: 0 !important;

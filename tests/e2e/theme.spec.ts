@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { createPage, setup, url } from '@nuxt/test-utils/e2e'
+import { createPage, setup } from '@nuxt/test-utils/e2e'
+import { gotoAs } from './helpers/viewer'
 
 const toggle = '[data-testid="theme-toggle"]'
 const shell = '[data-testid="app-shell"]'
@@ -61,7 +62,7 @@ describe('theme', async () => {
     const page = await createPage()
     await page.emulateMedia({ colorScheme })
     await page.setViewportSize({ width: 360, height: 640 })
-    await page.goto(url('/?user=sam&liked=1,2,3'))
+    await gotoAs(page, '/?user=sam&liked=1,2,3')
     await page.waitForSelector('[data-testid="movie-card"]')
     await page.waitForSelector(`${shell}.v-theme--${colorScheme}`)
 

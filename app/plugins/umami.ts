@@ -9,7 +9,7 @@ export default defineNuxtPlugin(() => {
       src: 'https://cloud.umami.is/script.js',
       defer: true,
       'data-website-id': umamiWebsiteId,
-      // Picks live in ?liked=, which changes on every click; page views stay per page, not per pick
+      // Page views stay per page; the query string only carries legacy share links
       'data-exclude-search': 'true'
     }]
   })

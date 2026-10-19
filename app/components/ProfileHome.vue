@@ -1,20 +1,27 @@
 <script setup lang="ts">
 // Everything with local state (menus, the debounced picks, request status) lives here so that
 // the page can remount it with a key when the viewer changes, instead of carrying state over from the previous one
-const { active, resetLikes } = await useProfiles()
-const { liked, likedMovies, ignoredCount, remove } = await useLikedMovies()
+const { active } = await useProfiles()
+const { liked, likedMovies, remove } = await useLikedMovies()
 const { data: movies } = await useMovies()
 const { data, status, error, refresh } = await useRecommendations(liked)
 const watchlist = useWatchlist()
+const loading = useProfileLoading()
+
+// The overlay lifts once this viewer's room has its results (or has failed to get them)
+if (import.meta.client) {
+  watch(status, async (current) => {
+    if (current === 'pending') return
+    await nextTick()
+    loading.markReady(active.value.id)
+  }, { immediate: true })
+}
 
 const analytics = useAnalytics()
 // Once per result set shown, including the one rendered on the server for a deep link
 watch(data, (shown) => {
   if (shown?.items.length) analytics.recommendationsShown(liked.value.length, shown.source)
 }, { immediate: true })
-
-const edited = computed(() => liked.value.length !== active.value.liked.length
-  || liked.value.some(id => !active.value.liked.includes(id)))
 
 const watchlisted = computed(() => {
   const byId = new Map(movies.value.map(movie => [movie.id, movie]))
@@ -27,29 +34,6 @@ const watchlisted = computed(() => {
     <h1 class="sr-only">
       {{ $t('app.title') }}
     </h1>
-
-    <div
-      v-if="edited || ignoredCount"
-      class="room-notices"
-    >
-      <v-btn
-        v-if="edited"
-        size="small"
-        variant="tonal"
-        data-testid="reset-likes"
-        @click="resetLikes()"
-      >
-        {{ $t('profiles.reset') }}
-      </v-btn>
-      <v-alert
-        v-if="ignoredCount"
-        type="warning"
-        variant="tonal"
-        density="compact"
-        :text="$t('liked.ignored')"
-        data-testid="ignored-ids-notice"
-      />
-    </div>
 
     <RoomScene
       :tint="active.tint"

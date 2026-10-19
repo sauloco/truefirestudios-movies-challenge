@@ -1,5 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest'
-import { $fetch, createPage, setup, url } from '@nuxt/test-utils/e2e'
+import { $fetch, createPage, setup } from '@nuxt/test-utils/e2e'
+import { gotoAs, waitForViewer } from './helpers/viewer'
 import type { Page } from 'playwright-core'
 import type { Movie } from '../../shared/types'
 import { stubPosters } from './helpers/posters'
@@ -21,7 +22,7 @@ beforeAll(async () => {
 async function open(path = '/?user=sam') {
   const page = await createPage()
   await stubPosters(page)
-  await page.goto(url(path))
+  await gotoAs(page, path)
   await page.locator('[data-testid="movie-search"]').waitFor()
   // Typing before hydration would be lost to the server-rendered input
   await page.waitForFunction(() => (window as unknown as { useNuxtApp?: () => { isHydrating: boolean } }).useNuxtApp?.().isHydrating === false)
@@ -38,19 +39,18 @@ async function search(page: Page, text: string) {
 }
 
 describe('MovieSearch and LikedChips', () => {
-  it('renders keyboard focus on the field without an inner input outline', async () => {
+  it('glows the header like a poster while the field has focus, with no inner input outline', async () => {
     const page = await open()
     const input = page.locator('[data-testid="movie-search"] input')
+    const header = page.locator('[data-testid="app-header"]')
+    expect(await header.evaluate(el => getComputedStyle(el).boxShadow)).toBe('none')
+
     await input.focus()
     await page.keyboard.type('star wars')
     await options(page).first().waitFor()
 
     expect(await input.evaluate(el => getComputedStyle(el).outlineStyle)).toBe('none')
-    const field = page.locator('[data-testid="movie-search"] .v-field')
-    expect(await field.getAttribute('class')).toContain('v-field--focused')
-    const outline = field.locator('.v-field__outline')
-    expect(await outline.getAttribute('class')).toContain('text-primary')
-    expect(await outline.evaluate(el => getComputedStyle(el).getPropertyValue('--v-field-border-width'))).toBe('2px')
+    await page.waitForFunction(() => getComputedStyle(document.querySelector('[data-testid="app-header"]')!).boxShadow.includes('255, 244, 214'))
     await page.close()
   })
 
@@ -79,7 +79,7 @@ describe('MovieSearch and LikedChips', () => {
     await chips(page).first().waitFor()
     expect(await chips(page).allInnerTexts()).toEqual([`${STAR_WARS.title} (${STAR_WARS.year})`])
     expect(await page.locator('[data-testid="movie-search"] input').inputValue()).toBe('')
-    await page.waitForURL(`**/?user=sam&liked=${STAR_WARS.id}`)
+    await waitForViewer(page, 'sam', [STAR_WARS.id])
     await page.close()
   })
 
@@ -91,7 +91,7 @@ describe('MovieSearch and LikedChips', () => {
     await page.getByRole('button', { name: `Remove ${STAR_WARS.title}` }).click()
     await page.waitForFunction(() => document.querySelectorAll('[data-testid="liked-chip"]').length === 1)
     expect(await chips(page).allInnerTexts()).toEqual([`${EMPIRE.title} (${EMPIRE.year})`])
-    await page.waitForURL(`**/?user=sam&liked=${EMPIRE.id}`)
+    await waitForViewer(page, 'sam', [EMPIRE.id])
     await page.close()
   })
 
@@ -100,7 +100,7 @@ describe('MovieSearch and LikedChips', () => {
     await faceWall(page, 'likes')
     await page.getByRole('button', { name: `Remove ${STAR_WARS.title}` }).click()
     await page.waitForFunction(() => document.querySelectorAll('[data-testid="liked-chip"]').length === 0)
-    await page.waitForURL(url => url.search === '?user=sam')
+    await waitForViewer(page, 'sam', [])
     await page.close()
   })
 
@@ -134,7 +134,7 @@ describe('MovieSearch and LikedChips', () => {
 describe('page and URL state', () => {
   it('renders deep-linked results in the server HTML, before hydration', async () => {
     const html = await $fetch<string>(`/?user=sam&liked=${STAR_WARS.id},${EMPIRE.id}`)
-    expect(html).toContain('Recommended for you')
+    expect(html).toContain('Recommendations Wall')
     expect(html).toContain('data-testid="movie-card"')
     expect(html).toContain('Because you liked')
     expect(html).toContain(STAR_WARS.title)
@@ -143,7 +143,7 @@ describe('page and URL state', () => {
   it('shows personalized cards with reasons and match scores for a deep link', async () => {
     const page = await open(`/?user=sam&liked=${STAR_WARS.id},${EMPIRE.id}`)
     await page.locator('[data-testid="movie-card"]').first().waitFor()
-    expect(await page.locator('[data-testid="recommendations-heading"]').innerText()).toBe('Recommended for you')
+    expect(await page.locator('[data-testid="recommendations-heading"]').innerText()).toBe('Recommendations Wall')
     expect(await chips(page).count()).toBe(2)
 
     const first = page.locator('[data-testid="movie-card"]').first()
@@ -162,26 +162,25 @@ describe('page and URL state', () => {
 
   it('refetches recommendations after picking a movie', async () => {
     const page = await open()
-    expect(await page.locator('[data-testid="recommendations-heading"]').innerText()).toBe('Popular right now')
+    expect(await page.locator('[data-testid="recommendations-heading"]').innerText()).toBe('Recommendations Wall')
     await search(page, 'star wars')
     await page.locator(`[data-testid="movie-option-${STAR_WARS.id}"]`).click()
-    await page.getByRole('heading', { name: 'Recommended for you' }).waitFor()
+    await page.getByRole('heading', { name: 'Recommendations Wall' }).waitFor()
     expect(await page.locator('[data-testid="movie-card-title"]').allInnerTexts()).not.toContain(STAR_WARS.title)
     await page.close()
   })
 
-  it('ignores invalid and unknown ids in the URL and says so', async () => {
+  it('drops invalid and unknown ids from an old link', async () => {
     const page = await open(`/?user=sam&liked=${STAR_WARS.id},abc,9999,-3,${STAR_WARS.id},`)
     await page.locator('[data-testid="movie-card"]').first().waitFor()
     expect(await chips(page).allInnerTexts()).toEqual([`${STAR_WARS.title} (${STAR_WARS.year})`])
-    expect(await page.locator('[data-testid="ignored-ids-notice"]').innerText()).toContain('were not recognised')
     await page.close()
   })
 
   it('falls back to popular results when no id in the URL is valid', async () => {
     const page = await open('/?user=sam&liked=abc,9999')
     await page.locator('[data-testid="movie-card"]').first().waitFor()
-    expect(await page.locator('[data-testid="recommendations-heading"]').innerText()).toBe('Popular right now')
+    expect(await page.locator('[data-testid="recommendations-heading"]').innerText()).toBe('Recommendations Wall')
     expect(await chips(page).count()).toBe(0)
     await page.close()
   })
@@ -220,7 +219,7 @@ describe('page and URL state', () => {
     const page = await createPage()
     await stubPosters(page)
     await page.setViewportSize({ width: 360, height: 640 })
-    await page.goto(url(`/?user=sam&liked=${STAR_WARS.id},${EMPIRE.id}`))
+    await gotoAs(page, `/?user=sam&liked=${STAR_WARS.id},${EMPIRE.id}`)
     await page.locator('[data-testid="movie-card"]').first().waitFor()
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360)
     await page.close()

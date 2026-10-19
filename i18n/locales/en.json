@@ -1,21 +1,21 @@
 {
   "app": {
-    "title": "Movies RusticIT",
+    "title": "My Movie Room",
     "tagline": "People who liked these also liked…"
   },
   "search": {
     "label": "Search 70 movies…",
-    "noData": "No matching movies"
+    "noData": "No matching movies",
+    "add": "Add to poster wall"
   },
   "liked": {
-    "heading": "Movies you like",
+    "heading": "My Posters Wall",
     "hint": "Pick 1 or more. With none, we show what's popular.",
-    "remove": "Remove {title}",
-    "ignored": "Some movies in this link were not recognised and were ignored."
+    "remove": "Remove {title}"
   },
   "recommendations": {
-    "headingPersonalized": "Recommended for you",
-    "headingPopular": "Popular right now",
+    "headingPersonalized": "Recommendations Wall",
+    "headingPopular": "Recommendations Wall",
     "because": "Because you liked {titles}",
     "popularReason": "Liked by many viewers",
     "matchScore": "{percent}% match",
@@ -47,12 +47,14 @@
   "profiles": {
     "switcher": "Switch viewer",
     "reset": "Reset to my likes",
+    "loading": "Loading {name}'s profile",
+    "loadingGeneric": "Loading profile",
     "languages": {
       "en": "English",
       "es": "Spanish",
       "ja": "Japanese"
     },
-    "likedCount": "{count} liked movie | {count} liked movies"
+    "wallSummary": "{name}, {language}, {count} in Posters Wall"
   },
   "error": {
     "title": "Something went wrong",
@@ -73,18 +75,16 @@
     },
     "show": "Show {wall}",
     "egg": {
-      "title": "Built by RusticIT",
-      "open": "Open rusticit.com",
-      "frameTitle": "rusticit.com",
-      "idle": "Screen off"
+      "title": "Built by Saulo Vargas",
+      "open": "Open rusticit.com"
     }
   },
   "watchlist": {
-    "heading": "My watchlist",
+    "heading": "Watch Next Wall",
     "empty": "Bookmark a movie and it will hang here.",
-    "add": "Add {title} to watchlist",
-    "remove": "Take {title} off watchlist",
-    "addLabel": "Add to watchlist",
-    "onList": "On my watchlist"
+    "add": "Add {title} to Watch Next Wall",
+    "remove": "Take {title} off Watch Next Wall",
+    "addLabel": "Add to Watch Next Wall",
+    "onList": "On Watch Next Wall"
   }
 }

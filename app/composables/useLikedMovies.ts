@@ -1,28 +1,23 @@
-// The picks live in the URL (`?liked=20,59,60`) so results can be shared and survive a refresh
+// Without edits a viewer shows the likes of their profile; edits are kept per viewer in localStorage (see useViewer)
 export async function useLikedMovies() {
-  const route = useRoute()
-  const router = useRouter()
-  const { data: movies } = await useMovies()
+  // Every composable starts before the first await, while the setup context still exists
+  const moviesRequest = useMovies()
+  const profilesRequest = useProfiles()
+  const { state, update } = useViewer()
   const analytics = useAnalytics()
+  const { data: movies } = await moviesRequest
+  const { active } = await profilesRequest
 
   const byId = computed(() => new Map(movies.value.map(movie => [movie.id, movie])))
 
-  const requested = computed(() => {
-    const raw = [route.query.liked].flat().filter(value => typeof value === 'string')
-    return raw.flatMap(value => value.split(',')).map(value => value.trim()).filter(Boolean)
-  })
-
-  // Ids that are not numbers or not in the catalog are dropped rather than failing the page
-  const validIds = computed(() => requested.value.map(Number).filter(id => byId.value.has(id)))
-  const liked = computed(() => [...new Set(validIds.value)])
+  // Ids that are not in the catalog are dropped rather than failing the page
+  const liked = computed(() => [...new Set(state.value.picks[active.value.id] ?? active.value.liked)].filter(id => byId.value.has(id)))
 
   const likedMovies = computed(() => liked.value.map(id => byId.value.get(id)!))
   const available = computed(() => movies.value.filter(movie => !liked.value.includes(movie.id)))
-  const ignoredCount = computed(() => requested.value.length - validIds.value.length)
 
   function setLiked(ids: number[]) {
-    const { liked: _previous, ...query } = route.query
-    return router.replace({ query: ids.length ? { ...query, liked: ids.join(',') } : query })
+    update({ picks: { ...state.value.picks, [active.value.id]: ids } })
   }
 
   function add(id: number) {
@@ -37,5 +32,5 @@ export async function useLikedMovies() {
     return setLiked(liked.value.filter(pick => pick !== id))
   }
 
-  return { liked, likedMovies, available, ignoredCount, add, remove }
+  return { liked, likedMovies, available, add, remove }
 }

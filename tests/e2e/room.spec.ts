@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { $fetch, createPage, setup, url } from '@nuxt/test-utils/e2e'
+import { $fetch, createPage, setup } from '@nuxt/test-utils/e2e'
+import { gotoAs } from './helpers/viewer'
 import type { Page } from 'playwright-core'
 import type { Profile } from '../../shared/types'
 import { stubPosters } from './helpers/posters'
@@ -9,9 +10,7 @@ await setup({ browser: true })
 async function open(path = '/?user=sam') {
   const page = await createPage()
   await stubPosters(page)
-  // The easter-egg wall frames the real site; the specs never reach it
-  await page.route('https://rusticit.com/**', route => route.fulfill({ status: 200, contentType: 'text/html', body: '<p>stub</p>' }))
-  await page.goto(url(path))
+  await gotoAs(page, path)
   await page.locator('[data-testid="movie-card"]').first().waitFor()
   await page.waitForFunction(() => (window as unknown as { useNuxtApp?: () => { isHydrating: boolean } }).useNuxtApp?.().isHydrating === false)
   return page
@@ -56,15 +55,14 @@ describe('the room', () => {
 
   it('closes the ring: past the watchlist is the RusticIT wall, and so is past the likes', async () => {
     const page = await open()
-    expect(await page.locator('[data-testid="egg-frame"]').count()).toBe(0)
 
     await page.keyboard.press('ArrowRight')
     await front(page, 'watch')
     await page.waitForTimeout(500)
     await page.keyboard.press('ArrowRight')
     await front(page, 'egg')
-    await page.locator('[data-testid="egg-frame"]').waitFor({ state: 'attached' })
-    expect(await page.locator('[data-testid="egg-frame"]').getAttribute('src')).toBe('https://rusticit.com/')
+    await page.locator('[data-testid="egg-card"] .pc-card').waitFor({ state: 'visible' })
+    expect(await page.locator('[data-testid="egg-card"] .pc-handle').textContent()).toBe('@saulovargas')
 
     await page.waitForTimeout(500)
     await page.keyboard.press('ArrowRight')
@@ -83,7 +81,7 @@ describe('the room', () => {
     const page = await createPage()
     await stubPosters(page)
     await page.setViewportSize({ width: 360, height: 640 })
-    await page.goto(url('/?user=sam&liked=1,2,3'))
+    await gotoAs(page, '/?user=sam&liked=1,2,3')
     await page.locator('[data-testid="movie-card"]').first().waitFor()
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360)
     await page.close()
@@ -123,7 +121,7 @@ describe('the watchlist', () => {
   it('keeps one list per viewer', async () => {
     const page = await open('/?user=sam')
     await page.locator('[data-testid="movie-card"]').first().locator('[data-testid="watchlist-toggle"]').click()
-    await page.goto(url('/?user=yuki'))
+    await gotoAs(page, '/?user=yuki')
     await page.locator('[data-testid="movie-card"]').first().waitFor()
     await page.locator('[data-testid="wall-tab-watch"]').dispatchEvent('click')
     await front(page, 'watch')
@@ -139,7 +137,7 @@ describe('the watchlist', () => {
     expect(await button.getAttribute('aria-pressed')).toBe('false')
     await button.click()
     expect(await button.getAttribute('aria-pressed')).toBe('true')
-    expect(await button.innerText()).toBe('On my watchlist')
+    expect(await button.innerText()).toBe('On Watch Next Wall')
     await page.close()
   })
 })
