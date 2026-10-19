@@ -1,4 +1,4 @@
-# Movies RusticIT
+# My Movie Room
 
 "People who liked these also liked…" for 70 movies and 806 users. Pick a few movies you like and get ranked recommendations, each with a plain-language reason ("Because you liked …") and a match score. With no picks it shows what is popular. The home page is a full-viewport 3D room with the picks on its wall, and the picks are kept per viewer in the browser's localStorage, so they survive a refresh (they are no longer in the URL). Each card opens a read-only detail page at `/movies/<id>` (blurred-poster header, overview, genres, and the match score when you arrive from a result); the poster and title animate between the two pages with a view transition.
 
