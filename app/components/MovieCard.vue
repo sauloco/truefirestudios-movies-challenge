@@ -9,6 +9,7 @@ const props = defineProps<{
 const { t, n } = useI18n()
 const analytics = useAnalytics()
 const route = useRoute()
+const localePath = useLocalePath()
 // The detail page shows the score only when it was reached from a card
 const arrival = useState<{ id: number, score: string } | null>('movie-arrival', () => null)
 
@@ -26,7 +27,7 @@ function open() {
   analytics.recommendationClicked(props.item.movie.id, props.source)
 }
 
-const to = computed(() => ({ path: `/movies/${props.item.movie.id}`, query: route.query }))
+const to = computed(() => ({ path: localePath(`/movies/${props.item.movie.id}`), query: route.query }))
 </script>
 
 <template>
