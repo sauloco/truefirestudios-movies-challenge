@@ -7,7 +7,7 @@ describe('app shell and footer', async () => {
   it('renders the shell with the product name from the en locale', async () => {
     const page = await createPage('/')
     await page.waitForSelector('[data-testid="app-shell"]')
-    expect(await page.locator('[data-testid="app-title"]').innerText()).toBe('Movies RusticIT')
+    expect(await page.locator('[data-testid="movie-search"] label').first().innerText()).toBe('My Movie Room')
     await page.close()
   })
 

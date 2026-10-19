@@ -1,8 +1,10 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 import { $fetch, createPage, setup, url } from '@nuxt/test-utils/e2e'
+import { gotoAs, waitForViewer } from './helpers/viewer'
 import type { Page } from 'playwright-core'
 import type { Movie } from '../../shared/types'
 import { stubPosters } from './helpers/posters'
+import { faceWall } from './helpers/room'
 import { UMAMI_SCRIPT, stubUmami, watchUmamiRequests } from './helpers/umami'
 
 const WEBSITE_ID = '00000000-0000-4000-8000-000000000000'
@@ -26,7 +28,7 @@ async function open(path = '/?user=sam') {
   const page = await createPage()
   await stubPosters(page)
   const umami = await stubUmami(page)
-  await page.goto(url(path))
+  await gotoAs(page, path)
   await page.locator('[data-testid="movie-search"]').waitFor()
   await page.waitForFunction(() => (window as unknown as { useNuxtApp?: () => { isHydrating: boolean } }).useNuxtApp?.().isHydrating === false)
   return { page, umami }
@@ -73,7 +75,7 @@ describe('custom events', () => {
   it('fires movie-picked then recommendations-shown when a movie is picked', async () => {
     const { page, umami } = await open()
     await pick(page, STAR_WARS)
-    await page.getByRole('heading', { name: 'Recommended for you' }).waitFor()
+    await page.getByRole('heading', { name: 'Recommendations Wall' }).waitFor()
     expect(await umami.events()).toEqual([
       { event: 'recommendations-shown', data: { pickCount: 0, source: 'popular' } },
       { event: 'movie-picked', data: { movieId: STAR_WARS.id, pickCount: 1 } },
@@ -85,8 +87,9 @@ describe('custom events', () => {
   it('fires movie-removed with the remaining pick count', async () => {
     const { page, umami } = await open(`/?user=sam&liked=${STAR_WARS.id},${EMPIRE.id}`)
     await page.locator('[data-testid="movie-card"]').first().waitFor()
+    await faceWall(page, 'likes')
     await page.getByRole('button', { name: `Remove ${STAR_WARS.title}` }).click()
-    await page.waitForURL(`**/?user=sam&liked=${EMPIRE.id}`)
+    await waitForViewer(page, 'sam', [EMPIRE.id])
     expect(await umami.events()).toContainEqual({ event: 'movie-removed', data: { movieId: STAR_WARS.id, pickCount: 1 } })
     await page.close()
   })
@@ -114,7 +117,7 @@ describe('custom events', () => {
   it('never sends anything to an Umami host itself', async () => {
     const { page, umami } = await open()
     await pick(page, STAR_WARS)
-    await page.getByRole('heading', { name: 'Recommended for you' }).waitFor()
+    await page.getByRole('heading', { name: 'Recommendations Wall' }).waitFor()
     expect(umami.stray).toEqual([])
     await page.close()
   })
@@ -122,7 +125,7 @@ describe('custom events', () => {
   it('carries ids and counts only', async () => {
     const { page, umami } = await open()
     await pick(page, STAR_WARS)
-    await page.getByRole('heading', { name: 'Recommended for you' }).waitFor()
+    await page.getByRole('heading', { name: 'Recommendations Wall' }).waitFor()
     for (const { data } of await umami.events()) {
       for (const [key, value] of Object.entries(data ?? {})) {
         expect(['movieId', 'pickCount', 'source']).toContain(key)
@@ -145,7 +148,7 @@ describe('blocked script', () => {
     await page.waitForFunction(() => (window as unknown as { useNuxtApp?: () => { isHydrating: boolean } }).useNuxtApp?.().isHydrating === false)
 
     await pick(page, STAR_WARS)
-    await page.getByRole('heading', { name: 'Recommended for you' }).waitFor()
+    await page.getByRole('heading', { name: 'Recommendations Wall' }).waitFor()
     await page.locator('[data-testid="movie-card"]').first().click()
     await page.locator('[data-testid="movie-detail"]').waitFor()
 

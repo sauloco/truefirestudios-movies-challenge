@@ -19,7 +19,7 @@ const score = computed(() => arrival.value && arrival.value.id === movie.value?.
 
 useHead({ title: () => movie.value?.title })
 
-// With app history Back restores the grid and ?liked= exactly; a direct visit has none, so the link goes home
+// With app history Back restores the grid exactly; a direct visit has none, so the link goes home
 function goBack(event: MouseEvent) {
   if (!window.history.state?.back) return
   event.preventDefault()
@@ -33,7 +33,7 @@ function goBack(event: MouseEvent) {
     data-testid="movie-detail"
   >
     <NuxtLink
-      :to="{ path: localePath('/'), query: route.query }"
+      :to="localePath('/')"
       class="d-inline-flex align-center mb-4 text-body-2"
       data-testid="detail-back"
       @click="goBack"
@@ -78,6 +78,10 @@ function goBack(event: MouseEvent) {
         >
           {{ movie.year }}
         </p>
+        <WatchlistButton
+          class="mt-4"
+          :movie="movie"
+        />
         <div
           class="d-flex flex-wrap ga-2 mt-3"
           role="list"
@@ -134,7 +138,6 @@ function goBack(event: MouseEvent) {
 .hero__poster {
   flex: none;
   width: min(220px, 60%);
-  border-radius: 16px;
 }
 
 .hero__text {

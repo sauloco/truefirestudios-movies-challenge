@@ -1,21 +1,21 @@
 {
   "app": {
-    "title": "Movies RusticIT",
+    "title": "My Movie Room",
     "tagline": "People who liked these also liked…"
   },
   "search": {
     "label": "Search 70 movies…",
-    "noData": "No matching movies"
+    "noData": "No matching movies",
+    "add": "Add to poster wall"
   },
   "liked": {
-    "heading": "Movies you like",
+    "heading": "My Posters Wall",
     "hint": "Pick 1 or more. With none, we show what's popular.",
-    "remove": "Remove {title}",
-    "ignored": "Some movies in this link were not recognised and were ignored."
+    "remove": "Remove {title}"
   },
   "recommendations": {
-    "headingPersonalized": "Recommended for you",
-    "headingPopular": "Popular right now",
+    "headingPersonalized": "Recommendations Wall",
+    "headingPopular": "Recommendations Wall",
     "because": "Because you liked {titles}",
     "popularReason": "Liked by many viewers",
     "matchScore": "{percent}% match",
@@ -27,7 +27,7 @@
     "retry": "Try again"
   },
   "detail": {
-    "back": "Back to recommendations",
+    "back": "Back to the room",
     "notFound": "Movie not found",
     "genres": "Genres"
   },
@@ -36,7 +36,9 @@
   },
   "footer": {
     "tmdbLogoAlt": "The Movie Database (TMDB)",
-    "tmdbNotice": "This product uses the TMDB API but is not endorsed or certified by TMDB."
+    "tmdbNotice": "This product uses the TMDB API but is not endorsed or certified by TMDB.",
+    "patterns": "Wall patterns from",
+    "patternsLicense": "CC BY 4.0"
   },
   "theme": {
     "switchToDark": "Switch to dark theme",
@@ -45,12 +47,14 @@
   "profiles": {
     "switcher": "Switch viewer",
     "reset": "Reset to my likes",
+    "loading": "Loading {name}'s profile",
+    "loadingGeneric": "Loading profile",
     "languages": {
       "en": "English",
       "es": "Spanish",
       "ja": "Japanese"
     },
-    "likedCount": "{count} liked movie | {count} liked movies"
+    "wallSummary": "{name}, {language}, {count} in Posters Wall"
   },
   "error": {
     "title": "Something went wrong",
@@ -61,5 +65,26 @@
   },
   "language": {
     "switcher": "Language"
+  },
+  "room": {
+    "walls": "Room walls",
+    "tabs": {
+      "likes": "Likes",
+      "recs": "For you",
+      "watch": "Watchlist"
+    },
+    "show": "Show {wall}",
+    "egg": {
+      "title": "Built by Saulo Vargas",
+      "open": "Open rusticit.com"
+    }
+  },
+  "watchlist": {
+    "heading": "Watch Next Wall",
+    "empty": "Bookmark a movie and it will hang here.",
+    "add": "Add {title} to Watch Next Wall",
+    "remove": "Take {title} off Watch Next Wall",
+    "addLabel": "Add to Watch Next Wall",
+    "onList": "On Watch Next Wall"
   }
 }

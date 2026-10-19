@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Room home: three walls</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Rubik:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Design source: the project's own look (rusticit.com tokens from vuetify.config.ts, as in the earlier plans): charcoal #0e152e, purple #4a4ac0, Rubik + Inter. */
+  :root{--bg:#f7f7fb;--surface:#fff;--surface2:#eeeef6;--ink:#0e152e;--muted:#59607a;--line:#dcdeea;--primary:#4a4ac0;--on-primary:#fff;--primary-soft:#e6e6fa;--good:#1b7a43;--good-soft:#dff5e7;--warn:#9a5b00;--warn-soft:#fff0d6;--radius:14px}
+  @media (prefers-color-scheme:dark){:root{--bg:#0e152e;--surface:#151d3b;--surface2:#1d2647;--ink:#f3f4fa;--muted:#a3a9c4;--line:#2a345c;--primary:#8f8fe6;--on-primary:#0e152e;--primary-soft:#262a5c;--good:#6fd69a;--good-soft:#163524;--warn:#f1b95a;--warn-soft:#3a2a0c}}
+  *,*::before,*::after{box-sizing:border-box}
+  :where(.grid,.flex)>*{min-width:0}
+  :where(p,h1,h2,h3,li,td,th,dd,code,figcaption,label){overflow-wrap:anywhere}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+  main{max-width:1080px;margin:0 auto;padding:32px 20px 96px}
+  h1,h2,h3{font-family:Rubik,Inter,system-ui,sans-serif}
+  h1{font-size:2.1rem;line-height:1.15;margin:.2em 0 .3em;letter-spacing:-.02em}
+  h2{font-size:1.45rem;margin:2.4em 0 .5em;display:flex;gap:.6em;align-items:baseline}
+  h2 .n{font-size:.8rem;font-weight:700;color:var(--primary);background:var(--primary-soft);border-radius:99px;padding:.1em .7em}
+  h3{font-size:1.05rem;margin:0 0 .3em}
+  p{margin:.4em 0 .8em}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;background:var(--surface2);padding:.1em .4em;border-radius:6px}
+  pre{background:var(--surface2);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;overflow-x:auto;font-size:.82rem;line-height:1.5;margin:.6em 0}
+  pre code{background:none;padding:0}
+  .lede{color:var(--muted);font-size:1.1rem;max-width:64ch}
+  .grid{display:grid;gap:14px}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+  .g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+  .badge{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;border-radius:99px;padding:.15em .7em;background:var(--surface2);color:var(--muted)}
+  .badge.pri{background:var(--primary-soft);color:var(--primary)}.badge.good{background:var(--good-soft);color:var(--good)}.badge.warn{background:var(--warn-soft);color:var(--warn)}
+  table{border-collapse:collapse;width:100%;font-size:.93rem}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:var(--surface2)}
+  .tw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+  .tw td:first-child{font-weight:600}
+  .callout{border-left:4px solid var(--primary);background:var(--primary-soft);border-radius:0 var(--radius) var(--radius) 0;padding:12px 16px;margin:1em 0}
+  .callout.warn{border-color:var(--warn);background:var(--warn-soft)}
+
+  /* ---------- prototype ---------- */
+  .proto{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--surface)}
+  .toolbar{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--line);font-size:.85rem;color:var(--muted)}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:99px;overflow:hidden;background:var(--surface)}
+  .seg button{border:0;background:none;color:var(--ink);font:500 .82rem Inter,sans-serif;padding:5px 12px;cursor:pointer}
+  .seg button[aria-pressed=true]{background:var(--primary);color:var(--on-primary)}
+  .dot{inline-size:14px;block-size:14px;border-radius:50%;display:inline-block;vertical-align:-2px;margin-inline-end:6px;border:1px solid rgb(0 0 0/.2)}
+  .app{container-type:inline-size;margin:0 auto;transition:max-width .3s;position:relative;overflow:hidden;background:var(--bg)}
+  .app.phone{max-width:390px;border-inline:1px solid var(--line)}
+  .hdr{position:relative;z-index:5;display:flex;align-items:center;gap:10px;margin:10px 12px 0;padding:6px 10px 6px 16px;background:color-mix(in srgb,var(--surface) 80%,transparent);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:99px}
+  .hdr .search{flex:1;display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:12px;padding:7px 12px;background:var(--surface);color:var(--muted);font-size:.9rem;min-width:0}
+  .hdr .search b{font:600 .95rem Rubik,sans-serif;color:var(--ink);white-space:nowrap}
+  .hdr .avatars{display:flex}
+  .hdr .avatars i{inline-size:30px;block-size:30px;border-radius:50%;border:2px solid var(--surface);margin-inline-start:-8px;cursor:pointer;display:block}
+  .hdr .avatars i[aria-current=true]{box-shadow:0 0 0 2px var(--primary)}
+  /* The room. --tint is the active profile's badge colour */
+  .stage{--tint:#bfdbfe;position:relative;container-type:inline-size;perspective:1500px;perspective-origin:50% 42%;padding:90px 0 110px;min-height:600px;overflow:hidden;background:#161a2e}
+  .wall{position:relative;min-height:470px;padding:18px 14px;color:#0e152e;background:var(--tint);overflow:hidden;border:1px solid rgb(14 21 46/.12)}
+  .left .posters,.right .posters{max-height:430px;overflow-y:auto;scrollbar-width:none;padding:4px}
+  /* Hero Patterns: the profile's SVG is used as a mask so the pattern colour follows the tint */
+  .wall::before{content:"";position:absolute;inset:0;background:var(--pat-color,color-mix(in srgb,var(--tint) 65%,#0e152e));opacity:var(--pat-op,.2);pointer-events:none;
+    -webkit-mask:var(--pattern);mask:var(--pattern);-webkit-mask-size:var(--pat-size,auto);mask-size:var(--pat-size,auto)}
+  /* lighting: side walls fall off toward the corner */
+  .wall::after{content:"";position:absolute;inset:0;pointer-events:none}
+    .wall > *{position:relative;z-index:1}
+  .painted{font:700 1.7rem/1.1 Rubik,sans-serif;letter-spacing:-.01em;margin:2px 0 14px;color:#0e152e}
+  .painted.sm{font-size:1.05rem;text-transform:uppercase;letter-spacing:.08em}
+  .posters{display:grid;gap:10px}
+  /* Printed poster pinned to the wall: paper margin, gloss sheen, curl shadow, pin */
+  .poster{all:unset;box-sizing:border-box;position:relative;display:block;cursor:pointer;aspect-ratio:2/3;border-radius:2px;overflow:hidden;color:#fff;
+    border:5px solid #f4f1ea;border-bottom-width:7px;
+    box-shadow:0 1px 1px rgb(14 21 46/.35),0 4px 7px rgb(14 21 46/.28),0 14px 22px -6px rgb(14 21 46/.38),inset 0 0 0 1px rgb(0 0 0/.18);
+    transition:box-shadow .25s}
+  .poster::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;mix-blend-mode:soft-light;
+    background:linear-gradient(115deg,rgb(255 255 255/.55) 0,rgb(255 255 255/0) 38%,rgb(255 255 255/0) 62%,rgb(255 255 255/.22) 100%),
+    repeating-linear-gradient(0deg,rgb(0 0 0/.05) 0 1px,transparent 1px 3px)}
+  .poster::after{content:"";position:absolute;top:3px;left:50%;inline-size:9px;block-size:9px;margin-inline-start:-4.5px;border-radius:50%;z-index:3;pointer-events:none;
+    background:radial-gradient(circle at 35% 30%,#fff 0 12%,#d33 14% 60%,#7a1010 100%);box-shadow:1px 2px 2px rgb(0 0 0/.5)}
+  /* hover: backlight glow only, no movement or resize */
+  .poster:hover,.poster:focus-visible{outline:none;box-shadow:0 1px 1px rgb(14 21 46/.35),0 0 0 1px rgb(255 255 255/.5),0 0 14px 3px rgb(255 244 214/.75),0 0 38px 10px rgb(255 226 160/.45),inset 0 0 0 1px rgb(0 0 0/.18)}
+  .poster:focus-visible{outline:3px solid var(--primary);outline-offset:3px}
+  .poster span{position:absolute;inset:auto 0 0 0;z-index:1;padding:18px 6px 6px;font:600 .66rem/1.2 Inter,sans-serif;background:linear-gradient(transparent,rgb(0 0 0/.7))}
+  .poster em{position:absolute;z-index:4;top:15px;left:5px;font:700 .62rem Inter,sans-serif;font-style:normal;background:#0e152e;color:#fff;border-radius:99px;padding:1px 7px}
+  .poster .wl{z-index:4;position:absolute;top:13px;right:4px;inline-size:24px;block-size:24px;border-radius:50%;background:rgb(14 21 46/.82);color:#fff;font-size:.8rem;display:grid;place-items:center;opacity:0;transition:opacity .15s}
+  .poster:hover .wl,.poster:focus-visible .wl,.poster .wl.on{opacity:1}
+  .empty{border:2px dashed rgb(14 21 46/.35);border-radius:8px;padding:20px 10px;font-size:.82rem;text-align:center;color:#0e152e}
+  .a1{background:linear-gradient(160deg,#c24a63,#4e2150)}.a2{background:linear-gradient(160deg,#2d7f98,#0f2f3c)}.a3{background:linear-gradient(160deg,#d8a233,#8f3d12)}.a4{background:linear-gradient(160deg,#3fa98a,#14463d)}.a5{background:linear-gradient(160deg,#6a47b8,#231a50)}.a6{background:linear-gradient(160deg,#cc6a1e,#4d0d12)}.a7{background:linear-gradient(160deg,#4f9fc0,#2c1b78)}.a8{background:linear-gradient(160deg,#86b83a,#254d1e)}
+  /* detail (target of the zoom) */
+  .detail{position:absolute;inset:0;z-index:6;display:grid;place-items:center;padding:20px;background:rgb(14 21 46/.55);opacity:0;pointer-events:none;transition:opacity .3s .15s}
+  .app.zoomed .detail{opacity:1;pointer-events:auto}
+  .detail .sheet{display:flex;gap:18px;align-items:flex-end;max-width:620px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px}
+  .detail .big{flex:none;inline-size:150px;aspect-ratio:2/3;border-radius:14px;box-shadow:0 10px 26px rgb(0 0 0/.35)}
+  .btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 .85rem Inter,sans-serif;border-radius:99px;padding:6px 14px;cursor:pointer}
+  .btn.pri{background:var(--primary);color:var(--on-primary);border-color:transparent}
+  /* Camera rig: the room is a ring of four walls. The wall in front faces you; its neighbours stay angled at the
+     edges under a dark gradient. Each wall carries its ring slot --p (0 front, -1 left peek, 1 right peek, +-2 parked off-screen) */
+  .stage{--w:min(72cqw,820px)}
+  .app.phone .stage{--w:84cqw;padding:40px 0 50px}
+  .room{position:relative;transform-style:preserve-3d;width:var(--w);height:540px;margin:0 auto;transform:var(--zoom,translate(0,0) scale(1));transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+  .wall{position:absolute;inset:0;width:100%;height:100%;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .4s}
+  .wall::after{background:linear-gradient(90deg,rgb(8 10 24/.78),rgb(8 10 24/.12) 45%,rgb(8 10 24/.55));opacity:1;transition:opacity .5s}
+  .wall[data-side="r"]::after{background:linear-gradient(270deg,rgb(8 10 24/.78),rgb(8 10 24/.12) 45%,rgb(8 10 24/.55))}
+  .wall.active::after{opacity:0}
+  .wall[data-hidden]{opacity:0;pointer-events:none}
+  .wall:not(.active) .poster,.wall:not(.active) iframe{pointer-events:none}
+  .wall:not(.active){cursor:pointer}
+  .ceil,.floor{position:absolute;left:-250%;right:-250%;height:240px;pointer-events:none}
+  .ceil{top:0;transform-origin:50% 0;transform:rotateX(90deg);background:linear-gradient(#fff,#e4e6f1)}
+  .floor{bottom:0;transform-origin:50% 100%;transform:rotateX(-90deg);background:linear-gradient(#2a2f48,#0b0e1c)}
+  .floor::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgb(255 255 255/.05) 0 2px,transparent 2px 60px)}
+  .posters{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .app.phone .posters{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .app.phone .left .posters,.app.phone .right .posters{grid-template-columns:repeat(3,minmax(0,1fr));max-height:none}
+  .wall .posters{max-height:400px;overflow-y:auto;scrollbar-width:none;padding:4px}
+  .tabs{display:flex;justify-content:center;gap:6px;margin:10px auto 0;inline-size:fit-content}
+  .egg .screen{position:relative;margin:10px auto 0;border-radius:12px;background:#0b0e1c;padding:12px 12px 22px;box-shadow:0 12px 26px rgb(0 0 0/.45),inset 0 0 0 2px #2c3150}
+  .egg .screen iframe{display:block;width:100%;aspect-ratio:16/10;border:0;border-radius:4px;background:#fff}
+  .egg .screen::after{content:"";position:absolute;inset:12px 12px 22px;pointer-events:none;border-radius:4px;background:linear-gradient(120deg,rgb(255 255 255/.12),transparent 40%)}
+  .egg .screen i{position:absolute;left:50%;bottom:7px;inline-size:34px;block-size:5px;margin-left:-17px;border-radius:3px;background:#2c3150}
+  .egg .cap{font:600 .8rem Inter,sans-serif;text-align:center;margin-top:12px}
+  .note{font-size:.82rem;color:var(--muted);padding:8px 14px;border-top:1px solid var(--line)}
+  @media (prefers-reduced-motion:reduce){.room,.detail{transition:none}}
+
+  /* ---------- decisions ---------- */
+  .dec{display:grid;gap:14px}
+  .q{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .q legend{font:600 1rem Rubik,sans-serif;padding:0 4px}
+  .q label{display:block;padding:7px 8px;border-radius:10px;cursor:pointer}
+  .q label:hover{background:var(--surface2)}
+  .q label small{display:block;color:var(--muted)}
+  .q textarea{width:100%;font:inherit;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:8px;margin-top:6px}
+  .submit{font:600 .95rem Inter,sans-serif;background:var(--primary);color:var(--on-primary);border:0;border-radius:99px;padding:10px 22px;cursor:pointer}
+  ol.steps{counter-reset:s;list-style:none;padding:0;margin:0;display:grid;gap:10px}
+  ol.steps li{counter-increment:s;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 16px 12px 52px;position:relative}
+  ol.steps li::before{content:counter(s);position:absolute;left:14px;top:12px;inline-size:26px;block-size:26px;border-radius:50%;background:var(--primary-soft);color:var(--primary);font:700 .85rem Rubik,sans-serif;display:grid;place-items:center}
+</style>
+</head>
+<body>
+<main>
+  <span class="badge pri">Plan · not built yet</span>
+  <h1>Home as a room: three walls</h1>
+  <p class="lede">The home page becomes the inside of a room seen from the doorway. <b>Left wall</b>: the movies you like. <b>Middle wall</b>: Recommended for you, painted on the wall. <b>Right wall</b>: your watchlist. The camera starts on the middle wall and slides to the others. A hidden <b>fourth wall</b> closes the ring: go right past the watchlist or left past the likes and you reach a screen showing rusticit.com. Search moves into the header. Clicking a poster dollies the camera into it and lands on the movie page; Back dollies out. Pure HTML and CSS 3D, no Three.js.</p>
+
+  <h2><span class="n">1</span>Prototype you can poke at</h2>
+  <p>Click or press the arrow keys to move the camera between walls. Switch profile (the wall colour is that profile's badge tint and each profile has its own pattern), click a poster to zoom in, hover a poster and press the bookmark to put it on the watchlist wall, or switch to Phone to see the narrow layout. Poster art is stand-in gradients; the real build uses TMDB posters. Patterns are the four Hero Patterns you picked.</p>
+  <div class="proto" data-testid="proto">
+    <div class="toolbar">
+      <span>Profile:</span>
+      <span class="seg" id="tints">
+        <button aria-pressed="true" data-tint="#bfdbfe" data-pat="hex"><i class="dot" style="background:#bfdbfe"></i>Sam</button>
+        <button aria-pressed="false" data-tint="#fbcfe8" data-pat="groovy"><i class="dot" style="background:#fbcfe8"></i>Yuki</button>
+        <button aria-pressed="false" data-tint="#fde68a" data-pat="circles"><i class="dot" style="background:#fde68a"></i>Lucía</button>
+        <button aria-pressed="false" data-tint="#e9a58f" data-pat="brick"><i class="dot" style="background:#e9a58f"></i>Dale</button>
+      </span>
+      <span>Viewport:</span>
+      <span class="seg" id="vp">
+        <button aria-pressed="true" data-vp="desk">Desktop</button>
+        <button aria-pressed="false" data-vp="phone">Phone</button>
+      </span>
+    </div>
+    <div class="app" id="app">
+      <div class="hdr">
+        <div class="search"><b>Movies RusticIT</b><span>·&nbsp;search a movie to like…</span></div>
+        <div class="avatars" aria-hidden="true"><i style="background:#bfdbfe" aria-current="true"></i><i style="background:#fbcfe8"></i><i style="background:#fde68a"></i><i style="background:#e9a58f"></i></div>
+        <span aria-hidden="true">☾</span>
+      </div>
+      <div class="tabs seg" id="walltabs"></div>
+      <div class="stage" id="stage">
+        <div class="room" id="room">
+          <div class="ceil" aria-hidden="true"></div><div class="floor" aria-hidden="true"></div>
+          <section class="wall left" aria-label="Movies you like" data-wall="likes">
+            <p class="painted sm">You like</p>
+            <div class="posters" id="likes"></div>
+          </section>
+          <section class="wall center" aria-label="Recommended for you" data-wall="recs">
+            <h2 class="painted" style="display:block;margin-top:2px">Recommended for you</h2>
+            <div class="posters" id="recs"></div>
+          </section>
+          <section class="wall right" aria-label="My watchlist" data-wall="watch">
+            <p class="painted sm">My watchlist</p>
+            <div class="posters" id="watch"></div>
+          </section>
+          <section class="wall egg" aria-label="Easter egg: RusticIT" data-wall="egg">
+            <p class="painted sm">Built by RusticIT</p>
+            <div class="screen"><iframe id="eggframe" title="rusticit.com" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups"></iframe><i></i></div>
+            <p class="cap">rusticit.com</p>
+          </section>
+        </div>
+      </div>
+      <div class="detail" id="detail" role="dialog" aria-label="Movie page (mock)">
+        <div class="sheet">
+          <div class="big" id="bigart"></div>
+          <div>
+            <h3 id="bigtitle" style="font-size:1.4rem"></h3>
+            <p style="color:var(--muted)">Movie page (existing <code>/movies/[id]</code>). Real build navigates here.</p>
+            <button class="btn pri" id="wlbtn">+ Add to watchlist</button>
+            <button class="btn" id="back">← Back (zoom out)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="note">Stand-in art. In the build the camera transform and the existing View Transition poster morph run back to back (see approach, step 3).</div>
+  </div>
+
+  <h2><span class="n">2</span>Current → target</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Piece</th><th>Today</th><th>Target</th></tr></thead>
+    <tbody>
+      <tr><td>Liked movies</td><td>Chips under a heading (<code>LikedChips</code>)</td><td>Posters on the left wall, small remove button on each</td></tr>
+      <tr><td>Search</td><td>Autocomplete in the page body; brand is a link to rusticit.com</td><td>Autocomplete lives in the header where the brand link was. Placeholder keeps "Movies RusticIT". The rusticit.com anchor is removed</td></tr>
+      <tr><td>Recommendations</td><td>Grid of <code>MovieCard</code>s with title, reason, score chip</td><td>Posters on the back wall under a painted "Recommended for you" heading; title, year, reason in a hover/focus caption; match % stays as a small badge</td></tr>
+      <tr><td>Open a movie</td><td>View Transition morph of poster and title</td><td>Camera dolly into the poster, then the same morph into the hero. Back reverses it</td></tr>
+      <tr><td>Watchlist</td><td>none</td><td>New. Bookmark button on every poster and on the movie page. Stored in <code>localStorage</code>; shown on the right wall</td></tr>
+      <tr><td>Wall colour</td><td>n/a</td><td>The active profile's <code>tint</code> (the badge colour in <code>server/utils/profiles.ts</code>), with a Hero Patterns overlay</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2><span class="n">3</span>Approach</h2>
+  <div class="grid g2">
+    <div class="card">
+      <h3>Room geometry (CSS only)</h3>
+      <p>A <code>perspective</code> wrapper holds a <code>transform-style: preserve-3d</code> room: three equal walls in a row. The camera is the room's <code>translateX</code>, driven by one variable (<code>--i</code>, the wall in front of you), so it slides wall to wall on desktop and phone alike. The wall in front faces you; the neighbours pivot on the edge nearest the active wall: left <code>rotateY(34deg)</code> with origin at its right edge, right <code>rotateY(-34deg)</code> with origin at its left edge, so they peek in from the sides under a dark gradient. Clicking a peeking wall, the tabs, arrow keys or a swipe move the camera. A white ceiling and a dark floor are two wide planes hinged on the top and bottom edges of the walls and moving with the room. Soft gradients on the side walls and an inset shadow on the back wall fake lighting.</p>
+      <pre><code>.stage{--w:min(72cqw,820px);perspective:1500px;perspective-origin:50% 42%}
+.room{transform-style:preserve-3d;display:grid;grid-auto-flow:column;
+  grid-auto-columns:var(--w);width:calc(var(--w)*3);
+  transform:translateX(calc((100cqw - var(--w))/2 - var(--i)*var(--w))) var(--zoom)}
+.wall.left{transform-origin:100% 50%;transform:rotateY(34deg)}
+.wall.right{transform-origin:0 50%;transform:rotateY(-34deg)}
+.wall.active{transform:none}</code></pre>
+    </div>
+    <div class="card">
+      <h3>Colour and Hero Patterns</h3>
+      <p>Wall background is <code>profile.tint</code>. The profile's pattern (hexagons, groovy, intersecting circles, brick, copied from heropatterns.com) is saved as an SVG file and applied as a CSS <code>mask-image</code> over a darker mix of the tint, so the pattern recolours itself per profile and in dark mode. Brick flips this: light mortar over a terracotta wall, at 1.5x scale so the lines read as mortar. Dark mode mixes the tint toward charcoal <code>#0e152e</code> so a pastel wall does not glare.</p>
+      <p><b>Licence:</b> Hero Patterns is CC BY 4.0, so the footer gets an attribution line. The profile gains a <code>pattern</code> key next to <code>tint</code> in <code>server/utils/profiles.ts</code>.</p>
+    </div>
+    <div class="card">
+      <h3>Camera zoom to the movie page</h3>
+      <p>On poster click: read its rect, set the room's <code>transform-origin</code> to the poster centre, animate <code>scale()</code> plus a translate to centre it (~320 ms, Web Animations API), then <code>router.push</code>. The existing View Transition (<code>movie-poster-{id}</code>) morphs the poster into the hero. Going back: the home page mounts already scaled onto that poster and animates to identity. Needs a small <code>useRoomCamera</code> composable holding the last poster id and rect.</p>
+      <p><span class="badge warn">Spike first</span> A view-transition name inside a 3D-rotated side wall may snapshot flattened. If it looks wrong, side-wall posters get a short "turn to face the wall" pre-step or a plain crossfade; back-wall posters (flat) are unaffected.</p>
+    </div>
+    <div class="card">
+      <h3>Watchlist</h3>
+      <p><code>useWatchlist()</code> keeps an array of movie ids in <code>localStorage</code> and exposes <code>has / toggle / movies</code>. State is read in <code>onMounted</code> so SSR and first hydration stay identical (no mismatch); the right wall shows its empty state for one frame. Movies resolve from the already-loaded <code>useMovies()</code> list, so no new API. A shared <code>WatchlistButton</code> (bookmark icon, <code>aria-pressed</code>) goes on posters and in the movie page hero. Nothing is sent to the server.</p>
+    </div>
+    <div class="card">
+      <h3>Header search</h3>
+      <p><code>AppShell</code> drops the <code>&lt;a href="https://rusticit.com"&gt;</code> and mounts <code>MovieSearch</code> in <code>v-app-bar-title</code> with the "Movies RusticIT" label. Behaviour stays as today: picking a result adds it to the liked list (left wall). On phones the field collapses to an icon that expands.</p>
+    </div>
+    <div class="card">
+      <h3>Phone, motion, accessibility</h3>
+      <p><b>Phone:</b> same ring, same rig, with the active wall at 84% of the screen width so the neighbours still peek in (swipe, tabs, or tap a neighbour). The profile switcher stays in the header on phones too.</p>
+      <p><b>Reduced motion:</b> no dolly, no yaw; falls back to the current crossfade.</p>
+      <p><b>A11y:</b> each wall is a labelled <code>section</code>, posters stay real links with the title as their name, the painted heading is a real <code>h2</code> with 4.5:1 contrast on the tint, and the bookmark/remove buttons are reachable by keyboard and always visible on touch.</p>
+    </div>
+  </div>
+
+  <h2><span class="n">4</span>Build order</h2>
+  <ol class="steps">
+    <li><b>Spike:</b> hard-coded room in <code>ProfileHome</code> with real posters; confirm 3D wall, Hero Patterns mask and the view-transition snapshot on side walls.</li>
+    <li><b>Header search:</b> move <code>MovieSearch</code> into <code>AppShell</code>, remove the rusticit.com anchor, adjust the e2e selectors.</li>
+    <li><b>Walls:</b> new <code>RoomScene</code>, <code>RoomWall</code>, <code>WallPoster</code>; <code>LikedChips</code> and <code>RecommendationGrid</code> content moves into walls, keeping loading, error and empty states (on the back wall).</li>
+    <li><b>Watchlist:</b> <code>useWatchlist</code>, <code>WatchlistButton</code>, right wall, button on the movie page.</li>
+    <li><b>Camera:</b> <code>useRoomCamera</code> owns the ring (four slots, wrap-around, arrow keys, swipe, click a peeking wall) and the poster dolly in and out wired to the existing view transition; reduced-motion fallback. The fourth wall is a small <code>EasterEggWall</code> component with the lazily mounted iframe.</li>
+    <li><b>Phone mode</b> and dark mode tint mixing; attribution in the footer.</li>
+    <li><b>Tests:</b> update e2e specs whose selectors change (chips, cards, grid, header title); add specs for the watchlist (add, persist across reload, remove) and for the walls. Run lint, typecheck and <code>npm run test:e2e</code>.</li>
+  </ol>
+
+  <h2><span class="n">5</span>Risks</h2>
+  <div class="grid g2">
+    <div class="callout warn"><b>Many liked movies.</b> A profile can like dozens of films. Side walls would grow far taller than the back wall. Decided: side walls match the back wall's height and scroll inside (scrollbar hidden); a fade at the bottom edge hints there is more.</div>
+    <div class="callout warn"><b>Info density drops.</b> Cards showed title, reason and score at a glance; posters hide most of that behind hover. Touch has no hover, so the reason must also appear on the movie page.</div>
+    <div class="callout warn"><b>Existing e2e tests.</b> Several specs depend on test ids for chips, cards and the header title; they will need to be updated, not just re-run.</div>
+    <div class="callout warn"><b>The rusticit.com iframe.</b> It currently allows framing (no <code>X-Frame-Options</code> or <code>frame-ancestors</code> sent), but that is rusticit's call and can change; it also shows its own cookie banner inside the screen. Fallback if framing is ever blocked: a static screenshot of the site on the screen with a link. The iframe gets <code>sandbox</code>, <code>loading=lazy</code> and <code>referrerpolicy=no-referrer</code>.</div>
+    <div class="callout warn"><b>3D text blur.</b> Text on rotated walls can render soft in some browsers. Only posters and a short label sit on side walls; the long text lives on the flat back wall.</div>
+  </div>
+
+  <h2><span class="n">6</span>Decisions (locked)</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Question</th><th>Decision</th></tr></thead>
+    <tbody>
+      <tr><td>Wall colour</td><td>All three walls use the profile tint, lit differently (side walls darken toward the corners, back wall gets a soft vignette and baseboard)</td></tr>
+      <tr><td>Wall pattern</td><td>One Hero Patterns pattern per profile, shared by the three walls: Sam hexagons, Yuki groovy, Lucía intersecting circles, Dale brick</td></tr>
+      <tr><td>Dale's colour</td><td>Brick needs a brick colour, so Dale's <code>tint</code> becomes terracotta <code>#e9a58f</code> with light mortar lines. Because the wall and the badge share the tint, Dale's header badge changes too</td></tr>
+      <tr><td>Watchlist scope</td><td>One list per profile in <code>localStorage</code> (<code>watchlist:sam</code>, …)</td></tr>
+      <tr><td>Side-wall poster click</td><td>Opens the movie page like the back wall. Remove (left wall) and bookmark (right wall) are small buttons on the poster</td></tr>
+      <tr><td>Fourth wall (easter egg)</td><td>The ring closes: right of the watchlist and left of the likes is the same wall, a framed screen showing <code>rusticit.com</code> in an iframe. No tab points to it; you find it by moving past the end, or by noticing it peek in. The iframe is only mounted the first time that wall becomes the front or a neighbour, so a normal visit never loads it</td></tr>
+      <tr><td>Poster look</td><td>Printed paper posters: cream margin, glossy sheen and fine paper grain, layered drop shadow, a pin at the top. Hover adds a warm backlight glow with no movement or resize</td></tr>
+      <tr><td>Camera</td><td>One wall faces you; the other two peek in from the edges, angled and shaded. Same on desktop and phone. White ceiling, dark floor</td></tr>
+      <tr><td>Many posters</td><td>Side walls keep the back wall's height and scroll inside, scrollbar hidden</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout"><b>Next:</b> say "go" and I start with the spike (step 1 in the build order) on a branch, then show you the real room before wiring the rest. One check I will make while building: the brick mortar contrast against Dale's terracotta, and the CC BY 4.0 attribution for Hero Patterns in the footer.</div>
+</main>
+
+<script>
+const TITLES=[['Toy Story','a1'],['Heat','a2'],['Jumanji','a3'],['Sabrina','a4'],['Casino','a5'],['Se7en','a6'],['Babe','a7'],['Braveheart','a8'],['Apollo 13','a2'],['Clueless','a1'],['Twelve Monkeys','a5'],['Fargo','a6']];
+const mk=(i,extra='')=>{const [t,a]=TITLES[i%TITLES.length];return {i,t,a}};
+const likes=[0,3,5,9,10,7].map(mk), recs=[1,2,4,6,8,11,0,5].map(mk);
+let watch=[2];
+const $=s=>document.querySelector(s), app=$('#app'), room=$('#room'), stage=$('#stage');
+
+const PAT={
+ hex:{u:"url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23000' fill-rule='nonzero'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"},
+ groovy:{u:"url(\"data:image/svg+xml,%3Csvg width='24' height='40' viewBox='0 0 24 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 40c5.523 0 10-4.477 10-10V0C4.477 0 0 4.477 0 10v30zm22 0c-5.523 0-10-4.477-10-10V0c5.523 0 10 4.477 10 10v30z' fill='%23000' fill-rule='evenodd'/%3E%3C/svg%3E\")"},
+ circles:{u:"url(\"data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15 0C6.716 0 0 6.716 0 15c8.284 0 15-6.716 15-15zM0 15c0 8.284 6.716 15 15 15 0-8.284-6.716-15-15-15zm30 0c0-8.284-6.716-15-15-15 0 8.284 6.716 15 15 15zm0 0c0 8.284-6.716 15-15 15 0-8.284 6.716-15 15-15z' fill='%23000' fill-rule='evenodd'/%3E%3C/svg%3E\")"},
+ brick:{u:"url(\"data:image/svg+xml,%3Csvg width='42' height='44' viewBox='0 0 42 44' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000'%3E%3Cpath d='M0 0h42v44H0V0zm1 1h40v20H1V1zM0 23h20v20H0V23zm22 0h20v20H22V23z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",color:'#fff4ea',op:.7,size:'63px 66px'}
+};
+function setPat(k){const p=PAT[k];const st=stage.style;st.setProperty('--pattern',p.u+' repeat');
+  p.color?st.setProperty('--pat-color',p.color):st.removeProperty('--pat-color');
+  st.setProperty('--pat-op',p.op||.2);p.size?st.setProperty('--pat-size',p.size):st.removeProperty('--pat-size');}
+function poster(m,{wall,score}){
+  const b=document.createElement('button');b.className='poster '+m.a;b.setAttribute('aria-label',m.t);b.dataset.i=m.i;
+  b.innerHTML=`<span>${m.t}</span>${score?`<em>${score}%</em>`:''}<i class="wl ${watch.includes(m.i)?'on':''}" data-wl="${m.i}" role="button" aria-label="Toggle watchlist">${watch.includes(m.i)?'★':'☆'}</i>`;
+  b.addEventListener('click',e=>{
+    const w=e.target.closest('[data-wl]');
+    if(w){e.stopPropagation();toggle(+w.dataset.wl);return}
+    zoomIn(b,m);
+  });
+  return b;
+}
+function render(){
+  const f=(id,list,wall,sc)=>{const el=$('#'+id);el.replaceChildren(...list.map((m,k)=>poster(m,{wall,score:sc?92-k*4:null})));};
+  f('likes',likes,'l');f('recs',recs,'c',true);
+  const wl=watch.map(mk);
+  f('watch',wl,'r');
+  if(!wl.length){$('#watch').innerHTML='<div class="empty" style="grid-column:1/-1">Bookmark a movie and it will hang here.</div>'}
+}
+function toggle(i){watch=watch.includes(i)?watch.filter(x=>x!==i):[...watch,i];render();syncBtn()}
+let cur=null;
+function syncBtn(){if(cur)$('#wlbtn').textContent=watch.includes(cur.i)?'★ On my watchlist':'+ Add to watchlist'}
+function zoomIn(el,m){
+  cur=m;
+  $('#bigart').className='big '+m.a;$('#bigtitle').textContent=m.t;syncBtn();
+  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const s=stage.getBoundingClientRect(), r=el.getBoundingClientRect();
+  const rr=room.getBoundingClientRect();
+  const cx=r.left+r.width/2-rr.left, cy=r.top+r.height/2-rr.top;
+  room.style.transformOrigin=`${cx}px ${cy}px`;
+  const k=Math.min(5,(s.height*.8)/r.height);
+  if(!reduce) room.style.setProperty('--zoom',`translate(${s.left+s.width/2-(r.left+r.width/2)}px,${s.top+s.height/2-(r.top+r.height/2)}px) scale(${k})`);
+  app.classList.add('zoomed');
+}
+$('#back').onclick=()=>{app.classList.remove('zoomed');room.style.removeProperty('--zoom');};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#back').click()});
+$('#wlbtn').onclick=()=>{if(cur)toggle(cur.i)};
+$('#tints').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  [...$('#tints').children].forEach(x=>x.setAttribute('aria-pressed',x===b));stage.style.setProperty('--tint',b.dataset.tint);setPat(b.dataset.pat)});
+/* phone */
+const tabs=$('#walltabs');tabs.innerHTML='<button data-w="likes" aria-pressed="false">Likes</button><button data-w="recs" aria-pressed="true">For you</button><button data-w="watch" aria-pressed="false">Watchlist</button>';
+const RING=['likes','recs','watch','egg'];let cur_i=1;
+const wallEl=id=>document.querySelector(`.wall[data-wall="${id}"]`);
+const walls=RING.map(id=>({id,el:wallEl(id),p:0}));
+function paint(w,snap){
+  const el=w.el, side=w.p<0?'l':w.p>0?'r':'c';
+  if(snap)el.style.transition='none';
+  el.dataset.side=side;
+  el.style.transformOrigin=side==='l'?'100% 50%':side==='r'?'0 50%':'50% 50%';
+  el.style.transform=`translateX(${w.p*100}%) rotateY(${side==='l'?34:side==='r'?-34:0}deg)`;
+  el.classList.toggle('active',w.p===0);
+  Math.abs(w.p)>=2?el.setAttribute('data-hidden',''):el.removeAttribute('data-hidden');
+  if(snap){void el.offsetWidth;el.style.transition='';}
+  if(Math.abs(w.p)<=1&&w.id==='egg'&&!$('#eggframe').src)$('#eggframe').src='https://rusticit.com/';
+}
+function layout(){walls.forEach((w,k)=>{const d=((k-cur_i)%4+4)%4;w.p=d===3?-1:d;paint(w,true)});syncTabs()}
+function syncTabs(){[...tabs.children].forEach(x=>x.setAttribute('aria-pressed',RING[cur_i]===x.dataset.w))}
+function move(dir){
+  const hidden=walls.find(w=>Math.abs(w.p)===2);hidden.p=dir>0?2:-2;paint(hidden,true);
+  walls.forEach(w=>{w.p-=dir;paint(w,false)});
+  cur_i=(cur_i+dir+4)%4;syncTabs();
+}
+function showWall(id){
+  const t=RING.indexOf(id);if(t===cur_i)return;
+  const delta=(t-cur_i+4)%4;let dir=delta<=2?1:-1,steps=delta<=2?delta:4-delta;
+  if(delta===2&&cur_i===2)dir=-1;
+  (function step(n){if(n<=0)return;move(dir);setTimeout(()=>step(n-1),420)})(steps);
+}
+tabs.addEventListener('click',e=>{const b=e.target.closest('button');if(b)showWall(b.dataset.w)});
+$('#vp').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  [...$('#vp').children].forEach(x=>x.setAttribute('aria-pressed',x===b));
+  const ph=b.dataset.vp==='phone';app.classList.toggle('phone',ph);
+  });
+setPat('hex');render();layout();
+walls.forEach(w=>w.el.addEventListener('click',e=>{if(w.p!==0){e.preventDefault();move(w.p<0?-1:1)}}));
+document.addEventListener('keydown',e=>{if(app.classList.contains('zoomed'))return;if(e.key==='ArrowLeft')move(-1);if(e.key==='ArrowRight')move(1)});
+
+</script>
+</body>
+</html>

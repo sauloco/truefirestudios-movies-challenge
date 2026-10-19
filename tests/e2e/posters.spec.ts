@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { $fetch, createPage, setup, url } from '@nuxt/test-utils/e2e'
+import { $fetch, createPage, setup } from '@nuxt/test-utils/e2e'
+import { gotoAs } from './helpers/viewer'
 import type { Page } from 'playwright-core'
 import type { RecommendationsResponse } from '../../shared/types'
 import { failPoster, holdPosters, stubPosters } from './helpers/posters'
@@ -7,7 +8,7 @@ import { failPoster, holdPosters, stubPosters } from './helpers/posters'
 async function openHome(prepare: (page: Page) => Promise<unknown>) {
   const page = await createPage()
   await prepare(page)
-  await page.goto(url('/?user=sam'))
+  await gotoAs(page, '/?user=sam')
   const poster = page.locator('[data-testid="poster"]').first()
   await poster.waitFor()
   return { page, poster }
@@ -27,7 +28,7 @@ describe('PosterImage', () => {
   it('shows the blurhash first, then fades the real poster in', async () => {
     const page = await createPage()
     const held = await holdPosters(page)
-    await page.goto(url('/?user=sam'))
+    await gotoAs(page, '/?user=sam')
     const poster = page.locator('[data-testid="poster"]').first()
     await poster.waitFor()
 
@@ -65,7 +66,7 @@ describe('PosterImage', () => {
   it('keeps a fixed 2:3 box through loading, loaded and failed states', async () => {
     const page = await createPage()
     const held = await holdPosters(page)
-    await page.goto(url('/?user=sam'))
+    await gotoAs(page, '/?user=sam')
     const poster = page.locator('[data-testid="poster"]').first()
     await poster.waitFor()
 
@@ -89,7 +90,7 @@ describe('MovieCard and RecommendationGrid', () => {
     const expected = await $fetch<RecommendationsResponse>('/api/recommendations', { method: 'POST', body: { liked: [], limit: 12 } })
     const { page } = await openHome(stubPosters)
 
-    expect(await page.locator('[data-testid="recommendations-heading"]').innerText()).toBe('Popular right now')
+    expect(await page.locator('[data-testid="recommendations-heading"]').innerText()).toBe('Recommendations Wall')
     const cards = page.locator('[data-testid="movie-card"]')
     expect(await cards.count()).toBe(12)
     expect(await cards.locator('[data-testid="movie-card-title"]').allInnerTexts()).toEqual(expected.items.map(item => item.movie.title))

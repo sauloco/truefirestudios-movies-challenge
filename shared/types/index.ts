@@ -31,12 +31,16 @@ export interface RecommendationsRequest {
 
 export type Language = 'en' | 'es' | 'ja'
 
+export type WallPattern = 'hexagons' | 'groovy' | 'circles' | 'brick'
+
 export interface Profile {
   id: string
   name: string
   avatarUrl: string
   // Pastel backdrop so the transparent line-art avatar stays visible on the dark theme
   tint: string
+  // Hero Patterns motif printed on the walls of this viewer's room (files in public/patterns)
+  pattern: WallPattern
   language: Language
   liked: number[]
 }

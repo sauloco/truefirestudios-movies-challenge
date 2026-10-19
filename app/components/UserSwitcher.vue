@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const { t } = useI18n()
 const { profiles, active, switchTo } = await useProfiles()
+const { state } = useViewer()
 
 // A radiogroup with a roving tabindex: Tab enters on the active viewer, the arrow keys move between viewers
 const radios = ref<HTMLElement[]>([])
@@ -27,8 +28,11 @@ function onKeydown(event: KeyboardEvent, index: number) {
   }
 }
 
-const label = (profile: (typeof profiles.value)[number]) =>
-  `${profile.name}, ${t(`profiles.languages.${profile.language}`)}, ${t('profiles.likedCount', profile.liked.length)}`
+// Edited likes win over the profile's own, so the count follows the wall as movies are added or removed
+const label = (profile: (typeof profiles.value)[number]) => {
+  const count = new Set(state.value.picks[profile.id] ?? profile.liked).size
+  return t('profiles.wallSummary', { name: profile.name, language: t(`profiles.languages.${profile.language}`), count })
+}
 </script>
 
 <template>

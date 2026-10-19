@@ -5,13 +5,13 @@
   },
   "search": {
     "label": "70本の映画から検索…",
-    "noData": "一致する映画がありません"
+    "noData": "一致する映画がありません",
+    "add": "ポスターウォールに追加"
   },
   "liked": {
     "heading": "お気に入りの映画",
     "hint": "1本以上選んでください。選ばない場合は人気の作品を表示します。",
-    "remove": "{title}を削除",
-    "ignored": "このリンクの一部の映画は認識できなかったため無視されました。"
+    "remove": "{title}を削除"
   },
   "recommendations": {
     "headingPersonalized": "あなたへのおすすめ",
@@ -36,7 +36,9 @@
   },
   "footer": {
     "tmdbLogoAlt": "The Movie Database (TMDB)",
-    "tmdbNotice": "この製品はTMDB APIを使用していますが、TMDBによる推奨や認定を受けたものではありません。"
+    "tmdbNotice": "この製品はTMDB APIを使用していますが、TMDBによる推奨や認定を受けたものではありません。",
+    "patterns": "壁パターン提供:",
+    "patternsLicense": "CC BY 4.0"
   },
   "theme": {
     "switchToDark": "ダークテーマに切り替え",
@@ -50,7 +52,9 @@
       "es": "スペイン語",
       "ja": "日本語"
     },
-    "likedCount": "お気に入り {count} 本 | お気に入り {count} 本"
+    "loading": "{name}のプロフィールを読み込み中",
+    "loadingGeneric": "プロフィールを読み込み中",
+    "wallSummary": "{name}、{language}、ポスターウォール{count}本"
   },
   "language": {
     "switcher": "言語"
@@ -61,5 +65,26 @@
     "notFoundTitle": "ページが見つかりません",
     "notFoundText": "そのページが見つかりませんでした。映画またはリンクが移動した可能性があります。",
     "home": "おすすめに戻る"
+  },
+  "room": {
+    "egg": {
+      "open": "rusticit.comを開く",
+      "title": "Saulo Vargas 作"
+    },
+    "show": "{wall}を表示",
+    "tabs": {
+      "likes": "お気に入り",
+      "recs": "あなたへ",
+      "watch": "次に観る"
+    },
+    "walls": "部屋の壁"
+  },
+  "watchlist": {
+    "heading": "次に観るウォール",
+    "empty": "映画をブックマークすると、ここに掛かります。",
+    "add": "{title}を次に観るウォールに追加",
+    "remove": "{title}を次に観るウォールから外す",
+    "addLabel": "次に観るウォールに追加",
+    "onList": "次に観るウォールにあり"
   }
 }

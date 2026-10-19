@@ -1,5 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest'
-import { $fetch, createPage, fetch, setup, url } from '@nuxt/test-utils/e2e'
+import { $fetch, createPage, fetch, setup } from '@nuxt/test-utils/e2e'
+import { gotoAs, waitForViewer } from './helpers/viewer'
 import type { Page } from 'playwright-core'
 import type { Movie } from '../../shared/types'
 import { stubPosters } from './helpers/posters'
@@ -39,7 +40,7 @@ async function open(path = '/?user=sam', options: { reducedMotion?: boolean } = 
   if (options.reducedMotion) await page.emulateMedia({ reducedMotion: 'reduce' })
   await stubPosters(page)
   await page.addInitScript(SPY)
-  await page.goto(url(path))
+  await gotoAs(page, path)
   await hydrated(page)
   return page
 }
@@ -64,7 +65,7 @@ describe('movie detail page', () => {
     const target = await firstPopularCard(page)
     await card(page, target).click()
 
-    await page.waitForURL(`**/movies/${target.id}?user=sam`)
+    await page.waitForURL(`**/movies/${target.id}`)
     await page.locator('[data-testid="movie-detail"]').waitFor()
     expect(await page.locator('[data-testid="detail-title"]').innerText()).toBe(target.title)
     expect(await page.locator('[data-testid="detail-year"]').innerText()).toBe(String(target.year))
@@ -72,30 +73,30 @@ describe('movie detail page', () => {
     await page.close()
   })
 
-  it('starts a view transition carrying the same poster and title names at both ends', async () => {
+  it('starts a view transition carrying the same poster name at both ends', async () => {
     const page = await open()
     const target = await firstPopularCard(page)
     await card(page, target).click()
     await page.locator('[data-testid="movie-detail"]').waitFor()
 
     const [call] = await transitions(page)
-    for (const name of [`movie-poster-${target.id}`, `movie-title-${target.id}`]) {
-      expect(call.before).toContain(name)
-      expect(call.after).toContain(name)
-    }
+    // Only the poster that was clicked is named: a movie can hang on two walls, and a name must be unique
+    const name = `movie-poster-${target.id}`
+    expect(call.before.filter(candidate => candidate === name)).toHaveLength(1)
+    expect(call.after).toContain(name)
     await page.close()
   })
 
-  it('keeps ?liked= on the card links and restores the grid and query on Back', async () => {
+  it('keeps the card links clean and restores the grid and picks on Back', async () => {
     const page = await open(`/?user=sam&liked=${STAR_WARS.id}`)
     const target = await firstPopularCard(page)
-    expect(await card(page, target).getAttribute('href')).toBe(`/movies/${target.id}?user=sam&liked=${STAR_WARS.id}`)
+    expect(await card(page, target).locator('a').getAttribute('href')).toBe(`/movies/${target.id}`)
 
     await card(page, target).click()
     await page.locator('[data-testid="movie-detail"]').waitFor()
     await page.locator('[data-testid="detail-back"]').click()
 
-    await page.waitForURL(`**/?user=sam&liked=${STAR_WARS.id}`)
+    await waitForViewer(page, 'sam', [STAR_WARS.id])
     await page.locator('[data-testid="recommendation-grid"]').waitFor()
     expect(await card(page, target).isVisible()).toBe(true)
     expect(await page.locator('[data-testid="liked-chip"]').count()).toBe(1)
@@ -124,9 +125,9 @@ describe('movie detail page', () => {
     expect(await page.locator('[data-testid="detail-score"]').count()).toBe(0)
     const back = page.locator('[data-testid="detail-back"]')
     expect(await back.isVisible()).toBe(true)
-    expect(await back.getAttribute('href')).toBe('/?user=sam')
+    expect(await back.getAttribute('href')).toBe('/')
     await back.click()
-    await page.waitForURL(url('/?user=sam'))
+    await page.waitForURL(u => u.pathname === '/')
     await page.locator('[data-testid="recommendation-grid"]').waitFor()
     await page.close()
   })
@@ -141,7 +142,7 @@ describe('movie detail page', () => {
     const target = await firstPopularCard(page)
     await card(page, target).click()
 
-    await page.waitForURL(`**/movies/${target.id}?user=sam`)
+    await page.waitForURL(`**/movies/${target.id}`)
     await page.locator('[data-testid="movie-detail"]').waitFor()
     expect(await transitions(page)).toEqual([])
     await page.close()

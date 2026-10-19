@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { createPage, fetch, setup, url } from '@nuxt/test-utils/e2e'
+import { gotoAs } from './helpers/viewer'
 import { stubPosters } from './helpers/posters'
 
 // The production build is what Netlify serves, so headers are asserted on it
@@ -37,7 +38,7 @@ describe('security headers', () => {
     const messages: string[] = []
     page.on('console', message => messages.push(message.text()))
     page.on('pageerror', error => messages.push(error.message))
-    await page.goto(url('/?user=sam&liked=1'))
+    await gotoAs(page, '/?user=sam&liked=1')
     await page.locator('[data-testid="movie-card"]').first().waitFor()
     await page.locator('[data-testid="movie-card"]').first().click()
     await page.locator('[data-testid="movie-detail"]').waitFor()
@@ -53,7 +54,7 @@ describe('404 page', () => {
     expect(response!.status()).toBe(404)
     expect(await page.locator('[data-testid="error-code"]').innerText()).toBe('404')
     expect(await page.locator('[data-testid="error-title"]').innerText()).toBe('Page not found')
-    expect(await page.locator('[data-testid="app-title"]').innerText()).toBe('Movies RusticIT')
+    expect(await page.locator('[data-testid="movie-search"] label').first().innerText()).toBe('My Movie Room')
 
     await stubPosters(page)
     await page.locator('[data-testid="error-home"]').click()
