@@ -25,7 +25,13 @@ export default defineNuxtConfig({
   app: {
     head: {
       // Display-only site: kept out of search indexes (the X-Robots-Tag header says the same)
-      meta: [{ name: 'robots', content: 'noindex, nofollow' }]
+      meta: [{ name: 'robots', content: 'noindex, nofollow' }],
+      // SVG where supported, PNG as the fallback (and for Apple touch)
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'icon', type: 'image/png', href: '/favicon.png' },
+        { rel: 'apple-touch-icon', href: '/favicon.png' }
+      ]
     }
   },
   routeRules: {
