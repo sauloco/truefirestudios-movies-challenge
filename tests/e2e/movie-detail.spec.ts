@@ -72,24 +72,24 @@ describe('movie detail page', () => {
     await page.close()
   })
 
-  it('starts a view transition carrying the same poster and title names at both ends', async () => {
+  it('starts a view transition carrying the same poster name at both ends', async () => {
     const page = await open()
     const target = await firstPopularCard(page)
     await card(page, target).click()
     await page.locator('[data-testid="movie-detail"]').waitFor()
 
     const [call] = await transitions(page)
-    for (const name of [`movie-poster-${target.id}`, `movie-title-${target.id}`]) {
-      expect(call.before).toContain(name)
-      expect(call.after).toContain(name)
-    }
+    // Only the poster that was clicked is named: a movie can hang on two walls, and a name must be unique
+    const name = `movie-poster-${target.id}`
+    expect(call.before.filter(candidate => candidate === name)).toHaveLength(1)
+    expect(call.after).toContain(name)
     await page.close()
   })
 
   it('keeps ?liked= on the card links and restores the grid and query on Back', async () => {
     const page = await open(`/?user=sam&liked=${STAR_WARS.id}`)
     const target = await firstPopularCard(page)
-    expect(await card(page, target).getAttribute('href')).toBe(`/movies/${target.id}?user=sam&liked=${STAR_WARS.id}`)
+    expect(await card(page, target).locator('a').getAttribute('href')).toBe(`/movies/${target.id}?user=sam&liked=${STAR_WARS.id}`)
 
     await card(page, target).click()
     await page.locator('[data-testid="movie-detail"]').waitFor()

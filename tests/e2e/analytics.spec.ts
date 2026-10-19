@@ -3,6 +3,7 @@ import { $fetch, createPage, setup, url } from '@nuxt/test-utils/e2e'
 import type { Page } from 'playwright-core'
 import type { Movie } from '../../shared/types'
 import { stubPosters } from './helpers/posters'
+import { faceWall } from './helpers/room'
 import { UMAMI_SCRIPT, stubUmami, watchUmamiRequests } from './helpers/umami'
 
 const WEBSITE_ID = '00000000-0000-4000-8000-000000000000'
@@ -85,6 +86,7 @@ describe('custom events', () => {
   it('fires movie-removed with the remaining pick count', async () => {
     const { page, umami } = await open(`/?user=sam&liked=${STAR_WARS.id},${EMPIRE.id}`)
     await page.locator('[data-testid="movie-card"]').first().waitFor()
+    await faceWall(page, 'likes')
     await page.getByRole('button', { name: `Remove ${STAR_WARS.title}` }).click()
     await page.waitForURL(`**/?user=sam&liked=${EMPIRE.id}`)
     expect(await umami.events()).toContainEqual({ event: 'movie-removed', data: { movieId: STAR_WARS.id, pickCount: 1 } })

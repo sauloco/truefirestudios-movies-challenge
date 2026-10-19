@@ -2,6 +2,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import { $fetch, createPage, setup, url } from '@nuxt/test-utils/e2e'
 import type { Movie, Profile } from '../../shared/types'
 import { stubPosters } from './helpers/posters'
+import { faceWall } from './helpers/room'
 
 await setup({ browser: true })
 
@@ -29,6 +30,7 @@ describe('switching viewer starts from a clean context', () => {
 
     // As Sam: remove a chip, then type into the search and leave its menu open
     const removed = movies.find(movie => movie.id === sam.liked[0])!
+    await faceWall(page, 'likes')
     await page.getByRole('button', { name: `Remove ${removed.title}` }).click()
     await page.waitForFunction(count => document.querySelectorAll('[data-testid="liked-chip"]').length === count, sam.liked.length - 1)
     const input = page.locator('[data-testid="movie-search"] input')
@@ -78,6 +80,8 @@ describe('switching viewer starts from a clean context', () => {
   it('scrolls back to the top', async () => {
     const page = await createPage()
     await stubPosters(page)
+    // Only the phone layout scrolls the page; on desktop the room fills the viewport and its walls scroll inside
+    await page.setViewportSize({ width: 390, height: 700 })
     await page.goto(url('/?user=sam&liked=5'))
     await page.locator('[data-testid="movie-card"]').first().waitFor()
     await page.waitForFunction(() => (window as unknown as { useNuxtApp?: () => { isHydrating: boolean } }).useNuxtApp?.().isHydrating === false)

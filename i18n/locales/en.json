@@ -27,7 +27,7 @@
     "retry": "Try again"
   },
   "detail": {
-    "back": "Back to recommendations",
+    "back": "Back to the room",
     "notFound": "Movie not found",
     "genres": "Genres"
   },
@@ -36,7 +36,9 @@
   },
   "footer": {
     "tmdbLogoAlt": "The Movie Database (TMDB)",
-    "tmdbNotice": "This product uses the TMDB API but is not endorsed or certified by TMDB."
+    "tmdbNotice": "This product uses the TMDB API but is not endorsed or certified by TMDB.",
+    "patterns": "Wall patterns from",
+    "patternsLicense": "CC BY 4.0"
   },
   "theme": {
     "switchToDark": "Switch to dark theme",
@@ -61,5 +63,28 @@
   },
   "language": {
     "switcher": "Language"
+  },
+  "room": {
+    "walls": "Room walls",
+    "tabs": {
+      "likes": "Likes",
+      "recs": "For you",
+      "watch": "Watchlist"
+    },
+    "show": "Show {wall}",
+    "egg": {
+      "title": "Built by RusticIT",
+      "open": "Open rusticit.com",
+      "frameTitle": "rusticit.com",
+      "idle": "Screen off"
+    }
+  },
+  "watchlist": {
+    "heading": "My watchlist",
+    "empty": "Bookmark a movie and it will hang here.",
+    "add": "Add {title} to watchlist",
+    "remove": "Take {title} off watchlist",
+    "addLabel": "Add to watchlist",
+    "onList": "On my watchlist"
   }
 }

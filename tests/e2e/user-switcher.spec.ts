@@ -3,6 +3,7 @@ import { $fetch, createPage, setup, url } from '@nuxt/test-utils/e2e'
 import type { Page } from 'playwright-core'
 import type { Movie, Profile } from '../../shared/types'
 import { stubPosters } from './helpers/posters'
+import { faceWall } from './helpers/room'
 
 await setup({ browser: true })
 
@@ -126,6 +127,7 @@ describe('user switcher', () => {
 
   it('does not reseed the viewer\'s likes after the last chip is removed', async () => {
     const page = await open('/?user=sam&liked=5')
+    await faceWall(page, 'likes')
     await page.getByRole('button', { name: /^Remove / }).click()
     await waitForChips(page, 0)
     await page.waitForURL(url => url.search === '?user=sam')

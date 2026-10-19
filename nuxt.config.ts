@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   modules: ['@nuxt/eslint', '@nuxt/fonts', 'vuetify-nuxt-module', '@nuxtjs/i18n'],
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  css: ['~/assets/css/main.css', '~/assets/css/transitions.css'],
+  css: ['~/assets/css/main.css', '~/assets/css/transitions.css', '~/assets/css/room.css'],
   fonts: {
     // Self-hosted: fetched once at build time and served from our own origin
     provider: 'fontsource',
@@ -41,6 +41,7 @@ export default defineNuxtConfig({
             'img-src \'self\' data: blob: https://image.tmdb.org',
             'font-src \'self\' data:',
             'connect-src \'self\' https://cloud.umami.is https://api-gateway.umami.dev',
+            'frame-src https://rusticit.com',
             'object-src \'none\'',
             'base-uri \'self\'',
             'form-action \'self\'',

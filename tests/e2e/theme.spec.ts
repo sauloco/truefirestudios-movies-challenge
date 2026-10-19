@@ -77,19 +77,18 @@ describe('theme', async () => {
     const page = await createPage('/?user=sam&liked=1')
     await page.waitForSelector('[data-testid="movie-card"]')
 
-    expect(await page.locator('[data-testid="app-title"]').innerText()).toBe(en.app.title)
-    expect(await page.locator('h1').innerText()).toBe(en.liked.heading)
+    expect(await page.locator('[data-testid="movie-search"] label').first().innerText()).toBe(en.app.title)
+    expect(await page.locator('h1').innerText()).toBe(en.app.title)
     expect(await page.locator('[data-testid="recommendations-heading"]').innerText()).toBe(en.recommendations.headingPersonalized)
     expect(await page.locator('[data-testid="tmdb-notice"]').innerText()).toBe(en.footer.tmdbNotice)
     expect(await page.locator(toggle).getAttribute('aria-label')).toMatch(new RegExp(`^(${en.theme.switchToDark}|${en.theme.switchToLight})$`))
     await page.close()
   })
 
-  it('links the product name to rusticit.com', async () => {
+  it('makes the product name the search field instead of a link to rusticit.com', async () => {
     const page = await createPage('/')
-    const link = page.locator('[data-testid="app-title"]')
-    await link.waitFor()
-    expect(await link.getAttribute('href')).toBe('https://rusticit.com')
+    await page.locator('[data-testid="movie-search"]').waitFor()
+    expect(await page.locator('[data-testid="app-header"] a').count()).toBe(0)
     await page.close()
   })
 })

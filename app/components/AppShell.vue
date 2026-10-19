@@ -1,5 +1,8 @@
 <script setup lang="ts">
 const { init, followSystem } = useColorMode()
+const route = useRoute()
+// The room fills the page edge to edge; every other page sits in a centred container
+const fullBleed = computed(() => route.path === '/')
 init()
 onMounted(followSystem)
 </script>
@@ -12,22 +15,22 @@ onMounted(followSystem)
       floating
       data-testid="app-header"
     >
-      <v-app-bar-title>
-        <a
-          class="app-brand"
-          href="https://rusticit.com"
-          rel="noopener"
-          data-testid="app-title"
-        >{{ $t('app.title') }}</a>
-      </v-app-bar-title>
+      <div class="app-search">
+        <HeaderSearch />
+      </div>
+      <v-spacer />
       <template #append>
         <UserSwitcher />
         <LanguageSwitcher />
         <ColorModeToggle />
       </template>
     </v-app-bar>
-    <v-main>
-      <v-container class="py-6">
+    <v-main :class="{ 'room-page': fullBleed }">
+      <!-- One container for every page: switching between two branches would remount the page during navigation -->
+      <v-container
+        :fluid="fullBleed"
+        :class="fullBleed ? 'pa-0' : 'py-6'"
+      >
         <slot />
       </v-container>
     </v-main>
@@ -47,14 +50,11 @@ onMounted(followSystem)
   backdrop-filter: blur(14px);
 }
 
-.app-brand {
-  color: inherit;
-  text-decoration: none;
-  font-family: Rubik, Inter, system-ui, sans-serif;
-  font-weight: 600;
-}
-
-.app-brand:hover {
-  text-decoration: underline;
+.app-search {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  max-inline-size: 360px;
+  margin-inline-start: 12px;
+  padding-block: 4px;
 }
 </style>

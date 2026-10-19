@@ -3,6 +3,7 @@ import { $fetch, createPage, setup, url } from '@nuxt/test-utils/e2e'
 import type { Page } from 'playwright-core'
 import type { Movie } from '../../shared/types'
 import { stubPosters } from './helpers/posters'
+import { faceWall } from './helpers/room'
 
 await setup({ browser: true })
 
@@ -86,6 +87,7 @@ describe('MovieSearch and LikedChips', () => {
     const page = await open(`/?user=sam&liked=${STAR_WARS.id},${EMPIRE.id}`)
     expect(await chips(page).count()).toBe(2)
 
+    await faceWall(page, 'likes')
     await page.getByRole('button', { name: `Remove ${STAR_WARS.title}` }).click()
     await page.waitForFunction(() => document.querySelectorAll('[data-testid="liked-chip"]').length === 1)
     expect(await chips(page).allInnerTexts()).toEqual([`${EMPIRE.title} (${EMPIRE.year})`])
@@ -95,6 +97,7 @@ describe('MovieSearch and LikedChips', () => {
 
   it('drops the query once the last chip is removed', async () => {
     const page = await open(`/?user=sam&liked=${STAR_WARS.id}`)
+    await faceWall(page, 'likes')
     await page.getByRole('button', { name: `Remove ${STAR_WARS.title}` }).click()
     await page.waitForFunction(() => document.querySelectorAll('[data-testid="liked-chip"]').length === 0)
     await page.waitForURL(url => url.search === '?user=sam')

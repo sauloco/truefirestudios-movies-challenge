@@ -78,6 +78,10 @@ function goBack(event: MouseEvent) {
         >
           {{ movie.year }}
         </p>
+        <WatchlistButton
+          class="mt-4"
+          :movie="movie"
+        />
         <div
           class="d-flex flex-wrap ga-2 mt-3"
           role="list"

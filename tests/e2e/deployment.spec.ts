@@ -53,7 +53,7 @@ describe('404 page', () => {
     expect(response!.status()).toBe(404)
     expect(await page.locator('[data-testid="error-code"]').innerText()).toBe('404')
     expect(await page.locator('[data-testid="error-title"]').innerText()).toBe('Page not found')
-    expect(await page.locator('[data-testid="app-title"]').innerText()).toBe('Movies RusticIT')
+    expect(await page.locator('[data-testid="movie-search"] label').first().innerText()).toBe('Movies RusticIT')
 
     await stubPosters(page)
     await page.locator('[data-testid="error-home"]').click()

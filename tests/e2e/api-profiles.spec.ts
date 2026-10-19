@@ -12,7 +12,7 @@ describe('GET /api/profiles', async () => {
     const profiles = await $fetch<Profile[]>('/api/profiles')
     expect(profiles.map(profile => profile.id)).toEqual(['sam', 'yuki', 'lucia', 'dale'])
     for (const profile of profiles) {
-      expect(Object.keys(profile).sort()).toEqual(['avatarUrl', 'id', 'language', 'liked', 'name', 'tint'])
+      expect(Object.keys(profile).sort()).toEqual(['avatarUrl', 'id', 'language', 'liked', 'name', 'pattern', 'tint'])
       expect(profile).toMatchObject({
         name: expect.stringMatching(/\S/),
         tint: expect.stringMatching(/^#[0-9a-f]{6}$/i),
