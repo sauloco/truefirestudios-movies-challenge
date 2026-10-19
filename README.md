@@ -4,7 +4,7 @@
 
 Four demo viewers (avatars in the top right) each carry their own likes from the dataset; picking one switches the whole app to that viewer, with the viewer and picks in the URL (`?user=sam&liked=…`). **This is a proof of concept with no security**: anyone can be anyone, and the cookie that remembers the last viewer is only a convenience.
 
-Built with Nuxt 4, Vuetify (themed after rusticit.com, light and dark), `@nuxtjs/i18n`, and a server-side recommender. Tests are browser end-to-end only.
+Built with Nuxt 4, Vuetify (themed after rusticit.com, light and dark), `@nuxtjs/i18n` (English, Japanese at `/ja` and Spanish at `/es`, switchable from the app bar; strings live in `i18n/locales/`), and a server-side recommender. Tests are browser end-to-end only.
 
 ## Requirements
 
