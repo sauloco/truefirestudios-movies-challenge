@@ -3,7 +3,7 @@ const { t, locale } = useI18n()
 
 useHead({
   htmlAttrs: { lang: locale },
-  title: () => `${t('app.title')} — ${t('app.tagline')}`
+  title: () => t('app.title')
 })
 </script>
 
