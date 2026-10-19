@@ -75,7 +75,7 @@ describe('custom events', () => {
   it('fires movie-picked then recommendations-shown when a movie is picked', async () => {
     const { page, umami } = await open()
     await pick(page, STAR_WARS)
-    await page.getByRole('heading', { name: 'Recommendations Wall' }).waitFor()
+    await expect.poll(async () => (await umami.events()).length).toBe(3)
     expect(await umami.events()).toEqual([
       { event: 'recommendations-shown', data: { pickCount: 0, source: 'popular' } },
       { event: 'movie-picked', data: { movieId: STAR_WARS.id, pickCount: 1 } },

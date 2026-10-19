@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { $fetch, createPage, setup } from '@nuxt/test-utils/e2e'
 import { gotoAs } from './helpers/viewer'
 import type { Page } from 'playwright-core'
@@ -23,12 +23,21 @@ const front = (page: Page, wall: string) => page.waitForFunction(
 )
 
 describe('the room', () => {
+  // The camera-only tests share one loaded room; each leaves the camera facing the recommendations again
+  let shared: Page
+  beforeAll(async () => {
+    shared = await open()
+  })
+  afterEach(async () => {
+    await shared.locator('[data-testid="wall-tab-recs"]').dispatchEvent('click')
+    await front(shared, 'recs')
+  })
+  afterAll(() => shared.close())
+
   it('starts facing the recommendations with the likes and the watchlist at the sides', async () => {
-    const page = await open()
-    expect(await side(page, 'recs')).toBe('c')
-    expect(await side(page, 'likes')).toBe('l')
-    expect(await side(page, 'watch')).toBe('r')
-    await page.close()
+    expect(await side(shared, 'recs')).toBe('c')
+    expect(await side(shared, 'likes')).toBe('l')
+    expect(await side(shared, 'watch')).toBe('r')
   })
 
   it('paints the walls with the viewer\'s tint and pattern', async () => {
@@ -42,7 +51,7 @@ describe('the room', () => {
   })
 
   it('turns the camera with the tabs and the arrow keys', async () => {
-    const page = await open()
+    const page = shared
     await page.locator('[data-testid="wall-tab-watch"]').dispatchEvent('click')
     await front(page, 'watch')
     await page.locator('[data-testid="wall-tab-recs"]').dispatchEvent('click')
@@ -50,11 +59,10 @@ describe('the room', () => {
 
     await page.keyboard.press('ArrowLeft')
     await front(page, 'likes')
-    await page.close()
   })
 
   it('closes the ring: past the watchlist is the RusticIT wall, and so is past the likes', async () => {
-    const page = await open()
+    const page = shared
 
     await page.keyboard.press('ArrowRight')
     await front(page, 'watch')
@@ -67,14 +75,12 @@ describe('the room', () => {
     await page.waitForTimeout(500)
     await page.keyboard.press('ArrowRight')
     await front(page, 'likes')
-    await page.close()
   })
 
   it('keeps walls that are not in front out of the tab order', async () => {
-    const page = await open()
+    const page = shared
     expect(await page.locator('[data-testid="wall-likes"] .room-wall__body').getAttribute('inert')).not.toBeNull()
     expect(await page.locator('[data-testid="wall-recs"] .room-wall__body').getAttribute('inert')).toBeNull()
-    await page.close()
   })
 
   it('has no horizontal scroll at 360px', async () => {

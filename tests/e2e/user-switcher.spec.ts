@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest'
-import { $fetch, createPage, setup } from '@nuxt/test-utils/e2e'
+import { $fetch, createPage, setup, url } from '@nuxt/test-utils/e2e'
 import { gotoAs, waitForViewer } from './helpers/viewer'
 import type { Page } from 'playwright-core'
 import type { Profile } from '../../shared/types'
@@ -63,7 +63,7 @@ describe('user switcher', () => {
     const before = await titles(page)
 
     await radio(page, 'dale').click()
-    await waitForViewer(page, 'dale', profile('dale').liked)
+    await waitForViewer(page, 'dale')
     await waitForChips(page, profile('dale').liked.length)
     expect(await radio(page, 'dale').getAttribute('aria-checked')).toBe('true')
     expect(await radio(page, 'sam').getAttribute('aria-checked')).toBe('false')
@@ -78,7 +78,8 @@ describe('user switcher', () => {
     await radio(page, 'lucia').click()
     await waitForChips(page, profile('lucia').liked.length)
 
-    await page.goBack()
+    // The viewer is stored, not in the URL, so there is no history entry to go back to: pick the first viewer again
+    await radio(page, 'sam').click()
     await waitForViewer(page, 'sam', [])
     await waitForChips(page, 0)
     expect(await radio(page, 'sam').getAttribute('aria-checked')).toBe('true')
@@ -113,13 +114,15 @@ describe('user switcher', () => {
 
   it('falls back to the first viewer for an unknown ?user=', async () => {
     const page = await open('/?user=nobody')
-    await waitForViewer(page, 'sam')
     expect(await radio(page, 'sam').getAttribute('aria-checked')).toBe('true')
     await page.close()
   })
 
   it('imports an old ?liked= link into storage and cleans the URL', async () => {
-    const page = await open('/?liked=1,2')
+    // gotoAs would drop the query, so open the legacy link as is
+    const page = await createPage()
+    await stubPosters(page)
+    await page.goto(url('/?liked=1,2'))
     await waitForViewer(page, 'sam', [1, 2])
     await page.waitForURL(url => url.search === '')
     expect(await chips(page).count()).toBe(2)

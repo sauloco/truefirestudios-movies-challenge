@@ -4,7 +4,7 @@
 const { active } = await useProfiles()
 const { liked, likedMovies, remove } = await useLikedMovies()
 const { data: movies } = await useMovies()
-const { data, status, error, refresh } = await useRecommendations(liked)
+const { data, status, error, refresh, settled } = await useRecommendations(liked)
 const watchlist = useWatchlist()
 const loading = useProfileLoading()
 
@@ -18,9 +18,17 @@ if (import.meta.client) {
 }
 
 const analytics = useAnalytics()
-// Once per result set shown, including the one rendered on the server for a deep link
-watch(data, (shown) => {
-  if (shown?.items.length) analytics.recommendationsShown(liked.value.length, shown.source)
+// Once per result set shown, including the one rendered on the server for a deep link. Nothing is reported
+// while the viewer is still the placeholder one from the server render (the stored viewer replaces it right
+// after mount) or while the response on screen is for picks that are no longer the viewer's
+let reported = ''
+watch([data, status, () => loading.state.value.targetId, liked, settled], ([shown, current, target, picks, asked]) => {
+  if (current !== 'success' || !shown?.items.length || target !== active.value.id) return
+  if (picks.join(',') !== asked.join(',')) return
+  const signature = `${asked.join(',')}|${shown.source}`
+  if (signature === reported) return
+  reported = signature
+  analytics.recommendationsShown(asked.length, shown.source)
 }, { immediate: true })
 
 const watchlisted = computed(() => {

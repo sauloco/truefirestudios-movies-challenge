@@ -15,6 +15,7 @@ onMounted(followSystem)
       class="app-header"
       location="top"
       floating
+      flat
       data-testid="app-header"
     >
       <div class="app-search">
@@ -52,13 +53,15 @@ onMounted(followSystem)
   border-radius: 999px !important;
   background: rgb(var(--v-theme-surface), 0.72) !important;
   backdrop-filter: blur(14px);
+  /* Vuetify's elevation utilities are !important, so the resting and glow shadows must be too */
+  box-shadow: none !important;
   transition: box-shadow 200ms ease, border-color 200ms ease;
 }
 
 /* Focusing the search lights the whole header with the same glow as a poster */
 .app-header:has(.msearch__input:focus) {
   border-color: rgb(255 226 160 / 0.9);
-  box-shadow: var(--underglow);
+  box-shadow: var(--underglow) !important;
 }
 
 .app-search {

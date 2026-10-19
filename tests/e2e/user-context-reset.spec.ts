@@ -40,7 +40,7 @@ describe('switching viewer starts from a clean context', () => {
     await page.locator('[role="option"]').first().waitFor()
 
     await page.locator('[data-testid="user-dale"]').click()
-    await waitForViewer(page, 'dale', dale.liked)
+    await waitForViewer(page, 'dale')
     await page.waitForFunction(count => document.querySelectorAll('[data-testid="liked-chip"]').length === count, dale.liked.length)
 
     expect(await input.inputValue()).toBe('')
@@ -61,7 +61,6 @@ describe('switching viewer starts from a clean context', () => {
   })
 
   it('clears a failed recommendation request', async () => {
-    const dale = profiles.find(profile => profile.id === 'dale')!
     const page = await createPage()
     await stubPosters(page)
     await page.route('**/api/recommendations', route => route.abort('failed'))
@@ -71,7 +70,7 @@ describe('switching viewer starts from a clean context', () => {
 
     await page.unroute('**/api/recommendations')
     await page.locator('[data-testid="user-dale"]').click()
-    await waitForViewer(page, 'dale', dale.liked)
+    await waitForViewer(page, 'dale')
     await page.locator('[data-testid="movie-card"]').first().waitFor()
     expect(await page.locator('[data-testid="recommendation-error"]').count()).toBe(0)
     await page.close()

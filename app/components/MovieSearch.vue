@@ -42,6 +42,8 @@ function pick(movie: Movie | undefined) {
   emit('select', movie.id)
   search.value = ''
   active.value = 0
+  // The field keeps focus for the next pick; typing or the arrow keys reopen the menu
+  open.value = false
 }
 
 function onKeydown(event: KeyboardEvent) {
@@ -95,6 +97,7 @@ function onKeydown(event: KeyboardEvent) {
           :aria-controls="listId"
           :aria-activedescendant="open && results[active] ? optionId(results[active]!.id) : undefined"
           @focus="open = true"
+          @click="open = true"
           @input="open = true"
           @blur="close"
           @keydown="onKeydown"
@@ -233,6 +236,8 @@ function onKeydown(event: KeyboardEvent) {
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: text;
+  /* Overlays the input: let clicks fall through to it (focus() on the input already hides the title) */
+  pointer-events: none;
 }
 
 .msearch__panel {

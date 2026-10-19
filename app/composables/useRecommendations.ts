@@ -4,7 +4,7 @@ const RECOMMENDATION_LIMIT = 12
 const DEBOUNCE_MS = 250
 
 // Re-fetches whenever the picks settle; each distinct set of picks is its own cache key
-export function useRecommendations(liked: Ref<number[]>) {
+export async function useRecommendations(liked: Ref<number[]>) {
   const settled = ref([...liked.value])
 
   if (import.meta.client) {
@@ -18,9 +18,12 @@ export function useRecommendations(liked: Ref<number[]>) {
     onScopeDispose(() => clearTimeout(timer))
   }
 
-  return useFetch<RecommendationsResponse>('/api/recommendations', {
+  const fetched = await useFetch<RecommendationsResponse>('/api/recommendations', {
     method: 'POST',
     key: computed(() => `recommendations:${settled.value.join(',')}`),
     body: computed(() => ({ liked: settled.value, limit: RECOMMENDATION_LIMIT }))
   })
+
+  // `settled` is the set of picks the current response was asked for
+  return { ...fetched, settled }
 }
