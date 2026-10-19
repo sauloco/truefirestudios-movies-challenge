@@ -9,13 +9,13 @@
     "add": "ポスターウォールに追加"
   },
   "liked": {
-    "heading": "お気に入りの映画",
+    "heading": "マイポスターウォール",
     "hint": "1本以上選んでください。選ばない場合は人気の作品を表示します。",
     "remove": "{title}を削除"
   },
   "recommendations": {
-    "headingPersonalized": "あなたへのおすすめ",
-    "headingPopular": "今の人気作品",
+    "headingPersonalized": "おすすめウォール",
+    "headingPopular": "おすすめウォール",
     "because": "{titles}が好きだから",
     "popularReason": "多くの視聴者に支持されています",
     "matchScore": "一致度 {percent}%",
