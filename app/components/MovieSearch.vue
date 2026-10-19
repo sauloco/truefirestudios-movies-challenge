@@ -72,29 +72,39 @@ function onKeydown(event: KeyboardEvent) {
     data-testid="movie-search"
   >
     <div class="msearch__field">
-      <input
-          :id="id"
-        v-model="search"
-        class="msearch__input"
-        type="text"
-        role="combobox"
-        autocomplete="off"
-        spellcheck="false"
-        :placeholder="open ? $t('search.label') : ''"
-        aria-autocomplete="list"
-        :aria-expanded="open"
-        :aria-controls="listId"
-        :aria-activedescendant="open && results[active] ? optionId(results[active]!.id) : undefined"
-        @focus="open = true"
-        @input="open = true"
-        @blur="close"
-        @keydown="onKeydown"
+      <!-- Decorative: stays visible while the field is focused -->
+      <img
+        class="msearch__logo"
+        src="/favicon.svg"
+        alt=""
+        width="28"
+        height="28"
       >
-      <label
-        v-show="showTitle"
-        class="msearch__title"
-        :for="id"
-      >{{ $t('app.title') }}</label>
+      <div class="msearch__box">
+        <input
+          :id="id"
+          v-model="search"
+          class="msearch__input"
+          type="text"
+          role="combobox"
+          autocomplete="off"
+          spellcheck="false"
+          :placeholder="open ? $t('search.label') : ''"
+          aria-autocomplete="list"
+          :aria-expanded="open"
+          :aria-controls="listId"
+          :aria-activedescendant="open && results[active] ? optionId(results[active]!.id) : undefined"
+          @focus="open = true"
+          @input="open = true"
+          @blur="close"
+          @keydown="onKeydown"
+        >
+        <label
+          v-show="showTitle"
+          class="msearch__title"
+          :for="id"
+        >{{ $t('app.title') }}</label>
+      </div>
     </div>
     <!-- Teleported out of the header: its backdrop-filter would otherwise trap a fixed child inside the pill -->
     <Teleport to="body">
@@ -173,7 +183,21 @@ function onKeydown(event: KeyboardEvent) {
 }
 
 .msearch__field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.msearch__logo {
+  flex: none;
+  block-size: 28px;
+  inline-size: 28px;
+}
+
+.msearch__box {
   position: relative;
+  flex: 1;
+  min-inline-size: 0;
 }
 
 .msearch__input,
@@ -257,7 +281,8 @@ function onKeydown(event: KeyboardEvent) {
   font-size: 0.9375rem;
 }
 
-.msearch__poster {
+/* Doubled class: PosterImage sets width: 100% at equal specificity, and bundle order decides who wins in prod */
+.msearch__poster.msearch__poster {
   flex: none;
   inline-size: 64px;
   aspect-ratio: 2 / 3;
