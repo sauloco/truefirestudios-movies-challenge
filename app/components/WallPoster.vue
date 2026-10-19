@@ -10,7 +10,6 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{ open: [], remove: [] }>()
 
-const route = useRoute()
 const router = useRouter()
 const { has, toggle } = useWatchlist()
 
@@ -20,7 +19,7 @@ const arrival = useState<{ id: number, score: string } | null>('movie-arrival', 
 const focus = useState<string | null>('room-focus', () => null)
 
 const key = computed(() => `${props.kind}:${props.movie.id}`)
-const to = computed(() => ({ path: `/movies/${props.movie.id}`, query: route.query }))
+const to = computed(() => ({ path: `/movies/${props.movie.id}` }))
 // A plain anchor rather than NuxtLink: the click may have to wait for the camera before navigating
 const href = computed(() => router.resolve(to.value).href)
 const listed = computed(() => has(props.movie.id))
@@ -189,7 +188,6 @@ async function open(event: MouseEvent) {
   text-decoration: none;
   border: 5px solid #f4f1ea;
   border-bottom-width: 7px;
-  border-radius: 2px;
   background: #f4f1ea;
   box-shadow:
     0 1px 1px rgb(14 21 46 / 0.35),
@@ -230,7 +228,6 @@ async function open(event: MouseEvent) {
   position: absolute;
   inset: 0;
   z-index: 4;
-  border-radius: 2px;
   background: linear-gradient(180deg, #cfcabd, #ece8de 60%, #d9d4c7);
   box-shadow: 0 6px 10px -2px rgb(14 21 46 / 0.45);
   transform-origin: 0 0;
@@ -253,8 +250,7 @@ async function open(event: MouseEvent) {
   box-shadow:
     0 1px 1px rgb(14 21 46 / 0.35),
     0 0 0 1px rgb(255 255 255 / 0.5),
-    0 0 14px 3px rgb(255 244 214 / 0.75),
-    0 0 38px 10px rgb(255 226 160 / 0.45),
+    var(--underglow),
     inset 0 0 0 1px rgb(0 0 0 / 0.18);
 }
 
@@ -333,6 +329,7 @@ async function open(event: MouseEvent) {
   place-items: center;
   width: 26px;
   height: 26px;
+  padding: 0;
   border: 0;
   border-radius: 50%;
   background: rgb(14 21 46 / 0.85);
@@ -346,6 +343,20 @@ async function open(event: MouseEvent) {
 .tile:focus-within .tile__button,
 .tile__button--on {
   opacity: 1;
+}
+
+.tile__button :deep(.v-icon) {
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  line-height: 1;
+}
+
+.tile__button :deep(.v-icon__svg) {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 @media (hover: none) {

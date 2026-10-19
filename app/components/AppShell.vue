@@ -18,7 +18,6 @@ onMounted(followSystem)
       <div class="app-search">
         <HeaderSearch />
       </div>
-      <v-spacer />
       <template #append>
         <UserSwitcher />
         <LanguageSwitcher />
@@ -41,20 +40,60 @@ onMounted(followSystem)
 <style scoped>
 /* Floating pill: inset from the viewport edges, translucent over a blurred backdrop */
 .app-header {
-  inset-inline: 12px;
-  inline-size: auto;
+  /* Vuetify pins the bar to both viewport edges, so the gutter is taken out of its width instead */
+  inset-inline: 0 !important;
+  inline-size: min(1080px, calc(100% - 24px)) !important;
   margin-block-start: 12px;
-  max-inline-size: 1080px;
-  margin-inline: auto;
-  background: rgba(var(--v-theme-surface), 0.72) !important;
+  margin-inline: auto !important;
+  --header-pad: 28px;
+  border: 1px solid rgb(var(--v-theme-on-surface), 0.12);
+  border-radius: 999px !important;
+  background: rgb(var(--v-theme-surface), 0.72) !important;
   backdrop-filter: blur(14px);
+  transition: box-shadow 200ms ease, border-color 200ms ease;
+}
+
+/* Focusing the search lights the whole header with the same glow as a poster */
+.app-header:has(.msearch__input:focus) {
+  border-color: rgb(255 226 160 / 0.9);
+  box-shadow: var(--underglow);
 }
 
 .app-search {
   flex: 1 1 auto;
   min-inline-size: 0;
-  max-inline-size: 360px;
-  margin-inline-start: 12px;
-  padding-block: 4px;
+  margin-inline-start: var(--header-pad);
+}
+
+/* The toolbar clips its children, which would hide the results dropdown hanging below the pill.
+   Its own gutter would also keep the plate off the right edge. */
+.app-header,
+.app-header :deep(.v-toolbar__content) {
+  overflow: visible !important;
+}
+
+.app-header :deep(.v-toolbar__content) {
+  padding-inline-end: 0;
+}
+
+/* The viewer controls keep a soft plate behind them while the field is in use */
+.app-header :deep(.v-toolbar__append) {
+  align-self: stretch;
+  align-items: center;
+  margin-inline: 0;
+  padding-inline: var(--header-pad) 16px;
+  border-radius: 999px;
+  transition: background-color 200ms ease;
+}
+
+.app-header:has(.msearch__input:focus) :deep(.v-toolbar__append) {
+  background: rgb(var(--v-theme-surface), 0.85);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-header,
+  .app-header :deep(.v-toolbar__append) {
+    transition: none;
+  }
 }
 </style>
