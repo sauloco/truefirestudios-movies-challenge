@@ -281,10 +281,10 @@ function onKeydown(event: KeyboardEvent) {
   font-size: 0.9375rem;
 }
 
-/* Doubled class: PosterImage sets width: 100% at equal specificity, and bundle order decides who wins in prod */
-.msearch__poster.msearch__poster {
+/* Nested for specificity: PosterImage's own `width: 100%` ties with a single class and wins by stylesheet order in production builds */
+.msearch__option .msearch__poster {
   flex: none;
-  inline-size: 64px;
+  width: 64px;
   aspect-ratio: 2 / 3;
   border-radius: 3px;
   overflow: hidden;
