@@ -1,0 +1,65 @@
+{
+  "app": {
+    "title": "Movies RusticIT",
+    "tagline": "A quienes les gustaron estas también les gustó…"
+  },
+  "search": {
+    "label": "Buscar entre 70 películas…",
+    "noData": "Ninguna película coincide"
+  },
+  "liked": {
+    "heading": "Películas que te gustan",
+    "hint": "Elige 1 o más. Si no eliges ninguna, mostramos las más populares.",
+    "remove": "Quitar {title}",
+    "ignored": "Algunas películas de este enlace no se reconocieron y se ignoraron."
+  },
+  "recommendations": {
+    "headingPersonalized": "Recomendadas para ti",
+    "headingPopular": "Lo más popular ahora",
+    "because": "Porque te gustó {titles}",
+    "popularReason": "Le gusta a muchos espectadores",
+    "matchScore": "{percent}% de coincidencia",
+    "popularityScore": "{percent}% de la popularidad del n.º 1",
+    "emptyTitle": "No queda nada por recomendar",
+    "emptyText": "Has elegido todas las películas que conocemos. Quita algunas para volver a ver sugerencias.",
+    "errorTitle": "No pudimos cargar las recomendaciones",
+    "errorText": "Algo salió mal al obtener tus selecciones. Inténtalo de nuevo.",
+    "retry": "Reintentar"
+  },
+  "detail": {
+    "back": "Volver a las recomendaciones",
+    "notFound": "Película no encontrada",
+    "genres": "Géneros"
+  },
+  "poster": {
+    "alt": "Póster de {title}"
+  },
+  "footer": {
+    "tmdbLogoAlt": "The Movie Database (TMDB)",
+    "tmdbNotice": "Este producto usa la API de TMDB, pero no está avalado ni certificado por TMDB."
+  },
+  "theme": {
+    "switchToDark": "Cambiar al tema oscuro",
+    "switchToLight": "Cambiar al tema claro"
+  },
+  "profiles": {
+    "switcher": "Cambiar de espectador",
+    "reset": "Volver a mis favoritas",
+    "languages": {
+      "en": "inglés",
+      "es": "español",
+      "ja": "japonés"
+    },
+    "likedCount": "{count} película que te gusta | {count} películas que te gustan"
+  },
+  "language": {
+    "switcher": "Idioma"
+  },
+  "error": {
+    "title": "Algo salió mal",
+    "text": "Ocurrió un error inesperado. Vuelve a las recomendaciones e inténtalo de nuevo.",
+    "notFoundTitle": "Página no encontrada",
+    "notFoundText": "No encontramos esa página. Puede que la película o el enlace se haya movido.",
+    "home": "Volver a las recomendaciones"
+  }
+}
