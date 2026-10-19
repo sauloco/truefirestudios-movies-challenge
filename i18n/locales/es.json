@@ -5,13 +5,13 @@
   },
   "search": {
     "label": "Buscar entre 70 películas…",
-    "noData": "Ninguna película coincide"
+    "noData": "Ninguna película coincide",
+    "add": "Añadir al muro de pósters"
   },
   "liked": {
     "heading": "Películas que te gustan",
     "hint": "Elige 1 o más. Si no eliges ninguna, mostramos las más populares.",
-    "remove": "Quitar {title}",
-    "ignored": "Algunas películas de este enlace no se reconocieron y se ignoraron."
+    "remove": "Quitar {title}"
   },
   "recommendations": {
     "headingPersonalized": "Recomendadas para ti",
@@ -36,7 +36,9 @@
   },
   "footer": {
     "tmdbLogoAlt": "The Movie Database (TMDB)",
-    "tmdbNotice": "Este producto usa la API de TMDB, pero no está avalado ni certificado por TMDB."
+    "tmdbNotice": "Este producto usa la API de TMDB, pero no está avalado ni certificado por TMDB.",
+    "patterns": "Patrones de pared de",
+    "patternsLicense": "CC BY 4.0"
   },
   "theme": {
     "switchToDark": "Cambiar al tema oscuro",
@@ -50,7 +52,9 @@
       "es": "español",
       "ja": "japonés"
     },
-    "likedCount": "{count} película que te gusta | {count} películas que te gustan"
+    "loading": "Cargando el perfil de {name}",
+    "loadingGeneric": "Cargando perfil",
+    "wallSummary": "{name}, {language}, {count} en el Muro de Pósters"
   },
   "language": {
     "switcher": "Idioma"
@@ -61,5 +65,26 @@
     "notFoundTitle": "Página no encontrada",
     "notFoundText": "No encontramos esa página. Puede que la película o el enlace se haya movido.",
     "home": "Volver a las recomendaciones"
+  },
+  "room": {
+    "egg": {
+      "open": "Abrir rusticit.com",
+      "title": "Creado por Saulo Vargas"
+    },
+    "show": "Mostrar {wall}",
+    "tabs": {
+      "likes": "Me gustan",
+      "recs": "Para ti",
+      "watch": "Ver después"
+    },
+    "walls": "Paredes de la sala"
+  },
+  "watchlist": {
+    "heading": "Muro Ver Después",
+    "empty": "Marca una película y se colgará aquí.",
+    "add": "Añadir {title} al Muro Ver Después",
+    "remove": "Quitar {title} del Muro Ver Después",
+    "addLabel": "Añadir al Muro Ver Después",
+    "onList": "En el Muro Ver Después"
   }
 }

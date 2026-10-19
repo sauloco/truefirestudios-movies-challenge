@@ -11,6 +11,7 @@ const props = defineProps<{
 const emit = defineEmits<{ open: [], remove: [] }>()
 
 const router = useRouter()
+const localePath = useLocalePath()
 const { has, toggle } = useWatchlist()
 
 // The detail page shows the score only when it was reached from a recommendation
@@ -19,7 +20,7 @@ const arrival = useState<{ id: number, score: string } | null>('movie-arrival', 
 const focus = useState<string | null>('room-focus', () => null)
 
 const key = computed(() => `${props.kind}:${props.movie.id}`)
-const to = computed(() => ({ path: `/movies/${props.movie.id}` }))
+const to = computed(() => ({ path: localePath(`/movies/${props.movie.id}`) }))
 // A plain anchor rather than NuxtLink: the click may have to wait for the camera before navigating
 const href = computed(() => router.resolve(to.value).href)
 const listed = computed(() => has(props.movie.id))
