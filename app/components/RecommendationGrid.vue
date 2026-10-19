@@ -10,11 +10,14 @@ const props = defineProps<{
 }>()
 defineEmits<{ retry: [] }>()
 
-const { t, n } = useI18n()
+const { t, n, locale } = useI18n()
 const analytics = useAnalytics()
 
+// Joins the titles the way the locale does ("A, B, and C" / "A, B y C" / "A、B、C")
+const titles = computed(() => new Intl.ListFormat(locale.value, { style: 'long', type: 'conjunction' }))
+
 const reason = (item: Recommendation) => item.because.length
-  ? t('recommendations.because', { titles: item.because.map(({ title }) => title).join(', ') })
+  ? t('recommendations.because', { titles: titles.value.format(item.because.map(({ title }) => title)) })
   : t('recommendations.popularReason')
 
 const score = (item: Recommendation) => t(
