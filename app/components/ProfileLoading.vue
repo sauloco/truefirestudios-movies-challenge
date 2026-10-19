@@ -99,7 +99,7 @@ useHead({ noscript: [{ innerHTML: '<style>.profile-loading{display:none}</style>
 .profile-loading-enter-from,
 .profile-loading-leave-to {
   opacity: 0;
-  backdrop-filter: blur(0);
+  backdrop-filter: blur(0px);
 }
 
 @media (prefers-reduced-motion: reduce) {
