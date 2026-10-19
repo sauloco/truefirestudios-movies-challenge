@@ -1,8 +1,8 @@
 # Movies RusticIT
 
-"People who liked these also liked…" for 70 movies and 806 users. Pick a few movies you like and get ranked recommendations, each with a plain-language reason ("Because you liked …") and a match score. With no picks it shows what is popular. The picks live in the URL (`?liked=20,59,60`), so a result page can be shared and survives a refresh. Each card opens a read-only detail page at `/movies/<id>` (blurred-poster header, overview, genres, and the match score when you arrive from a result); the poster and title animate between the two pages with a view transition.
+"People who liked these also liked…" for 70 movies and 806 users. Pick a few movies you like and get ranked recommendations, each with a plain-language reason ("Because you liked …") and a match score. With no picks it shows what is popular. The home page is a full-viewport 3D room with the picks on its wall, and the picks are kept per viewer in the browser's localStorage, so they survive a refresh (they are no longer in the URL). Each card opens a read-only detail page at `/movies/<id>` (blurred-poster header, overview, genres, and the match score when you arrive from a result); the poster and title animate between the two pages with a view transition.
 
-Four demo viewers (avatars in the top right) each carry their own likes from the dataset; picking one switches the whole app to that viewer, with the viewer and picks in the URL (`?user=sam&liked=…`). **This is a proof of concept with no security**: anyone can be anyone, and the cookie that remembers the last viewer is only a convenience.
+Four demo viewers (avatars in the top right) each carry their own likes from the dataset; picking one switches the whole app to that viewer, and the viewer and their edited picks are remembered in localStorage. **This is a proof of concept with no security**: anyone can be anyone, and the stored viewer is only a convenience.
 
 Built with Nuxt 4, Vuetify (themed after rusticit.com, light and dark), `@nuxtjs/i18n` (English, Japanese at `/ja` and Spanish at `/es`, switchable from the app bar; strings live in `i18n/locales/`), and a server-side recommender. Tests are browser end-to-end only.
 
@@ -71,7 +71,7 @@ Page views and four custom events go to [Umami](https://umami.is) Cloud. It is c
 
 1. The website id is read from `NUXT_PUBLIC_UMAMI_WEBSITE_ID`. Deploys get it from `netlify.toml`, and a Netlify environment variable overrides it; for local use put it in `.env` (see `.env.example`). It is read at runtime, so changing it needs a redeploy but not a code change. The id is public (it is visible in the page source) and currently is the shared rusticit.com one.
 2. Events: `movie-picked` and `movie-removed` (`movieId`, `pickCount`), `recommendations-shown` (`pickCount`, `source`) and `recommendation-clicked` (`movieId`, `source`). Payloads carry movie ids and counts only. `useAnalytics()` wraps `window.umami?.track`, so an ad blocker only turns tracking into a no-op.
-3. Query strings are excluded from page views (`data-exclude-search`), because the picks in `?liked=` change on every click.
+3. Query strings are excluded from page views (`data-exclude-search`), so old `?liked=` share links do not split page views.
 
 While this site shares the rusticit.com website id, filter by hostname in Umami to tell the two apart.
 

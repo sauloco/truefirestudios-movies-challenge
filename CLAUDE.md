@@ -27,7 +27,7 @@ Nuxt 4 app (`app/` is the srcDir) with Vuetify, `@nuxtjs/i18n` and a server-side
 
 **API** (`server/api/`): `GET /api/movies`, `POST /api/recommendations` (unknown ids → 400, schema failure → 422; schemas in `server/utils/schemas.ts`). Types shared between server and client live in `shared/types/index.ts`.
 
-**Client** (`app/`): a single page (`pages/index.vue`) whose state is in the URL — liked movies are kept in `?liked=20,59,60` so results are shareable and survive refresh (`composables/useLikedMovies.ts`, `useRecommendations.ts`, `useMovies.ts`). Components are thin presentation pieces around those composables.
+**Client** (`app/`): the home page (`pages/index.vue`) is a full-viewport CSS-3D room; `AppShell.vue` drops the width-capped container for the `index` route (by base name, since `/es` and `/ja` also serve it). The viewer and their picks live in localStorage (`composables/useViewer.ts`, `useLikedMovies.ts`), not the URL. Components are thin presentation pieces around the composables.
 
 **Theming / i18n.** The rusticit.com theme (light + dark) is defined once in `vuetify.config.ts`; Vuetify composable `useLayout` is prefixed to `useVLayout` in `nuxt.config.ts` to avoid colliding with Nuxt's. Color mode follows the system until the toggle is used, then is stored in a cookie and applied during setup for SSR (`composables/useColorMode.ts`). All user-facing strings go in `i18n/locales/en.json`. Fonts are self-hosted via `@nuxt/fonts` (fontsource provider).
 
