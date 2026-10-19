@@ -136,6 +136,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
           class="room-wall__cover"
           tabindex="-1"
           aria-hidden="true"
+          @mousedown.prevent
           @click="room.move(room.slotOf(wall) < 0 ? -1 : 1)"
         />
       </section>
