@@ -1,35 +1,35 @@
 <script setup lang="ts">
-const props = defineProps<{ front: boolean }>()
+defineProps<{ front: boolean }>()
 
-// The site is only requested once the camera has turned to this wall, so a normal visit never loads it
-const powered = ref(false)
-watch(() => props.front, (front) => {
-  if (front) powered.value = true
-}, { immediate: true })
+const behindGradient = 'radial-gradient(farthest-side circle at var(--pointer-x) var(--pointer-y), hsla(280,100%,70%,var(--card-opacity)) 4%, hsla(280,50%,50%,calc(var(--card-opacity)*0.75)) 10%, hsla(280,25%,40%,calc(var(--card-opacity)*0.5)) 50%, hsla(280,0%,30%,0) 100%), radial-gradient(35% 52% at 55% 20%, #9C1DE7c4 0%, #073aff00 100%), radial-gradient(100% 100% at 50% 50%, #FF073Aff 1%, #073aff00 76%), conic-gradient(from 124deg at 50% 50%, #581B98ff 0%, #9C1DE7ff 40%, #FF073Aff 60%, #581B98ff 100%)'
+const innerGradient = 'linear-gradient(145deg, #581B988c 0%, #FF073A44 100%)'
 </script>
 
 <template>
-  <div class="egg">
+  <div
+    class="egg"
+    :data-front="front"
+  >
     <h2 class="room-heading">
       {{ $t('room.egg.title') }}
     </h2>
-    <div class="egg__screen">
-      <iframe
-        v-if="powered"
-        class="egg__frame"
-        src="https://rusticit.com/"
-        :title="$t('room.egg.frameTitle')"
-        sandbox="allow-scripts allow-same-origin allow-popups"
-        referrerpolicy="no-referrer"
-        data-testid="egg-frame"
-      />
-      <span
-        v-else
-        class="egg__idle"
-      >{{ $t('room.egg.idle') }}</span>
-      <i
-        class="egg__stand"
-        aria-hidden="true"
+    <div
+      class="egg__card"
+      data-testid="egg-card"
+    >
+      <ProfileCard
+        name="Saulo Vargas"
+        title="Senior Full-Stack Engineer"
+        handle="saulovargas"
+        status="Available"
+        contact-text="Email Me"
+        contact-href="mailto:saulo@rusticit.com"
+        grain-url="/profile-card/grain.webp"
+        icon-url="/profile-card/pattern.png"
+        avatar-url="/profile-card/Saulo_Vargas_subject_only.webp"
+        mini-avatar-url="/profile-card/Saulo_Vargas_subject_only.webp"
+        :behind-gradient="behindGradient"
+        :inner-gradient="innerGradient"
       />
     </div>
     <a
@@ -42,42 +42,9 @@ watch(() => props.front, (front) => {
 </template>
 
 <style scoped>
-.egg__screen {
-  position: relative;
-  margin-inline: auto;
-  max-width: 760px;
-  padding: 12px 12px 22px;
-  border-radius: 12px;
-  background: #0b0e1c;
-  box-shadow: 0 12px 26px rgb(0 0 0 / 0.45), inset 0 0 0 2px #2c3150;
-}
-
-.egg__frame,
-.egg__idle {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  border: 0;
-  border-radius: 4px;
-  background: #fff;
-}
-
-.egg__idle {
-  background: #05070f;
-  color: #4a5073;
-  font-size: 0.9rem;
-}
-
-.egg__stand {
-  position: absolute;
-  left: 50%;
-  bottom: 7px;
-  width: 34px;
-  height: 5px;
-  margin-left: -17px;
-  border-radius: 3px;
-  background: #2c3150;
+.egg__card {
+  display: flex;
+  justify-content: center;
 }
 
 .egg__link {
