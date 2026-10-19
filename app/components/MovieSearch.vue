@@ -257,9 +257,10 @@ function onKeydown(event: KeyboardEvent) {
   font-size: 0.9375rem;
 }
 
-.msearch__poster {
+/* Nested for specificity: PosterImage's own `width: 100%` ties with a single class and wins by stylesheet order in production builds */
+.msearch__option .msearch__poster {
   flex: none;
-  inline-size: 64px;
+  width: 64px;
   aspect-ratio: 2 / 3;
   border-radius: 3px;
   overflow: hidden;
