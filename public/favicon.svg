@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="175.657" height="175.657" viewBox="0 0 175.657 175.657">
+  <defs>
+    <radialGradient id="radial-gradient" cx="0.5" cy="0.5" r="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0"/>
+      <stop offset="0.458" stop-color="#363321"/>
+      <stop offset="1" stop-color="#fff39a"/>
+    </radialGradient>
+  </defs>
+  <g id="Group_3" data-name="Group 3" transform="translate(-78.672 -88.672)">
+    <g id="Rectangle_12" data-name="Rectangle 12" transform="translate(82 91)" stroke="#707070" stroke-width="1" fill="url(#radial-gradient)">
+      <rect width="170" height="170" stroke="none"/>
+      <rect x="0.5" y="0.5" width="169" height="169" fill="none"/>
+    </g>
+    <rect id="Rectangle_10" data-name="Rectangle 10" width="99" height="99" transform="translate(117 127)" stroke="#000" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="4"/>
+    <rect id="Rectangle_11" data-name="Rectangle 11" width="170" height="170" transform="translate(81 91)" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="4"/>
+    <line id="Line_1" data-name="Line 1" x1="35" y2="36" transform="translate(216.5 91.5)" fill="none" stroke="#000" stroke-linecap="round" stroke-width="4"/>
+    <line id="Line_2" data-name="Line 2" x1="35" y1="35" transform="translate(216.5 226.5)" fill="none" stroke="#000" stroke-linecap="round" stroke-width="4"/>
+    <line id="Line_3" data-name="Line 3" y1="35" x2="36" transform="translate(81.5 226.5)" fill="none" stroke="#000" stroke-linecap="round" stroke-width="4"/>
+    <line id="Line_4" data-name="Line 4" x2="36" y2="36" transform="translate(81.5 91.5)" fill="none" stroke="#000" stroke-linecap="round" stroke-width="4"/>
+    <g id="Rectangle_13" data-name="Rectangle 13" transform="translate(136 129)" fill="#fff" stroke="#000" stroke-width="6">
+      <rect width="61" height="95" stroke="none"/>
+      <rect x="3" y="3" width="55" height="89" fill="none"/>
+    </g>
+    <text id="M_R" data-name="M
+R" transform="translate(167 167)" font-size="38" font-family="HelveticaNeue-Bold, Helvetica Neue" font-weight="700"><tspan x="-17.233" y="0">M</tspan><tspan x="-13.718" y="46">R</tspan></text>
+    <rect id="Rectangle_14" data-name="Rectangle 14" width="10" height="10" transform="translate(124 138)" fill="#fff"/>
+    <rect id="Rectangle_19" data-name="Rectangle 19" width="10" height="10" transform="translate(197 138)" fill="#fff"/>
+    <rect id="Rectangle_15" data-name="Rectangle 15" width="10" height="10" transform="translate(124 203)" fill="#fff"/>
+    <rect id="Rectangle_21" data-name="Rectangle 21" width="10" height="10" transform="translate(197 203)" fill="#fff"/>
+    <rect id="Rectangle_16" data-name="Rectangle 16" width="10" height="10" transform="translate(124 181)" fill="#fff"/>
+    <rect id="Rectangle_20" data-name="Rectangle 20" width="10" height="10" transform="translate(197 181)" fill="#fff"/>
+    <rect id="Rectangle_17" data-name="Rectangle 17" width="10" height="10" transform="translate(124 160)" fill="#fff"/>
+    <rect id="Rectangle_18" data-name="Rectangle 18" width="10" height="10" transform="translate(197 160)" fill="#fff"/>
+  </g>
+</svg>
