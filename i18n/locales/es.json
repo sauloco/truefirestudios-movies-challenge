@@ -9,13 +9,13 @@
     "add": "Añadir al muro de pósters"
   },
   "liked": {
-    "heading": "Películas que te gustan",
+    "heading": "Mi Muro de Pósters",
     "hint": "Elige 1 o más. Si no eliges ninguna, mostramos las más populares.",
     "remove": "Quitar {title}"
   },
   "recommendations": {
-    "headingPersonalized": "Recomendadas para ti",
-    "headingPopular": "Lo más popular ahora",
+    "headingPersonalized": "Muro de Recomendaciones",
+    "headingPopular": "Muro de Recomendaciones",
     "because": "Porque te gustó {titles}",
     "popularReason": "Le gusta a muchos espectadores",
     "matchScore": "{percent}% de coincidencia",
