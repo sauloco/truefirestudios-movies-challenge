@@ -2,8 +2,11 @@ import type { Profile } from '#shared/types'
 
 // The overlay stays at least this long, even when the profile is already loaded behind it
 export const PROFILE_LOADING_MIN_MS = 1000
+// Whatever goes wrong while waiting for the room, the overlay never covers the page longer than this
+export const PROFILE_LOADING_MAX_MS = 5000
 
 let timer: ReturnType<typeof setTimeout> | undefined
+let failsafe: ReturnType<typeof setTimeout> | undefined
 
 // The overlay covers the room while a viewer is being switched to or restored, so the swap never shows as a jump.
 // It lifts once the minimum time has passed and the room of the target viewer has its results.
@@ -22,7 +25,11 @@ export function useProfileLoading() {
 
   function startTimer() {
     clearTimeout(timer)
+    clearTimeout(failsafe)
     state.value.elapsed = false
+    failsafe = setTimeout(() => {
+      state.value.visible = false
+    }, PROFILE_LOADING_MAX_MS)
     timer = setTimeout(() => {
       state.value.elapsed = true
       settle()

@@ -135,7 +135,8 @@ function goBack(event: MouseEvent) {
   filter: blur(24px) brightness(0.55);
 }
 
-.hero__poster {
+/* Beats PosterImage's own `.poster { width: 100% }`, whichever stylesheet loads last */
+.hero .hero__poster {
   flex: none;
   width: min(220px, 60%);
 }
