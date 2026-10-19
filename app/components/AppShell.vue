@@ -1,8 +1,10 @@
 <script setup lang="ts">
 const { init, followSystem } = useColorMode()
 const route = useRoute()
-// The room fills the page edge to edge; every other page sits in a centred container
-const fullBleed = computed(() => route.path === '/')
+const getRouteBaseName = useRouteBaseName()
+// The room fills the page edge to edge; every other page sits in a centred container.
+// Compared by base name because the other locales serve it under a prefix (/es, /ja)
+const fullBleed = computed(() => getRouteBaseName(route) === 'index')
 init()
 onMounted(followSystem)
 </script>
