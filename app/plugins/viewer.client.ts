@@ -24,7 +24,12 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
 
     const current = findProfile(profiles.value ?? [], state.value.user) ?? profiles.value?.[0]
-    if (current) useProfileLoading().target(current)
+    if (current) {
+      const loading = useProfileLoading()
+      loading.target(current)
+      // Only the home room reports its results ready; any other page (a movie opened directly) has nothing to wait for
+      if (useRouteBaseName()(router.currentRoute.value) !== 'index') loading.markReady(current.id)
+    }
 
     await nextTick()
     document.documentElement.dataset.viewerReady = ''

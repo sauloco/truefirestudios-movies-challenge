@@ -28,7 +28,8 @@ describe('PosterImage', () => {
   it('shows the blurhash first, then fades the real poster in', async () => {
     const page = await createPage()
     const held = await holdPosters(page)
-    await gotoAs(page, '/?user=sam')
+    // Posters are held on purpose, so the network never goes idle
+    await gotoAs(page, '/?user=sam', { settle: false })
     const poster = page.locator('[data-testid="poster"]').first()
     await poster.waitFor()
 
@@ -66,7 +67,8 @@ describe('PosterImage', () => {
   it('keeps a fixed 2:3 box through loading, loaded and failed states', async () => {
     const page = await createPage()
     const held = await holdPosters(page)
-    await gotoAs(page, '/?user=sam')
+    // Posters are held on purpose, so the network never goes idle
+    await gotoAs(page, '/?user=sam', { settle: false })
     const poster = page.locator('[data-testid="poster"]').first()
     await poster.waitFor()
 

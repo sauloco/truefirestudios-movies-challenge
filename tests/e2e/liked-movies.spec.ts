@@ -166,7 +166,8 @@ describe('page and URL state', () => {
     await search(page, 'star wars')
     await page.locator(`[data-testid="movie-option-${STAR_WARS.id}"]`).click()
     await page.getByRole('heading', { name: 'Recommendations Wall' }).waitFor()
-    expect(await page.locator('[data-testid="movie-card-title"]').allInnerTexts()).not.toContain(STAR_WARS.title)
+    // The refetch is debounced, so wait for the personalized results to replace the popular ones
+    await expect.poll(async () => (await page.locator('[data-testid="movie-card-title"]').allInnerTexts()).includes(STAR_WARS.title), { timeout: 10000 }).toBe(false)
     await page.close()
   })
 
