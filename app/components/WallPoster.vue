@@ -24,7 +24,50 @@ const to = computed(() => ({ path: `/movies/${props.movie.id}`, query: route.que
 // A plain anchor rather than NuxtLink: the click may have to wait for the camera before navigating
 const href = computed(() => router.resolve(to.value).href)
 const listed = computed(() => has(props.movie.id))
+// Taking a poster off the wall peels it from the top (the Vue Bits StickerPeel flap, in CSS), then runs the real removal
+const peeling = ref(false)
+const peelStyle = ref<Record<string, string | number>>({})
+const tile = useTemplateRef<HTMLElement>('tile')
+let afterPeel: (() => void) | null = null
 const testid = computed(() => ({ recommendation: 'movie-card', liked: 'liked-chip', watchlist: 'watchlist-item' })[props.kind])
+
+// The peel starts at a random corner and sweeps diagonally. The flap is the peeled part mirrored across the moving fold line
+function randomCorner() {
+  const sx = Math.random() < 0.5 ? 1 : -1
+  const sy = Math.random() < 0.5 ? 1 : -1
+  const width = tile.value?.offsetWidth ?? 0
+  const height = tile.value?.offsetHeight ?? 0
+  const s = Math.SQRT1_2
+  const dx = sx * s
+  const dy = sy * s
+  const corner = (sx > 0 ? 0 : width) * dx + (sy > 0 ? 0 : height) * dy
+  const span = s * (width + height)
+  return {
+    '--peel-angle': `${sx > 0 ? (sy > 0 ? 135 : 45) : (sy > 0 ? 225 : 315)}deg`,
+    '--flip-a': 1 - 2 * dx * dx,
+    '--flip-b': -2 * dx * dy,
+    '--flip-d': 1 - 2 * dy * dy,
+    '--flip-e0': 2 * corner * dx,
+    '--flip-f0': 2 * corner * dy,
+    '--flip-e1': 2 * span * dx,
+    '--flip-f1': 2 * span * dy
+  }
+}
+
+function peelOff(action: () => void) {
+  if (peeling.value) return
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return action()
+  afterPeel = action
+  peelStyle.value = randomCorner()
+  peeling.value = true
+}
+
+function peeled(event: AnimationEvent) {
+  if (event.target !== event.currentTarget || !afterPeel) return
+  const action = afterPeel
+  afterPeel = null
+  action()
+}
 
 async function open(event: MouseEvent) {
   if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
@@ -40,10 +83,19 @@ async function open(event: MouseEvent) {
 
 <template>
   <div
+    ref="tile"
     class="tile"
+    :class="{ 'tile--peeling': peeling }"
+    :style="peeling ? peelStyle : undefined"
     :data-testid="testid"
     :data-movie-id="movie.id"
+    @animationend="peeled"
   >
+    <span
+      v-if="peeling"
+      class="tile__flap"
+      aria-hidden="true"
+    />
     <a
       class="tile__link"
       :href="href"
@@ -92,7 +144,7 @@ async function open(event: MouseEvent) {
         :aria-pressed="listed"
         :aria-label="listed ? $t('watchlist.remove', { title: movie.title }) : $t('watchlist.add', { title: movie.title })"
         data-testid="watchlist-toggle"
-        @click="toggle(movie.id)"
+        @click="kind === 'watchlist' ? peelOff(() => toggle(movie.id)) : toggle(movie.id)"
       >
         <v-icon
           :icon="`svg:${listed ? mdiBookmark : mdiBookmarkOutline}`"
@@ -105,7 +157,7 @@ async function open(event: MouseEvent) {
         class="tile__button"
         :aria-label="$t('liked.remove', { title: movie.title })"
         data-testid="liked-remove"
-        @click="emit('remove')"
+        @click="peelOff(() => emit('remove'))"
       >
         <v-icon
           :icon="`svg:${mdiClose}`"
@@ -117,7 +169,13 @@ async function open(event: MouseEvent) {
 </template>
 
 <style scoped>
-/* A printed poster pinned to the wall: paper margin, gloss, grain, a layered shadow and a pin */
+@property --peel {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+/* A printed poster pinned to the wall: paper margin, gloss, grain, and a layered shadow */
 .tile {
   position: relative;
   min-width: 0;
@@ -153,19 +211,39 @@ async function open(event: MouseEvent) {
     repeating-linear-gradient(0deg, rgb(0 0 0 / 0.05) 0 1px, transparent 1px 3px);
 }
 
-.tile__link::after {
-  content: '';
-  position: absolute;
-  top: 3px;
-  left: 50%;
-  z-index: 3;
-  width: 9px;
-  height: 9px;
-  margin-inline-start: -4.5px;
-  border-radius: 50%;
+/* The poster is masked away along a diagonal fold while the peeled part shows as the back of the paper */
+.tile--peeling {
   pointer-events: none;
-  background: radial-gradient(circle at 35% 30%, #fff 0 12%, #d33 14% 60%, #7a1010 100%);
-  box-shadow: 1px 2px 2px rgb(0 0 0 / 0.5);
+  animation: tile-peel 0.7s cubic-bezier(0.55, 0, 0.6, 1) forwards;
+}
+
+.tile--peeling .tile__link {
+  -webkit-mask-image: linear-gradient(var(--peel-angle), transparent calc(var(--peel) * 100%), #000 calc(var(--peel) * 100%));
+  mask-image: linear-gradient(var(--peel-angle), transparent calc(var(--peel) * 100%), #000 calc(var(--peel) * 100%));
+}
+
+.tile--peeling .tile__actions {
+  display: none;
+}
+
+.tile__flap {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #cfcabd, #ece8de 60%, #d9d4c7);
+  box-shadow: 0 6px 10px -2px rgb(14 21 46 / 0.45);
+  transform-origin: 0 0;
+  transform: matrix(var(--flip-a), var(--flip-b), var(--flip-b), var(--flip-d), calc(var(--flip-e0) + var(--peel) * var(--flip-e1)), calc(var(--flip-f0) + var(--peel) * var(--flip-f1)));
+  -webkit-mask-image: linear-gradient(var(--peel-angle), #000 calc(var(--peel) * 100%), transparent calc(var(--peel) * 100%));
+  mask-image: linear-gradient(var(--peel-angle), #000 calc(var(--peel) * 100%), transparent calc(var(--peel) * 100%));
+}
+
+@keyframes tile-peel {
+  to {
+    --peel: 1;
+    opacity: 0;
+  }
 }
 
 /* Hover and focus backlight the poster: a glow only, nothing moves or resizes */
