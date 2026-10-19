@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it } from 'vitest'
+import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { $fetch, createPage, setup } from '@nuxt/test-utils/e2e'
 import { gotoAs, waitForViewer } from './helpers/viewer'
 import type { Page } from 'playwright-core'
@@ -39,8 +39,20 @@ async function search(page: Page, text: string) {
 }
 
 describe('MovieSearch and LikedChips', () => {
+  // The three tests that only type into the field share one room; each leaves the field empty and unfocused
+  let shared: Page
+  beforeAll(async () => {
+    shared = await open()
+  })
+  afterEach(async () => {
+    const input = shared.locator('[data-testid="movie-search"] input')
+    await input.fill('')
+    await input.blur()
+  })
+  afterAll(() => shared.close())
+
   it('glows the header like a poster while the field has focus, with no inner input outline', async () => {
-    const page = await open()
+    const page = shared
     const input = page.locator('[data-testid="movie-search"] input')
     const header = page.locator('[data-testid="app-header"]')
     expect(await header.evaluate(el => getComputedStyle(el).boxShadow)).toBe('none')
@@ -51,24 +63,21 @@ describe('MovieSearch and LikedChips', () => {
 
     expect(await input.evaluate(el => getComputedStyle(el).outlineStyle)).toBe('none')
     await page.waitForFunction(() => getComputedStyle(document.querySelector('[data-testid="app-header"]')!).boxShadow.includes('255, 244, 214'))
-    await page.close()
   })
 
   it('filters the options as you type', async () => {
-    const page = await open()
+    const page = shared
     await search(page, 'star wars')
     await options(page).first().waitFor()
     const titles = await options(page).allInnerTexts()
     expect(titles.length).toBeGreaterThan(0)
     expect(titles.every(title => /star wars/i.test(title))).toBe(true)
-    await page.close()
   })
 
   it('shows a no-data message when nothing matches', async () => {
-    const page = await open()
+    const page = shared
     await search(page, 'zzzzzz')
     await page.getByText('No matching movies').waitFor()
-    await page.close()
   })
 
   it('adds a chip when an option is chosen, clears the field and updates the URL', async () => {
