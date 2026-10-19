@@ -22,6 +22,7 @@ onMounted(followSystem)
       </v-app-bar-title>
       <template #append>
         <UserSwitcher />
+        <LanguageSwitcher />
         <ColorModeToggle />
       </template>
     </v-app-bar>

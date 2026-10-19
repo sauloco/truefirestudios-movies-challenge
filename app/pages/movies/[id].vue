@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const route = useRoute()
 const router = useRouter()
+const localePath = useLocalePath()
 const { t } = useI18n()
 const { data: movies } = await useMovies()
 const arrival = useState<{ id: number, score: string } | null>('movie-arrival', () => null)
@@ -32,7 +33,7 @@ function goBack(event: MouseEvent) {
     data-testid="movie-detail"
   >
     <NuxtLink
-      :to="{ path: '/', query: route.query }"
+      :to="{ path: localePath('/'), query: route.query }"
       class="d-inline-flex align-center mb-4 text-body-2"
       data-testid="detail-back"
       @click="goBack"

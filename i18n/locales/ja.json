@@ -1,0 +1,65 @@
+{
+  "app": {
+    "title": "Movies RusticIT",
+    "tagline": "これを好きな人はこちらも好きです…"
+  },
+  "search": {
+    "label": "70本の映画から検索…",
+    "noData": "一致する映画がありません"
+  },
+  "liked": {
+    "heading": "お気に入りの映画",
+    "hint": "1本以上選んでください。選ばない場合は人気の作品を表示します。",
+    "remove": "{title}を削除",
+    "ignored": "このリンクの一部の映画は認識できなかったため無視されました。"
+  },
+  "recommendations": {
+    "headingPersonalized": "あなたへのおすすめ",
+    "headingPopular": "今の人気作品",
+    "because": "{titles}が好きだから",
+    "popularReason": "多くの視聴者に支持されています",
+    "matchScore": "一致度 {percent}%",
+    "popularityScore": "1位の{percent}%の人気",
+    "emptyTitle": "おすすめできる作品がありません",
+    "emptyText": "知っている映画をすべて選択済みです。いくつか外すと、おすすめが再び表示されます。",
+    "errorTitle": "おすすめを読み込めませんでした",
+    "errorText": "選択内容の取得中に問題が発生しました。もう一度お試しください。",
+    "retry": "再試行"
+  },
+  "detail": {
+    "back": "おすすめに戻る",
+    "notFound": "映画が見つかりません",
+    "genres": "ジャンル"
+  },
+  "poster": {
+    "alt": "{title}のポスター"
+  },
+  "footer": {
+    "tmdbLogoAlt": "The Movie Database (TMDB)",
+    "tmdbNotice": "この製品はTMDB APIを使用していますが、TMDBによる推奨や認定を受けたものではありません。"
+  },
+  "theme": {
+    "switchToDark": "ダークテーマに切り替え",
+    "switchToLight": "ライトテーマに切り替え"
+  },
+  "profiles": {
+    "switcher": "視聴者を切り替え",
+    "reset": "自分のお気に入りに戻す",
+    "languages": {
+      "en": "英語",
+      "es": "スペイン語",
+      "ja": "日本語"
+    },
+    "likedCount": "お気に入り {count} 本 | お気に入り {count} 本"
+  },
+  "language": {
+    "switcher": "言語"
+  },
+  "error": {
+    "title": "問題が発生しました",
+    "text": "予期しないエラーが発生しました。おすすめに戻ってもう一度お試しください。",
+    "notFoundTitle": "ページが見つかりません",
+    "notFoundText": "そのページが見つかりませんでした。映画またはリンクが移動した可能性があります。",
+    "home": "おすすめに戻る"
+  }
+}

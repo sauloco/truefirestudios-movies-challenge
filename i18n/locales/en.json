@@ -58,5 +58,8 @@
     "notFoundTitle": "Page not found",
     "notFoundText": "We couldn't find that page. The movie or link may have moved.",
     "home": "Back to recommendations"
+  },
+  "language": {
+    "switcher": "Language"
   }
 }

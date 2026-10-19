@@ -5,6 +5,7 @@ export async function useProfiles() {
   const route = useRoute()
   const router = useRouter()
   const { locales } = useI18n()
+  const localePath = useLocalePath()
   const remembered = useProfileCookie()
   const { data: profiles } = await useProfileList()
 
@@ -19,7 +20,7 @@ export async function useProfiles() {
     const profile = findProfile(profiles.value, id)
     if (!profile || profile.id === active.value.id) return
     remembered.value = profile.id
-    await router.push({ path: '/', query: profileQuery(profile) })
+    await router.push({ path: localePath('/'), query: profileQuery(profile) })
     window.scrollTo(0, 0)
   }
 
